@@ -15,7 +15,8 @@
             let location = `https://web.whatsapp.com/send?phone=52${whatsappNumer}&text&app_absent=0`
             window.open(location,"_blank");
 		}else {
-            alert("No introduciste numero, recarga la pagina.");
+            alert("Debes introducir un numero de WhatsApp.");
+            location.reload();
         }
       }
       window.onload = load;
