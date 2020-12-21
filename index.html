@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link id="favicon" rel="shortcut icon" type="image/png" href="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png" src="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png">
+  <link id="favicon" rel="shortcut icon" type="image/png"
+    href="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png"
+    src="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
   <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
   <title>WhatsApp Messenger App</title>
@@ -22,7 +24,7 @@
       width: 500px;
     }
 
-    .container {
+    .centered {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -33,7 +35,7 @@
 
   <div class="container">
     <div class="columns">
-      <div class="card ">
+      <div class="card centered ">
         <header class="card-header has-background-primary-dark">
           <h1 class="card-header-title has-text-white is-size-4">
             <span class="icon is-large mr-2">
@@ -58,37 +60,60 @@
             </div>
             <div class="field is-grouped">
               <div class="control">
-                <button id="submit" class="button is-link" onclick="sendMessage()">Enviar
-                  Mensaje</button>
+                <button id="submit" class="button is-link" onclick="sendMessage()">
+                  Enviar Mensaje
+                </button>
+                <button id="helpModal" class="button is-link" onclick="modalControl()">
+                  Ayuda
+                </button>
               </div>
             </div>
           </div>
         </div>
+
+      </div>
+      <div id="modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Instrucciones de uso</p>
+            <button class="delete" aria-label="close" onclick="modalControl()"></button>
+          </header>
+          <section class="modal-card-body">
+            <!-- Content ... -->
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success" onclick="modalControl()">Cerrar</button>
+          </footer>
+        </div>
       </div>
 
-    </div>
+      <script>
+        function load() {
 
-    <script>
-      function load() {
-
-      }
-      window.onload = load;
-
-      function sendMessage() {
-
-        let whatsAppNumber = document.getElementById('number').value;
-        let whatsAppMessage = document.getElementById('message').value;
-        console.log(whatsAppMessage, whatsAppMessage);
-
-        if (whatsAppNumber !== null & whatsAppNumber !== "") {
-          let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber}&text=${whatsAppMessage}&app_absent=0`
-          window.open(location);
-        } else {
-          alert("Debes introducir un numero válido de WhatsApp.");
         }
-      }
+        window.onload = load;
 
-    </script>
+        function sendMessage() {
+
+          let whatsAppNumber = document.getElementById('number').value;
+          let whatsAppMessage = document.getElementById('message').value;
+          console.log(whatsAppMessage, whatsAppMessage);
+
+          if (whatsAppNumber !== null & whatsAppNumber !== "") {
+            let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber}&text=${whatsAppMessage}&app_absent=0`
+            window.open(location);
+          } else {
+            alert("Debes introducir un numero válido de WhatsApp.");
+          }
+        }
+
+        function modalControl() {
+          let x = document.getElementById("modal");
+          x.classList.toggle("is-active")
+        }
+
+      </script>
 </body>
 
 </html>
