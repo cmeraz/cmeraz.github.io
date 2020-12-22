@@ -49,13 +49,13 @@
             <div class="field">
               <label class="label">Telefono:</label>
               <div class="control">
-                <input id="number" class="input" type="text" placeholder="Escribe el número telefónico">
+                <input id="number" class="input" type="text" placeholder="Número telefónico a 10 dígitos">
               </div>
             </div>
             <div class="field">
               <label class="label">Mensaje:</label>
               <div class="control">
-                <input id="message" class="input" type="text" placeholder="Escribe el mensaje que vas a enviar">
+                <input id="message" class="input" type="text" placeholder="Incluir mensaje en texto (opcional)">
               </div>
             </div>
             <div class="field is-grouped">
@@ -96,15 +96,21 @@
 
         function sendMessage() {
 
-          let whatsAppNumber = document.getElementById('number').value;
+          // Obtener los valores de los campos de texto
+          let whatsAppNumber = parseInt(document.getElementById('number').value);
           let whatsAppMessage = document.getElementById('message').value;
-          console.log(whatsAppMessage, whatsAppMessage);
 
-          if (whatsAppNumber !== null & whatsAppNumber !== "") {
+          //console.log(isNaN(whatsAppNumber), whatsAppMessage);
+
+          if (isNaN(whatsAppNumber) == true) {
+            alert('Introduce un número válido');
+          } else if (whatsAppNumber.toString().length !== 10) {
+            alert("El número debe ser de 10 caracteres");
+          }
+          else {
             let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber}&text=${whatsAppMessage}&app_absent=0`
-            window.open(location);
-          } else {
-            alert("Debes introducir un numero válido de WhatsApp.");
+            //window.open(location);
+            alert('todo esta correcto');
           }
         }
 
