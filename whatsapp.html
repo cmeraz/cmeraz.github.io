@@ -90,16 +90,28 @@
 
       <script>
 
-        window.onkeydown = enterKeyPressed;
+        window.onload = function () {
+          focusNumber();
+        };
+
+        window.onkeydown = keyPressed;
 
         //Eventos de teclado
-        function enterKeyPressed(){
+        function keyPressed() {
 
           let enterKey = event.keyCode;
           console.log(enterKey)
 
-          if (enterKey == 13){
-            sendMessage();
+          switch (enterKey) {
+
+            // Key Enter send the message function
+            case 13:
+              sendMessage();
+              break;
+
+            case 46:
+              clearInputs();
+              break;
           }
         }
 
@@ -127,6 +139,15 @@
           x.classList.toggle("is-active")
         }
 
+        function clearInputs() {
+          document.getElementById('number').value = "";
+          document.getElementById('message').value = "";
+          focusNumber();
+        }
+
+        function focusNumber() {
+          document.getElementById('number').focus();
+        }
       </script>
 </body>
 
