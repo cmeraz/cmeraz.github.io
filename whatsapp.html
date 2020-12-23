@@ -89,10 +89,19 @@
       </div>
 
       <script>
-        function load() {
 
+        window.onkeydown = enterKeyPressed;
+
+        //Eventos de teclado
+        function enterKeyPressed(){
+
+          let enterKey = event.keyCode;
+          console.log(enterKey)
+
+          if (enterKey == 13){
+            sendMessage();
+          }
         }
-        window.onload = load;
 
         function sendMessage() {
 
