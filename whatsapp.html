@@ -108,9 +108,8 @@
             alert("El número debe ser de 10 caracteres");
           }
           else {
-            let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber}&text=${whatsAppMessage}&app_absent=0`
-            //window.open(location);
-            alert('todo esta correcto');
+            let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber}&text=${whatsAppMessage}`
+            window.open(location);
           }
         }
 
