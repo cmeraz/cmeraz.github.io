@@ -9,6 +9,8 @@
     src="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
   <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+/>
   <title>WhatsApp Messenger App</title>
 </head>
 
@@ -35,7 +37,10 @@
 
   <div class="container">
     <div class="columns">
-      <div class="card centered ">
+      <div>
+        
+      </div>
+      <div class="card centered">
         <header class="card-header has-background-primary-dark">
           <h1 class="card-header-title has-text-white is-size-4">
             <span class="icon is-large mr-2">
@@ -49,7 +54,7 @@
             <div class="field">
               <label class="label">Telefono:</label>
               <div class="control">
-                <input id="number" class="input" type="text" placeholder="Número telefónico a 10 dígitos">
+                <input id="number" class="input animate__animated animate__pulse" type="text" placeholder="Número telefónico a 10 dígitos">
               </div>
             </div>
             <div class="field">
@@ -60,10 +65,10 @@
             </div>
             <div class="field is-grouped">
               <div class="control">
-                <button id="submit" class="button is-link" onclick="sendMessage()">
+                <button id="submit" class="button is-primary" onclick="sendMessage()">
                   Enviar Mensaje
                 </button>
-                <button id="helpModal" class="button is-link" onclick="modalControl()">
+                <button id="helpModal" class="button is-danger" onclick="modalControl()">
                   Ayuda
                 </button>
               </div>
@@ -74,7 +79,7 @@
       </div>
       <div id="modal" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-card">
+        <div class="modal-card  animate__animated animate__backInUp">
           <header class="modal-card-head">
             <p class="modal-card-title">Instrucciones de uso</p>
             <button class="delete" aria-label="close" onclick="modalControl()"></button>
