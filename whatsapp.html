@@ -9,8 +9,7 @@
     src="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
   <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <title>WhatsApp Messenger App</title>
 </head>
 
@@ -38,7 +37,7 @@
   <div class="container">
     <div class="columns">
       <div>
-        
+
       </div>
       <div class="card centered">
         <header class="card-header has-background-primary-dark">
@@ -54,7 +53,8 @@
             <div class="field">
               <label class="label">Telefono:</label>
               <div class="control">
-                <input id="number" class="input animate__animated animate__pulse" type="text" placeholder="Número telefónico a 10 dígitos">
+                <input id="number" class="input animate__animated animate__pulse" type="text"
+                  placeholder="Número telefónico a 10 dígitos">
               </div>
             </div>
             <div class="field">
@@ -65,7 +65,7 @@
             </div>
             <div class="field is-grouped">
               <div class="control">
-                <button id="submit" class="button is-primary" onclick="sendMessage()">
+                <button id="submit" class="button is-primary">
                   Enviar Mensaje
                 </button>
                 <button id="helpModal" class="button is-danger" onclick="modalControl()">
@@ -92,68 +92,67 @@
           </footer>
         </div>
       </div>
+    </div>
+  </div>
+  <script>
 
-      <script>
+    const sendButton = document.getElementById('submit');
+    const helpButton = document.getElementById('helpModal');
 
-        window.onload = function () {
-          focusNumber();
-        };
+    sendButton.addEventListener('click', function(){
+      sendMessage();
+    })
 
-        window.onkeydown = keyPressed;
+    window.onload = function () {
+      focusNumber();
+    };
 
-        //Eventos de teclado
-        function keyPressed() {
+    window.onkeydown = function (event) {
 
-          let enterKey = event.keyCode;
-          console.log(enterKey)
+      switch (event.key) {
 
-          switch (enterKey) {
+        case 'Enter':
+          sendMessage();
+          break;
 
-            // Key Enter send the message function
-            case 13:
-              sendMessage();
-              break;
+        case 'Delete':
+          clearInputs();
+          break;
+      }
+    }
 
-            case 46:
-              clearInputs();
-              break;
-          }
-        }
+    function sendMessage() {
 
-        function sendMessage() {
+      // Obtener los valores de los campos de texto
+      let whatsAppNumber = parseInt(document.getElementById('number').value);
+      let whatsAppMessage = document.getElementById('message').value;
 
-          // Obtener los valores de los campos de texto
-          let whatsAppNumber = parseInt(document.getElementById('number').value);
-          let whatsAppMessage = document.getElementById('message').value;
+      if (isNaN(whatsAppNumber) == true) {
+        alert('Introduce un número válido');
+      } else if (whatsAppNumber.toString().length !== 10) {
+        alert("El número debe ser de 10 caracteres");
+      }else {
+        let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber}&text=${whatsAppMessage}`
+        window.open(location);
+        clearInputs();
+      }
+    }
 
-          //console.log(isNaN(whatsAppNumber), whatsAppMessage);
+    function modalControl() {
+      let x = document.getElementById("modal");
+      x.classList.toggle("is-active");
+    }
 
-          if (isNaN(whatsAppNumber) == true) {
-            alert('Introduce un número válido');
-          } else if (whatsAppNumber.toString().length !== 10) {
-            alert("El número debe ser de 10 caracteres");
-          }
-          else {
-            let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber}&text=${whatsAppMessage}`
-            window.open(location);
-          }
-        }
+    function clearInputs() {
+      document.getElementById('number').value = "";
+      document.getElementById('message').value = "";
+      focusNumber();
+    }
 
-        function modalControl() {
-          let x = document.getElementById("modal");
-          x.classList.toggle("is-active")
-        }
-
-        function clearInputs() {
-          document.getElementById('number').value = "";
-          document.getElementById('message').value = "";
-          focusNumber();
-        }
-
-        function focusNumber() {
-          document.getElementById('number').focus();
-        }
-      </script>
+    function focusNumber() {
+      document.getElementById('number').focus();
+    }
+  </script>
 </body>
 
 </html>
