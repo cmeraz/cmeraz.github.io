@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WhatsApp con mensajes predefinidos</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  label, select, textarea, button { display: block; margin-bottom: 10px; width: 100%; max-width: 400px; }
+  textarea { height: 100px; resize: vertical; }
+</style>
+</head>
+<body>
+
+<label for="predefinedMessages">Selecciona un mensaje predefinido:</label>
+<select id="predefinedMessages">
+  <option value="">-- Elige un mensaje --</option>
+  <option value="Este es nuestro WhatsApp para que nos envíes tus archivos.">Este es nuestro WhatsApp para que nos envíes tus archivos.</option>
+  <option value="Hola, ¿en qué puedo ayudarte?">Hola, ¿en qué puedo ayudarte?</option>
+  <option value="Buenas tardes, ¿en qué puedo ayudarte hoy?">Buenas tardes, ¿en qué puedo ayudarte hoy?</option>
+</select>
+
+<label for="customMessage">Mensaje a enviar:</label>
+<textarea id="customMessage" placeholder="Escribe o selecciona un mensaje..."></textarea>
+
+<button id="sendBtn">Enviar por WhatsApp</button>
+
+<script>
+  const selector = document.getElementById('predefinedMessages');
+  const messageBox = document.getElementById('customMessage');
+  const sendBtn = document.getElementById('sendBtn');
+  const phoneNumber = '5211234567890'; // Cambia este número por el tuyo con código país y sin signos
+
+  selector.addEventListener('change', () => {
+    messageBox.value = selector.value;
+  });
+
+  sendBtn.addEventListener('click', () => {
+    let message = encodeURIComponent(messageBox.value.trim());
+    if (!message) {
+      alert('Por favor escribe o selecciona un mensaje para enviar.');
+      return;
+    }
+    let url = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(url, '_blank');
+  });
+</script>
+
+</body>
+</html>
