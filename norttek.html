@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mockup Clientes</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f8f9fa;
+    color: #333;
+  }
+  .container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 6px;
+  }
+  h1 {
+    margin-bottom: 20px;
+    color: #007bff;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  table thead {
+    background: #007bff;
+    color: white;
+  }
+  table th, table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+  }
+  table tbody tr:nth-child(even) {
+    background: #f2f2f2;
+  }
+  a.btn {
+    display: inline-block;
+    padding: 8px 14px;
+    margin: 4px 2px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn-primary { background: #007bff; color: white; }
+  .btn-success { background: #28a745; color: white; }
+  .btn-warning { background: #ffc107; color: black; }
+  .btn-danger { background: #dc3545; color: white; }
+  .btn-info { background: #17a2b8; color: white; }
+  .btn-secondary { background: #6c757d; color: white; }
+  form label {
+    display: block;
+    margin: 10px 0 4px 0;
+    font-weight: bold;
+  }
+  form input[type="text"], form input[type="email"], form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  form textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  form button {
+    margin-top: 12px;
+  }
+  .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Lista Clientes -->
+  <section id="clientes-lista">
+    <h1>Clientes</h1>
+    <a href="#" class="btn btn-primary">Nuevo Cliente</a>
+
+    <div class="alert-success" style="display:none;">Cliente creado exitosamente.</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Dirección</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Carlos Meraz</td>
+          <td>555-123-4567</td>
+          <td>carlos@email.com</td>
+          <td>Ciudad de México</td>
+          <td>
+            <a href="#" class="btn btn-info">Ver</a>
+            <a href="#" class="btn btn-warning">Editar</a>
+            <a href="#" class="btn btn-danger" onclick="return confirm('¿Eliminar cliente?')">Eliminar</a>
+          </td>
+        </tr>
+        <tr>
+          <td>María López</td>
+          <td>555-987-6543</td>
+          <td>maria@email.com</td>
+          <td>Guadalajara</td>
+          <td>
+            <a href="#" class="btn btn-info">Ver</a>
+            <a href="#" class="btn btn-warning">Editar</a>
+            <a href="#" class="btn btn-danger" onclick="return confirm('¿Eliminar cliente?')">Eliminar</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr />
+
+  <!-- Formulario Crear Cliente -->
+  <section id="clientes-crear" style="display:none;">
+    <h1>Nuevo Cliente</h1>
+    <form>
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="telefono">Teléfono</label>
+      <input type="text" id="telefono" name="telefono" />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="direccion">Dirección</label>
+      <input type="text" id="direccion" name="direccion" />
+
+      <button type="submit" class="btn btn-success">Guardar</button>
+      <button type="button" class="btn btn-secondary" onclick="showList()">Cancelar</button>
+    </form>
+  </section>
+
+  <hr />
+
+  <!-- Detalle Cliente -->
+  <section id="clientes-detalle" style="display:none;">
+    <h1>Detalle del Cliente</h1>
+    <p><strong>Nombre:</strong> Carlos Meraz</p>
+    <p><strong>Teléfono:</strong> 555-123-4567</p>
+    <p><strong>Email:</strong> carlos@email.com</p>
+    <p><strong>Dirección:</strong> Ciudad de México</p>
+    <a href="#" class="btn btn-warning" onclick="showEdit()">Editar</a>
+    <button class="btn btn-secondary" onclick="showList()">Volver</button>
+  </section>
+
+  <hr />
+
+  <!-- Formulario Editar Cliente -->
+  <section id="clientes-editar" style="display:none;">
+    <h1>Editar Cliente</h1>
+    <form>
+      <label for="edit-nombre">Nombre</label>
+      <input type="text" id="edit-nombre" name="nombre" value="Carlos Meraz" required />
+
+      <label for="edit-telefono">Teléfono</label>
+      <input type="text" id="edit-telefono" name="telefono" value="555-123-4567" />
+
+      <label for="edit-email">Email</label>
+      <input type="email" id="edit-email" name="email" value="carlos@email.com" required />
+
+      <label for="edit-direccion">Dirección</label>
+      <input type="text" id="edit-direccion" name="direccion" value="Ciudad de México" />
+
+      <button type="submit" class="btn btn-primary">Actualizar</button>
+      <button type="button" class="btn btn-secondary" onclick="showList()">Cancelar</button>
+    </form>
+  </section>
+
+</div>
+
+<script>
+  function showList() {
+    document.getElementById('clientes-lista').style.display = 'block';
+    document.getElementById('clientes-crear').style.display = 'none';
+    document.getElementById('clientes-detalle').style.display = 'none';
+    document.getElementById('clientes-editar').style.display = 'none';
+  }
+  function showCreate() {
+    document.getElementById('clientes-lista').style.display = 'none';
+    document.getElementById('clientes-crear').style.display = 'block';
+    document.getElementById('clientes-detalle').style.display = 'none';
+    document.getElementById('clientes-editar').style.display = 'none';
+  }
+  function showDetail() {
+    document.getElementById('clientes-lista').style.display = 'none';
+    document.getElementById('clientes-crear').style.display = 'none';
+    document.getElementById('clientes-detalle').style.display = 'block';
+    document.getElementById('clientes-editar').style.display = 'none';
+  }
+  function showEdit() {
+    document.getElementById('clientes-lista').style.display = 'none';
+    document.getElementById('clientes-crear').style.display = 'none';
+    document.getElementById('clientes-detalle').style.display = 'none';
+    document.getElementById('clientes-editar').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
