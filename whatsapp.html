@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link id="favicon" rel="shortcut icon" type="image/png"
-    href="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png"
-    src="https://web.whatsapp.com//img/favicon_c5088e888c97ad440a61d247596f88e5.png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-  <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    id="favicon"
+    rel="shortcut icon"
+    type="image/png"
+    href="https://web.whatsapp.com/img/favicon_c5088e888c97ad440a61d247596f88e5.png"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
   <title>WhatsApp Messenger App</title>
-</head>
-
-<body>
   <style>
     body {
       background-image: url('./assets/background.jpg');
       height: 100vh;
-      width: 100%
+      width: 100%;
+      margin: 0;
     }
 
     .card {
@@ -26,32 +35,27 @@
     }
 
     .centered {
-      /* position: fixed; */
+      position: fixed;
       top: 50%;
       left: 50%;
-      /* bring your own prefixes */
       transform: translate(-50%, -50%);
     }
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
-      /* display: none; <- Crashes Chrome on hover */
       -webkit-appearance: none;
       margin: 0;
-      /* <-- Apparently some margin are still there even though it's hidden */
     }
 
-    input[type=number] {
+    input[type='number'] {
       -moz-appearance: textfield;
-      /* Firefox */
     }
   </style>
-
+</head>
+<body>
   <div class="container">
     <div class="columns">
-      <div>
-
-      </div>
+      <div></div>
       <div class="card centered animate__animated animate__bounceIn">
         <header class="card-header has-background-primary-dark">
           <h1 class="card-header-title has-text-white is-size-4">
@@ -64,16 +68,25 @@
         <div class="card-content">
           <div class="content">
             <div class="field">
-              <label class="label">Telefono:</label>
+              <label class="label">Teléfono:</label>
               <div class="control">
-                <input id="number" class="input animate__animated animate__pulse" type="number"
-                  placeholder="Número telefónico a 10 dígitos">
+                <input
+                  id="number"
+                  class="input animate__animated animate__pulse"
+                  type="number"
+                  placeholder="Número telefónico a 10 dígitos"
+                />
               </div>
             </div>
             <div class="field">
               <label class="label">Mensaje:</label>
               <div class="control">
-                <input id="message" class="input" type="text" placeholder="Incluir mensaje en texto (opcional)">
+                <input
+                  id="message"
+                  class="input"
+                  type="text"
+                  placeholder="Incluir mensaje en texto (opcional)"
+                />
               </div>
             </div>
             <div class="field is-grouped">
@@ -88,17 +101,20 @@
             </div>
           </div>
         </div>
-
       </div>
+
       <div id="modal" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-card  animate__animated animate__fadeInUp">
+        <div class="modal-card animate__animated animate__fadeInUp">
           <header class="modal-card-head">
             <p class="modal-card-title">Instrucciones de uso</p>
             <button class="delete" aria-label="close" onclick="modalControl()"></button>
           </header>
           <section class="modal-card-body">
-            <!-- Content ... -->
+            <p>
+              Ingresa un número telefónico válido de 10 dígitos sin espacios ni signos.
+              Opcionalmente agrega un mensaje de texto. Presiona "Enviar Mensaje" para abrir WhatsApp Web.
+            </p>
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success" onclick="modalControl()">Cerrar</button>
@@ -109,66 +125,67 @@
   </div>
 
   <script>
-
-    const whatsAppNumber = document.getElementById('number')
-    const whatsAppMessage = document.getElementById('message')
-    const sendButton = document.getElementById('submit')
-    const helpButton = document.getElementById('helpModal')
-    const modal = document.getElementById('modal')
+    const whatsAppNumber = document.getElementById('number');
+    const whatsAppMessage = document.getElementById('message');
+    const sendButton = document.getElementById('submit');
+    const modal = document.getElementById('modal');
 
     sendButton.addEventListener('click', () => {
-      sendMessage()
-    })
+      sendMessage();
+    });
 
     window.onload = () => {
-      focusNumber()
+      focusNumber();
     };
 
     window.onkeydown = (event) => {
-
       switch (event.key) {
-
         case 'Enter':
-          sendMessage()
+          sendMessage();
           break;
-
         case 'Delete':
-          clearInputs()
+          clearInputs();
           break;
       }
-    }
+    };
 
     function sendMessage() {
+      const numberValue = whatsAppNumber.value.trim();
+      const messageValue = whatsAppMessage.value.trim();
 
-      console.log(whatsAppNumber.value)
-      if (whatsAppNumber.value == "") {
-        alert('El número está vacío')
-
-      } else if (whatsAppNumber.value.toString().length !== 10) {
-        alert("El número debe ser de 10 caracteres")
-        whatsAppNumber.value = ""
-
-      } else {
-        let location = `https://web.whatsapp.com/send?phone=52${whatsAppNumber.value}&text=${whatsAppMessage.value}`
-        window.open(location)
-        clearInputs()
+      if (numberValue === '') {
+        alert('El número está vacío');
+        return;
       }
+
+      if (!/^\d{10}$/.test(numberValue)) {
+        alert('El número debe contener exactamente 10 dígitos numéricos');
+        whatsAppNumber.value = '';
+        focusNumber();
+        return;
+      }
+
+      const url = `https://web.whatsapp.com/send?phone=52${numberValue}&text=${encodeURIComponent(
+        messageValue
+      )}`;
+
+      window.open(url);
+      clearInputs();
     }
 
     function modalControl() {
-      modal.classList.toggle("is-active")
+      modal.classList.toggle('is-active');
     }
 
     function clearInputs() {
-      document.getElementById('number').value = ""
-      document.getElementById('message').value = ""
-      focusNumber()
+      whatsAppNumber.value = '';
+      whatsAppMessage.value = '';
+      focusNumber();
     }
 
     function focusNumber() {
-      document.getElementById('number').focus()
+      whatsAppNumber.focus();
     }
   </script>
 </body>
-
 </html>
