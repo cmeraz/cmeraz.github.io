@@ -23,23 +23,29 @@
   />
   <title>WhatsApp Messenger App</title>
   <style>
-    body {
-      background-image: url('./assets/background.jpg');
-      height: 100vh;
-      width: 100%;
-      margin: 0;
-    }
+    /* Elimina o comenta cualquier uso de position: fixed en .centered */
 
-    .card {
-      width: 500px;
-    }
+/* Agrega en su lugar: */
+body, html {
+  height: 100%;
+  margin: 0;
+  background-image: url('./assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-    .centered {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+  /* Flexbox para centrar contenido */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ajusta el ancho máximo y margen para que se adapte mejor */
+.card {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px;
+}
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
