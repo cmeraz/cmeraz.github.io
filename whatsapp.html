@@ -74,23 +74,28 @@
     transition: all 0.3s ease;
   }
 
-  /* Modal animado */
-  .modal {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-  }
-  .modal.is-active {
-    opacity: 1;
-    pointer-events: all;
-  }
-  .modal-card {
-    transform: scale(0.8);
-    transition: transform 0.4s ease;
-  }
-  .modal.is-active .modal-card {
-    transform: scale(1);
-  }
+/* Modal animado */
+.modal {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.modal.is-active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Animación de modal */
+.modal-card {
+  transform: translateY(-30px) scale(0.8);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+.modal.is-active .modal-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
 
   /* Historial animado */
   #historyList li {
@@ -288,12 +293,14 @@
     if(e.key === 'Enter') sendMessage();
   });
 
-  function openHelp() {
-    document.getElementById('helpModal').classList.add('is-active');
-  }
-  function closeHelp() {
-    document.getElementById('helpModal').classList.remove('is-active');
-  }
+function openHelp() {
+  document.getElementById('helpModal').classList.add('is-active');
+}
+
+function closeHelp() {
+  document.getElementById('helpModal').classList.remove('is-active');
+}
+
 
   window.onload = () => {
     renderHistory();
