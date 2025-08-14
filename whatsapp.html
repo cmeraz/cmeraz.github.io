@@ -1,166 +1,181 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WhatsApp Messenger App</title>
-  <link rel="shortcut icon" type="image/png" href="https://web.whatsapp.com/img/favicon_c5088e888c97ad440a61d247596f88e5.png" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  
-  <style>
-    body, html {
-      height: 100%;
-      margin: 0;
-      background-image: url('./assets/background.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 500px;
-      margin: 20px;
-      background-color: rgba(255, 255, 255, 0.92);
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .notification {
-      margin-bottom: 10px;
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp Pro Sender</title>
+<link rel="shortcut icon" type="image/png" href="https://web.whatsapp.com/img/favicon_c5088e888c97ad440a61d247596f88e5.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<link rel="manifest" href="manifest.json">
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    background: linear-gradient(270deg, #25d366, #128c7e, #075e54);
+    background-size: 600% 600%;
+    animation: gradient 15s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  @keyframes gradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+  .card {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .dark-mode {
+    filter: invert(1) hue-rotate(180deg);
+  }
+</style>
 </head>
 <body>
-  <div class="card animate__animated animate__fadeInDown">
-    <header class="card-header has-background-success">
-      <h1 class="card-header-title has-text-white is-size-4">
-        <span class="icon is-large mr-2">
-          <i class="fab fa-2x fa-whatsapp"></i>
-        </span>
-        WhatsApp Messenger
-      </h1>
-    </header>
-    <div class="card-content">
-      <div id="errorBox" class="notification is-danger">
-        <button class="delete" onclick="this.parentElement.style.display='none';"></button>
-        <span id="errorMsg"></span>
-      </div>
-
-      <div class="field">
-        <label class="label">Teléfono:</label>
-        <div class="control has-icons-left">
-          <input id="number" class="input" type="tel" placeholder="Número a 10 dígitos" maxlength="14" />
-          <span class="icon is-small is-left">
-            <i class="fas fa-phone"></i>
-          </span>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Mensaje:</label>
-        <div class="control has-icons-left">
-          <input id="message" class="input" type="text" placeholder="Mensaje opcional" />
-          <span class="icon is-small is-left">
-            <i class="fas fa-comment-alt"></i>
-          </span>
-        </div>
-      </div>
-
-      <div class="field is-grouped">
-        <div class="control">
-          <button id="submit" class="button is-success">
-            <i class="fas fa-paper-plane"></i> &nbsp;Enviar
-          </button>
-        </div>
-        <div class="control">
-          <button id="helpModal" class="button is-info" onclick="modalControl()">
-            <i class="fas fa-info-circle"></i> &nbsp;Ayuda
-          </button>
+<div class="card">
+  <header class="card-header has-background-success">
+    <p class="card-header-title has-text-white is-size-4">
+      <i class="fab fa-whatsapp mr-2"></i> WhatsApp Pro Sender
+    </p>
+    <button class="button is-small is-light" onclick="toggleDarkMode()" title="Modo oscuro"><i class="fas fa-adjust"></i></button>
+  </header>
+  <div class="card-content">
+    <!-- Selector de país -->
+    <div class="field">
+      <label class="label">País:</label>
+      <div class="control">
+        <div class="select is-fullwidth">
+          <select id="countryCode">
+            <option value="52">🇲🇽 México (+52)</option>
+            <option value="1">🇺🇸 USA (+1)</option>
+            <option value="34">🇪🇸 España (+34)</option>
+            <option value="57">🇨🇴 Colombia (+57)</option>
+          </select>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Modal de ayuda -->
-  <div id="modal" class="modal">
-    <div class="modal-background" onclick="modalControl()"></div>
-    <div class="modal-card animate__animated animate__zoomIn">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Instrucciones</p>
-        <button class="delete" aria-label="close" onclick="modalControl()"></button>
-      </header>
-      <section class="modal-card-body">
-        <p>1. Ingresa un número de teléfono válido de 10 dígitos (solo números, sin espacios ni signos).</p>
-        <p>2. Opcionalmente agrega un mensaje de texto.</p>
-        <p>3. Pulsa <strong>Enviar</strong> para abrir WhatsApp Web o la app en móvil.</p>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success" onclick="modalControl()">Cerrar</button>
-      </footer>
+    <!-- Número -->
+    <div class="field">
+      <label class="label">Teléfono:</label>
+      <div class="control has-icons-left">
+        <input id="number" class="input" type="tel" placeholder="Número a 10 dígitos">
+        <span class="icon is-small is-left"><i class="fas fa-phone"></i></span>
+      </div>
+    </div>
+    <!-- Mensaje -->
+    <div class="field">
+      <label class="label">Mensaje:</label>
+      <div class="control has-icons-left">
+        <input id="message" class="input" type="text" placeholder="Escribe tu mensaje">
+        <span class="icon is-small is-left"><i class="fas fa-comment-alt"></i></span>
+      </div>
+    </div>
+    <!-- Mensajes rápidos -->
+    <div class="buttons is-centered">
+      <button class="button is-small is-info" onclick="quickMsg('Hola, ¿cómo estás?')">Saludo</button>
+      <button class="button is-small is-warning" onclick="quickMsg('Envíame tu ubicación 📍')">Ubicación</button>
+      <button class="button is-small is-danger" onclick="quickMsg('Lláma cuando puedas 📞')">Llamada</button>
+    </div>
+    <!-- Botones -->
+    <div class="field is-grouped is-grouped-centered mt-3">
+      <p class="control">
+        <button id="sendBtn" class="button is-success"><i class="fas fa-paper-plane"></i> Enviar</button>
+      </p>
+      <p class="control">
+        <button class="button is-light" onclick="clearInputs()"><i class="fas fa-eraser"></i> Limpiar</button>
+      </p>
+    </div>
+    <!-- Historial -->
+    <div class="mt-4">
+      <p class="title is-6">Historial</p>
+      <ul id="historyList" class="menu-list"></ul>
     </div>
   </div>
+</div>
 
-  <script>
-    const numberInput = document.getElementById('number');
-    const messageInput = document.getElementById('message');
-    const sendButton = document.getElementById('submit');
-    const modal = document.getElementById('modal');
-    const errorBox = document.getElementById('errorBox');
-    const errorMsg = document.getElementById('errorMsg');
+<script>
+  const numberInput = document.getElementById('number');
+  const messageInput = document.getElementById('message');
+  const historyList = document.getElementById('historyList');
+  const countrySelect = document.getElementById('countryCode');
 
-    function modalControl() {
-      modal.classList.toggle('is-active');
+  // Modo oscuro
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+  }
+
+  // Mensaje rápido
+  function quickMsg(msg) {
+    messageInput.value = msg;
+  }
+
+  // Guardar historial
+  function saveHistory(num, msg) {
+    let hist = JSON.parse(localStorage.getItem('whatsappHistory')) || [];
+    hist.unshift({ num, msg, date: new Date().toLocaleString() });
+    hist = hist.slice(0, 10);
+    localStorage.setItem('whatsappHistory', JSON.stringify(hist));
+    renderHistory();
+  }
+
+  // Mostrar historial
+  function renderHistory() {
+    historyList.innerHTML = '';
+    const hist = JSON.parse(localStorage.getItem('whatsappHistory')) || [];
+    hist.forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a onclick="useHistory('${item.num}', '${item.msg}')">
+        ${item.num} - ${item.msg} <small>(${item.date})</small>
+      </a>`;
+      historyList.appendChild(li);
+    });
+  }
+
+  // Usar elemento del historial
+  function useHistory(num, msg) {
+    numberInput.value = num;
+    messageInput.value = msg;
+  }
+
+  // Limpiar campos
+  function clearInputs() {
+    numberInput.value = '';
+    messageInput.value = '';
+    numberInput.focus();
+  }
+
+  // Enviar mensaje
+  function sendMessage() {
+    let num = numberInput.value.replace(/\D/g, '');
+    const msg = messageInput.value.trim();
+    const prefix = countrySelect.value;
+
+    if (num.length < 8) {
+      alert('Número inválido');
+      return;
     }
 
-    function showError(msg) {
-      errorMsg.textContent = msg;
-      errorBox.style.display = 'block';
-    }
+    saveHistory(num, msg);
 
-    function clearError() {
-      errorBox.style.display = 'none';
-    }
+    const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+    const url = isMobile
+      ? `https://wa.me/${prefix}${num}?text=${encodeURIComponent(msg)}`
+      : `https://web.whatsapp.com/send?phone=${prefix}${num}&text=${encodeURIComponent(msg)}`;
 
-    function sendMessage() {
-      clearError();
+    window.open(url, '_blank');
+  }
 
-      let cleanNumber = numberInput.value.replace(/\D/g, ''); // Solo números
-      let messageValue = messageInput.value.trim();
+  document.getElementById('sendBtn').addEventListener('click', sendMessage);
 
-      if (!/^\d{10}$/.test(cleanNumber)) {
-        showError('El número debe contener exactamente 10 dígitos.');
-        numberInput.focus();
-        return;
-      }
-
-      const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
-      const url = isMobile
-        ? `https://wa.me/52${cleanNumber}?text=${encodeURIComponent(messageValue)}`
-        : `https://web.whatsapp.com/send?phone=52${cleanNumber}&text=${encodeURIComponent(messageValue)}`;
-
-      window.open(url, '_blank');
-      numberInput.value = '';
-      messageInput.value = '';
-      numberInput.focus();
-    }
-
-    sendButton.addEventListener('click', sendMessage);
-
-    window.onload = () => numberInput.focus();
-    window.onkeydown = (event) => {
-      if (event.key === 'Enter') sendMessage();
-      if (event.key === 'Delete') {
-        numberInput.value = '';
-        messageInput.value = '';
-      }
-    };
-  </script>
+  window.onload = () => {
+    renderHistory();
+    numberInput.focus();
+  };
+</script>
 </body>
 </html>
