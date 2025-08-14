@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Catálogo de Cartuchos</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    input:focus {
+        border-color: #25d366; /* Verde estilo WhatsApp */
+        box-shadow: 0px 0px 8px rgba(37, 211, 102, 0.4);
+    }
+
+    .resultado {
+        display: grid;
+        gap: 15px;
+    }
+
+    .card {
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .modelo {
+        font-size: 18px;
+        font-weight: bold;
+        color: #25d366;
+    }
+
+    .impresoras {
+        color: #555;
+        margin-top: 5px;
+    }
+
+    .no-resultados {
+        text-align: center;
+        color: #999;
+        font-style: italic;
+    }
+</style>
+</head>
+<body>
+
+<h1>Catálogo de Cartuchos</h1>
+<input type="text" id="busqueda" placeholder="Buscar por modelo o impresora compatible...">
+<div id="resultado" class="resultado"></div>
+
+<script>
+// Datos de prueba
+const articulos = [
+    { modelo: "HP 85A", impresoras: "HP LaserJet Pro P1102, P1102w, M1132, M1212nf" },
+    { modelo: "Canon 725", impresoras: "Canon LBP6000, LBP6030, MF3010" },
+    { modelo: "Brother TN-450", impresoras: "Brother HL-2240, HL-2270DW, MFC-7360N" },
+    { modelo: "Samsung MLT-D111S", impresoras: "Samsung Xpress M2020, M2070" },
+    { modelo: "Epson 664", impresoras: "Epson L100, L110, L120, L200, L210" }
+];
+
+// Elementos del DOM
+const inputBusqueda = document.getElementById("busqueda");
+const resultadoDiv = document.getElementById("resultado");
+
+// Función para mostrar resultados
+function mostrarResultados(lista) {
+    resultadoDiv.innerHTML = "";
+    if (lista.length === 0) {
+        resultadoDiv.innerHTML = `<p class="no-resultados">No se encontraron resultados.</p>`;
+        return;
+    }
+    lista.forEach(item => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `
+            <div class="modelo">${item.modelo}</div>
+            <div class="impresoras">${item.impresoras}</div>
+        `;
+        resultadoDiv.appendChild(card);
+    });
+}
+
+// Función de búsqueda
+function buscarArticulos(texto) {
+    const busqueda = texto.toLowerCase();
+    const filtrados = articulos.filter(a =>
+        a.modelo.toLowerCase().includes(busqueda) ||
+        a.impresoras.toLowerCase().includes(busqueda)
+    );
+    mostrarResultados(filtrados);
+}
+
+// Evento de búsqueda en tiempo real
+inputBusqueda.addEventListener("input", e => {
+    buscarArticulos(e.target.value);
+});
+
+// Mostrar todo al inicio
+mostrarResultados(articulos);
+</script>
+
+</body>
+</html>
