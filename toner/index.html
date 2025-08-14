@@ -15,22 +15,44 @@
     h1 {
         text-align: center;
         color: #333;
+        margin-bottom: 15px;
+    }
+
+    .buscador {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 
     input {
-        width: 100%;
+        flex: 1;
         padding: 12px;
         font-size: 16px;
         border: 2px solid #ccc;
         border-radius: 8px;
-        margin-bottom: 20px;
         outline: none;
         transition: all 0.3s ease;
     }
 
     input:focus {
-        border-color: #25d366; /* Verde estilo WhatsApp */
+        border-color: #25d366;
         box-shadow: 0px 0px 8px rgba(37, 211, 102, 0.4);
+    }
+
+    button {
+        padding: 12px 15px;
+        border: none;
+        border-radius: 8px;
+        background-color: #25d366;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #1ea756;
+        transform: scale(1.05);
     }
 
     .resultado {
@@ -43,12 +65,16 @@
         padding: 15px;
         border-radius: 10px;
         border: 1px solid #ddd;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        animation: aparecer 0.3s ease forwards;
+        opacity: 0;
+        transform: translateY(10px);
     }
 
-    .card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    @keyframes aparecer {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .modelo {
@@ -67,12 +93,22 @@
         color: #999;
         font-style: italic;
     }
+
+    mark {
+        background-color: yellow;
+        padding: 0 2px;
+        border-radius: 3px;
+    }
 </style>
 </head>
 <body>
 
 <h1>Catálogo de Cartuchos</h1>
-<input type="text" id="busqueda" placeholder="Buscar por modelo o impresora compatible...">
+<div class="buscador">
+    <input type="text" id="busqueda" placeholder="Buscar por modelo o impresora compatible...">
+    <button id="btnLimpiar">Limpiar</button>
+    <button id="btnRecargar">Recargar</button>
+</div>
 <div id="resultado" class="resultado"></div>
 
 <script>
@@ -85,12 +121,20 @@ const articulos = [
     { modelo: "Epson 664", impresoras: "Epson L100, L110, L120, L200, L210" }
 ];
 
-// Elementos del DOM
 const inputBusqueda = document.getElementById("busqueda");
 const resultadoDiv = document.getElementById("resultado");
+const btnLimpiar = document.getElementById("btnLimpiar");
+const btnRecargar = document.getElementById("btnRecargar");
 
-// Función para mostrar resultados
-function mostrarResultados(lista) {
+// Función para resaltar coincidencias
+function resaltar(texto, busqueda) {
+    if (!busqueda) return texto;
+    const regex = new RegExp(`(${busqueda})`, "gi");
+    return texto.replace(regex, "<mark>$1</mark>");
+}
+
+// Mostrar resultados
+function mostrarResultados(lista, busqueda = "") {
     resultadoDiv.innerHTML = "";
     if (lista.length === 0) {
         resultadoDiv.innerHTML = `<p class="no-resultados">No se encontraron resultados.</p>`;
@@ -100,8 +144,8 @@ function mostrarResultados(lista) {
         const card = document.createElement("div");
         card.classList.add("card");
         card.innerHTML = `
-            <div class="modelo">${item.modelo}</div>
-            <div class="impresoras">${item.impresoras}</div>
+            <div class="modelo">${resaltar(item.modelo, busqueda)}</div>
+            <div class="impresoras">${resaltar(item.impresoras, busqueda)}</div>
         `;
         resultadoDiv.appendChild(card);
     });
@@ -109,20 +153,26 @@ function mostrarResultados(lista) {
 
 // Función de búsqueda
 function buscarArticulos(texto) {
-    const busqueda = texto.toLowerCase();
+    const busqueda = texto.trim().toLowerCase();
     const filtrados = articulos.filter(a =>
         a.modelo.toLowerCase().includes(busqueda) ||
         a.impresoras.toLowerCase().includes(busqueda)
     );
-    mostrarResultados(filtrados);
+    mostrarResultados(filtrados, texto);
 }
 
-// Evento de búsqueda en tiempo real
-inputBusqueda.addEventListener("input", e => {
-    buscarArticulos(e.target.value);
+// Eventos
+inputBusqueda.addEventListener("input", e => buscarArticulos(e.target.value));
+btnLimpiar.addEventListener("click", () => {
+    inputBusqueda.value = "";
+    mostrarResultados(articulos);
+    inputBusqueda.focus();
+});
+btnRecargar.addEventListener("click", () => {
+    location.reload();
 });
 
-// Mostrar todo al inicio
+// Mostrar todos al inicio
 mostrarResultados(articulos);
 </script>
 
