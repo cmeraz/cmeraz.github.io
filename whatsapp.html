@@ -7,24 +7,16 @@
 <link rel="shortcut icon" type="image/png" href="https://web.whatsapp.com/img/favicon_c5088e888c97ad440a61d247596f88e5.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-<link rel="manifest" href="manifest.json">
 <style>
   body, html {
     height: 100%;
     margin: 0;
-    background: linear-gradient(-45deg, #6a11cb, #2575fc, #43e97b, #f8ff00);
-    background-size: 800% 800%;
-    animation: gradientAnim 30s ease infinite;
+    background: url('https://i.ibb.co/7N1f5k6/whatsapp-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Segoe UI', sans-serif;
-  }
-
-  @keyframes gradientAnim {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
   }
 
   .card {
@@ -33,15 +25,22 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    background-color: rgba(255, 255, 255, 0.95);
   }
 
   .dark-mode {
     filter: invert(1) hue-rotate(180deg);
   }
 
-  /* Modal */
+  /* Modal animado */
+  .modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
   .modal.is-active {
-    display: flex;
+    opacity: 1;
+    pointer-events: all;
   }
 
   .buttons-header {
@@ -184,26 +183,22 @@
     });
   }
 
-  // Usar elemento del historial
   function useHistory(num, msg) {
     numberInput.value = num;
     messageInput.value = msg;
   }
 
-  // Limpiar campos
   function clearInputs() {
     numberInput.value = '';
     messageInput.value = '';
     numberInput.focus();
   }
 
-  // Borrar historial completo
   function clearHistory() {
     localStorage.removeItem('whatsappHistory');
     renderHistory();
   }
 
-  // Enviar mensaje
   function sendMessage() {
     let num = numberInput.value.replace(/\D/g, '');
     const msg = messageInput.value.trim();
@@ -234,7 +229,7 @@
     if(e.key === 'Enter') sendMessage();
   });
 
-  // Modal de ayuda
+  // Modal animado
   function openHelp() {
     document.getElementById('helpModal').classList.add('is-active');
   }
