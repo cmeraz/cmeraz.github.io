@@ -1,180 +1,315 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Catálogo de Cartuchos</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Catálogo de Cartuchos — Búsqueda avanzada</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f0f2f5;
-        padding: 20px;
-        max-width: 800px;
-        margin: auto;
-    }
+  :root{
+    --wa: #25d366;
+    --wa-dark:#1ea756;
+    --bg:#f0f2f5;
+    --card:#fff;
+    --muted:#6b7280;
+    --ring: rgba(37,211,102,.35);
+    --mark: #fff3a3;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji', 'Segoe UI Symbol';
+    background: var(--bg);
+    margin:0; padding:24px;
+    color:#111827;
+  }
+  .wrap{max-width: 980px; margin: 0 auto;}
+  h1{margin:0 0 6px 0; font-size: clamp(22px, 4vw, 30px)}
+  .sub{color:var(--muted); margin:0 0 18px 0}
 
-    h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 15px;
-    }
+  .toolbar{
+    display:grid; grid-template-columns: 1fr auto auto; gap:10px; align-items:center; margin-bottom:14px;
+  }
+  .search{
+    display:flex; align-items:center; gap:10px; background:var(--card); border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 12px;
+    transition: box-shadow .2s, border-color .2s, transform .12s;
+  }
+  .search:focus-within{ border-color: var(--wa); box-shadow: 0 0 0 6px var(--ring); transform: translateY(-1px); }
+  .search input{
+    flex:1; border:0; outline:0; font-size:16px; background:transparent;
+  }
+  .btn{border:0; padding:10px 14px; border-radius:10px; background:var(--wa); color:white; font-weight:600; cursor:pointer; transition:transform .12s, box-shadow .2s, background .2s}
+  .btn:hover{background:var(--wa-dark); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(30,167,86,.25)}
+  .btn.secondary{ background:#e5e7eb; color:#111827; }
+  .btn.secondary:hover{ background:#d1d5db; }
 
-    .buscador {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
+  .options{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px}
+  .chip{
+    display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:#eef2ff; color:#1f2937; font-size:13px; border:1px solid #e5e7eb; opacity:.9;
+    animation: pop .18s ease-out both;
+  }
+  @keyframes pop{ from{ transform: scale(.92); opacity:.4 } to{ transform: scale(1); opacity:1 } }
 
-    input {
-        flex: 1;
-        padding: 12px;
-        font-size: 16px;
-        border: 2px solid #ccc;
-        border-radius: 8px;
-        outline: none;
-        transition: all 0.3s ease;
-    }
+  .counter{color:var(--muted); font-size:14px; margin: 6px 0 18px}
 
-    input:focus {
-        border-color: #25d366;
-        box-shadow: 0px 0px 8px rgba(37, 211, 102, 0.4);
-    }
+  .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:14px}
+  .card{
+    background:var(--card); border:1px solid #e5e7eb; border-radius:14px; padding:14px; box-shadow: 0 6px 18px rgba(0,0,0,.04);
+    opacity:0; transform: translateY(8px); animation: in .24s ease-out forwards;
+  }
+  @keyframes in{ to{ opacity:1; transform:none } }
 
-    button {
-        padding: 12px 15px;
-        border: none;
-        border-radius: 8px;
-        background-color: #25d366;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+  .modelo{font-weight:800; color:var(--wa); font-size:17px; letter-spacing:.2px}
+  .imp{color:#374151; margin-top:6px; line-height:1.45}
+  .muted{color:var(--muted); font-size:12px; margin-top:10px}
 
-    button:hover {
-        background-color: #1ea756;
-        transform: scale(1.05);
-    }
+  mark{
+    background:var(--mark);
+    padding:0 2px; border-radius:3px; box-shadow: inset 0 -2px 0 rgba(0,0,0,.06);
+    animation: hilite .6s ease-out;
+  }
+  @keyframes hilite{ from{ background:#fff8c6 } to{ background:var(--mark) } }
 
-    .resultado {
-        display: grid;
-        gap: 15px;
-    }
+  .empty{
+    text-align:center; color:var(--muted); padding:28px; border:2px dashed #e5e7eb; border-radius:16px; background:white;
+  }
+  .switch{ display:inline-flex; gap:8px; align-items:center; font-size:14px; padding:8px 12px; background:#fff; border:1px solid #e5e7eb; border-radius:999px}
+  .switch input{accent-color: var(--wa);}
 
-    .card {
-        background: #fff;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-        animation: aparecer 0.3s ease forwards;
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    @keyframes aparecer {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .modelo {
-        font-size: 18px;
-        font-weight: bold;
-        color: #25d366;
-    }
-
-    .impresoras {
-        color: #555;
-        margin-top: 5px;
-    }
-
-    .no-resultados {
-        text-align: center;
-        color: #999;
-        font-style: italic;
-    }
-
-    mark {
-        background-color: yellow;
-        padding: 0 2px;
-        border-radius: 3px;
-    }
+  .tip{font-size:12px; color:var(--muted); margin-top:6px}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <h1>Catálogo de Cartuchos</h1>
+  <p class="sub">Escribe cualquier combinación de palabras (orden libre). Busca en <strong>modelo</strong> e <strong>impresoras compatibles</strong>. Ignora acentos.</p>
 
-<h1>Catálogo de Cartuchos</h1>
-<div class="buscador">
-    <input type="text" id="busqueda" placeholder="Buscar por modelo o impresora compatible...">
-    <button id="btnLimpiar">Limpiar</button>
-    <button id="btnRecargar">Recargar</button>
+  <div class="toolbar">
+    <div class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.2-4.2m1.7-5.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="text" placeholder="Ej: 1102w hp laserjet / MF3010 / brother 2270" autocomplete="off" />
+      <button class="btn secondary" id="clearBtn" title="Limpiar (Esc)">Limpiar</button>
+      <button class="btn" id="demoBtn">Demostración</button>
+    </div>
+    <div class="switch">
+      <input type="checkbox" id="modeAll" checked />
+      <label for="modeAll">Coincidan <b>todas</b> las palabras</label>
+    </div>
+    <div class="switch">
+      <input type="checkbox" id="rankOn" checked />
+      <label for="rankOn">Ordenar por relevancia</label>
+    </div>
+  </div>
+
+  <div id="chips" class="options" aria-live="polite"></div>
+  <div id="count" class="counter"></div>
+  <div id="grid" class="grid"></div>
+  <div class="tip">Sugerencia: prueba con términos desordenados, por ejemplo <code>p1102 hp 85a</code> o <code>lbp 6030 canon</code>.</div>
 </div>
-<div id="resultado" class="resultado"></div>
 
 <script>
-// Datos de prueba
+/* ================== Datos de ejemplo ================== */
 const articulos = [
-    { modelo: "HP 85A", impresoras: "HP LaserJet Pro P1102, P1102w, M1132, M1212nf" },
-    { modelo: "Canon 725", impresoras: "Canon LBP6000, LBP6030, MF3010" },
-    { modelo: "Brother TN-450", impresoras: "Brother HL-2240, HL-2270DW, MFC-7360N" },
-    { modelo: "Samsung MLT-D111S", impresoras: "Samsung Xpress M2020, M2070" },
-    { modelo: "Epson 664", impresoras: "Epson L100, L110, L120, L200, L210" }
+  { modelo: "HP 85A", impresoras: "HP LaserJet Pro P1102, P1102w, M1132, M1212nf" },
+  { modelo: "Canon 725", impresoras: "Canon LBP6000, LBP6030, MF3010" },
+  { modelo: "Brother TN-450", impresoras: "Brother HL-2240, HL-2270DW, MFC-7360N" },
+  { modelo: "Samsung MLT-D111S", impresoras: "Samsung Xpress M2020, M2070" },
+  { modelo: "Epson 664", impresoras: "Epson L100, L110, L120, L200, L210" },
+  { modelo: "HP 78A", impresoras: "HP LaserJet Pro M1536dnf, P1566, P1606dn" },
+  { modelo: "Canon 728", impresoras: "Canon i-SENSYS MF4450, MF4550d, MF4570dn, MF4580dn" },
+  { modelo: "Brother TN-660", impresoras: "Brother HL-L2300D, HL-L2320D, DCP-L2540DW, MFC-L2700DW" },
+  { modelo: "Samsung MLT-D104S", impresoras: "Samsung ML-1660, ML-1865, SCX-3200" },
+  { modelo: "HP 12A", impresoras: "HP LaserJet 1010, 1012, 1015, 1020, 3015" }
 ];
 
-const inputBusqueda = document.getElementById("busqueda");
-const resultadoDiv = document.getElementById("resultado");
-const btnLimpiar = document.getElementById("btnLimpiar");
-const btnRecargar = document.getElementById("btnRecargar");
-
-// Función para resaltar coincidencias
-function resaltar(texto, busqueda) {
-    if (!busqueda) return texto;
-    const regex = new RegExp(`(${busqueda})`, "gi");
-    return texto.replace(regex, "<mark>$1</mark>");
+/* ============== Utilidades de normalización ============== */
+// Elimina acentos, pasa a minúsculas y estandariza separadores.
+function normalize(str){
+  return str
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // quita acentos
+    .replace(/[_\-.,/()]+/g,' ')                     // separadores comunes -> espacio
+    .toLowerCase().trim().replace(/\s+/g,' ');
+}
+// Construye un índice de mapeo entre string original y normalizado
+function normalizeWithMap(str){
+  let norm = '';
+  const map = []; // map[iNormal] = indexOriginal
+  for (let i=0;i<str.length;i++){
+    const out = str[i].normalize('NFD').replace(/[\u0300-\u036f]/g,''); // sin acentos
+    const low = out.toLowerCase();
+    norm += low;
+    for (let k=0;k<low.length;k++) map.push(i);
+  }
+  return { norm: normalize(norm).replace(/\s+/g,' '), map };
 }
 
-// Mostrar resultados
-function mostrarResultados(lista, busqueda = "") {
-    resultadoDiv.innerHTML = "";
-    if (lista.length === 0) {
-        resultadoDiv.innerHTML = `<p class="no-resultados">No se encontraron resultados.</p>`;
-        return;
+// Tokeniza la consulta en palabras únicas (ignora vacíos)
+function tokenize(q){
+  return Array.from(new Set(
+    normalize(q).split(' ').filter(Boolean)
+  ));
+}
+
+/* ================== Resaltado preciso (acentos off) ================== */
+function highlight(original, terms){
+  if (!terms.length) return escapeHTML(original);
+  const { norm, map } = normalizeWithMap(original);
+  const ranges = [];
+  terms.forEach(t=>{
+    let start = 0;
+    while (true){
+      const i = norm.indexOf(t, start);
+      if (i === -1) break;
+      const j = i + t.length - 1;
+      ranges.push([map[i], map[j] + 1]); // [inicio, fin)
+      start = i + 1;
     }
-    lista.forEach(item => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        card.innerHTML = `
-            <div class="modelo">${resaltar(item.modelo, busqueda)}</div>
-            <div class="impresoras">${resaltar(item.impresoras, busqueda)}</div>
-        `;
-        resultadoDiv.appendChild(card);
+  });
+  if (!ranges.length) return escapeHTML(original);
+  // Unir solapamientos
+  ranges.sort((a,b)=>a[0]-b[0]);
+  const merged = [ranges[0]];
+  for (let k=1;k<ranges.length;k++){
+    const last = merged[merged.length-1];
+    const cur = ranges[k];
+    if (cur[0] <= last[1]) last[1] = Math.max(last[1], cur[1]);
+    else merged.push(cur);
+  }
+  // Reconstruir con <mark>
+  let out = '', prev = 0;
+  for (const [a,b] of merged){
+    out += escapeHTML(original.slice(prev, a));
+    out += '<mark>' + escapeHTML(original.slice(a, b)) + '</mark>';
+    prev = b;
+  }
+  out += escapeHTML(original.slice(prev));
+  return out;
+}
+
+function escapeHTML(s){
+  return s.replace(/[&<>"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m]));
+}
+
+/* ================ Búsqueda y ranking ================= */
+function scoreItem(itemNorm, terms){
+  // Relevancia: +2 por match en modelo, +1 por match en impresoras, + bonus por multi-coincidencias
+  let score = 0;
+  terms.forEach(t=>{
+    // ocurrencias en modelo
+    let idx = 0, c=0;
+    while((idx = itemNorm.modelo.indexOf(t, idx)) !== -1){ c++; idx = idx+1; }
+    score += c * 2;
+    // ocurrencias en impresoras
+    idx = 0; c=0;
+    while((idx = itemNorm.imp.indexOf(t, idx)) !== -1){ c++; idx = idx+1; }
+    score += c * 1;
+  });
+  return score;
+}
+
+function filterAndRank(items, qTerms, modeAll=true, orderByScore=true){
+  // Pre-normalizamos para rendimiento
+  const norms = items.map(it=>({
+    raw: it,
+    modelo: normalize(it.modelo),
+    imp: normalize(it.impresoras)
+  }));
+  const filtered = norms.filter(n=>{
+    if (!qTerms.length) return true;
+    const hayModelo = n.modelo;
+    const hayImp = n.imp;
+    const predicate = term => (hayModelo.includes(term) || hayImp.includes(term));
+    return modeAll ? qTerms.every(predicate) : qTerms.some(predicate);
+  });
+  if (orderByScore && qTerms.length){
+    filtered.sort((a,b)=> scoreItem(b, qTerms) - scoreItem(a, qTerms));
+  }
+  return filtered.map(x=>x.raw);
+}
+
+/* ================ Render ================= */
+const elQ = document.getElementById('q');
+const elGrid = document.getElementById('grid');
+const elCount = document.getElementById('count');
+const elChips = document.getElementById('chips');
+const modeAll = document.getElementById('modeAll');
+const rankOn = document.getElementById('rankOn');
+const clearBtn = document.getElementById('clearBtn');
+const demoBtn = document.getElementById('demoBtn');
+
+function renderChips(terms){
+  elChips.innerHTML = '';
+  terms.forEach(t=>{
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = `“${escapeHTML(t)}” <button title="Quitar" style="all:unset; cursor:pointer; font-weight:700; color:#374151">×</button>`;
+    chip.querySelector('button').addEventListener('click', ()=>{
+      // quitar término del query
+      const rest = tokenize(elQ.value).filter(x=>x!==t);
+      elQ.value = rest.join(' ');
+      doSearch();
+      elQ.focus();
     });
+    elChips.appendChild(chip);
+  });
 }
 
-// Función de búsqueda
-function buscarArticulos(texto) {
-    const busqueda = texto.trim().toLowerCase();
-    const filtrados = articulos.filter(a =>
-        a.modelo.toLowerCase().includes(busqueda) ||
-        a.impresoras.toLowerCase().includes(busqueda)
-    );
-    mostrarResultados(filtrados, texto);
+function render(items, terms){
+  elGrid.innerHTML = '';
+  if (!items.length){
+    elCount.textContent = '0 resultados';
+    elGrid.innerHTML = `<div class="empty">
+      <p><strong>Sin resultados.</strong></p>
+      <p>Consejos: usa menos palabras, sin acentos, o verifica el modelo/serie.</p>
+    </div>`;
+    return;
+  }
+  elCount.textContent = `${items.length} resultado${items.length!==1?'s':''}`;
+  items.forEach((it, i)=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = `${Math.min(i, 6)*30}ms`;
+    card.innerHTML = `
+      <div class="modelo">${highlight(it.modelo, terms)}</div>
+      <div class="imp">${highlight(it.impresoras, terms)}</div>
+      <div class="muted">Coincide en: ${
+        terms.map(t=>{
+          const hay = normalize(it.modelo + ' ' + it.impresoras).includes(t);
+          return `<span>${hay?'✔️':'❌'} ${escapeHTML(t)}</span>`
+        }).join(' · ')
+      }</div>
+    `;
+    elGrid.appendChild(card);
+  });
 }
 
-// Eventos
-inputBusqueda.addEventListener("input", e => buscarArticulos(e.target.value));
-btnLimpiar.addEventListener("click", () => {
-    inputBusqueda.value = "";
-    mostrarResultados(articulos);
-    inputBusqueda.focus();
+function doSearch(){
+  const terms = tokenize(elQ.value);
+  renderChips(terms);
+  const out = filterAndRank(articulos, terms, modeAll.checked, rankOn.checked);
+  render(out, terms);
+}
+
+/* ================ Eventos UX ================ */
+elQ.addEventListener('input', doSearch);
+modeAll.addEventListener('change', doSearch);
+rankOn.addEventListener('change', doSearch);
+clearBtn.addEventListener('click', ()=>{
+  elQ.value = '';
+  doSearch();
+  elQ.focus();
 });
-btnRecargar.addEventListener("click", () => {
-    location.reload();
+demoBtn.addEventListener('click', ()=>{
+  // ejemplo con palabras desordenadas y mezcla de acentos
+  elQ.value = 'p1102 hp láser pro';
+  doSearch();
+  elQ.focus();
+});
+// Esc = limpiar
+window.addEventListener('keydown', e=>{
+  if (e.key === 'Escape'){ clearBtn.click(); }
 });
 
-// Mostrar todos al inicio
-mostrarResultados(articulos);
+// Carga inicial
+doSearch();
 </script>
-
 </body>
 </html>
