@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <style>
+  /* Fondo y blur */
   body, html {
     height: 100%;
     margin: 0;
@@ -18,18 +19,59 @@
     align-items: center;
     font-family: 'Segoe UI', sans-serif;
   }
-
-  .card {
+  body::before {
+    content: '';
+    position: fixed;
     width: 100%;
-    max-width: 480px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    background-color: rgba(255, 255, 255, 0.95);
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
+    z-index: 0;
   }
 
+  /* Card principal */
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    background-color: rgba(255, 255, 255, 0.98);
+    transform: translateY(50px);
+    opacity: 0;
+    animation: fadeInUp 0.8s forwards;
+  }
+
+  /* Animación de entrada de card */
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Dark mode */
   .dark-mode {
     filter: invert(1) hue-rotate(180deg);
+  }
+
+  /* Botones */
+  .button {
+    transition: all 0.3s ease;
+  }
+  .button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  }
+
+  /* Inputs */
+  input:focus, select:focus {
+    border-color: #25D366;
+    box-shadow: 0 0 8px rgba(37, 211, 102, 0.5);
+    outline: none;
+    transition: all 0.3s ease;
   }
 
   /* Modal animado */
@@ -42,7 +84,28 @@
     opacity: 1;
     pointer-events: all;
   }
+  .modal-card {
+    transform: scale(0.8);
+    transition: transform 0.4s ease;
+  }
+  .modal.is-active .modal-card {
+    transform: scale(1);
+  }
 
+  /* Historial animado */
+  #historyList li {
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: slideIn 0.4s forwards;
+  }
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Header botones */
   .buttons-header {
     display: flex;
     gap: 0.5rem;
@@ -151,17 +214,14 @@
   const historyList = document.getElementById('historyList');
   const countrySelect = document.getElementById('countryCode');
 
-  // Modo oscuro
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
   }
 
-  // Mensaje rápido
   function quickMsg(msg) {
     messageInput.value = msg;
   }
 
-  // Guardar historial
   function saveHistory(num, msg) {
     let hist = JSON.parse(localStorage.getItem('whatsappHistory')) || [];
     hist.unshift({ num, msg, date: new Date().toLocaleString() });
@@ -170,12 +230,12 @@
     renderHistory();
   }
 
-  // Mostrar historial
   function renderHistory() {
     historyList.innerHTML = '';
     const hist = JSON.parse(localStorage.getItem('whatsappHistory')) || [];
-    hist.forEach(item => {
+    hist.forEach((item, idx) => {
       const li = document.createElement('li');
+      li.style.animationDelay = `${idx * 0.1}s`;
       li.innerHTML = `<a onclick="useHistory('${item.num}', '${item.msg}')">
         ${item.num} - ${item.msg} <small>(${item.date})</small>
       </a>`;
@@ -208,7 +268,6 @@
       alert('Número inválido. Ingresa entre 8 y 15 dígitos.');
       return;
     }
-
     if(msg === ''){
       alert('Escribe un mensaje antes de enviar');
       return;
@@ -229,7 +288,6 @@
     if(e.key === 'Enter') sendMessage();
   });
 
-  // Modal animado
   function openHelp() {
     document.getElementById('helpModal').classList.add('is-active');
   }
