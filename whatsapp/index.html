@@ -244,10 +244,11 @@
 </div>
 
 <script>
-  // ----- VARIABLES MODIFICABLES -----
+  // URLs base modificables
   const reviewURL = "https://www.norttek.com.mx/review";
   const storeURL  = "https://tienda.norttek.com.mx";
 
+  // Mensajes rápidos con emojis
   const reviewMsg = `😃 ¡Hola!  
 Esperamos que estés disfrutando tu compra 🛒✨
 ────────────────────────
@@ -260,22 +261,20 @@ Esperamos que estés disfrutando tu compra 🛒✨
 
 💙 ¡Tu opinión nos ayuda a seguir mejorando y ofreciendo un mejor servicio!`;
 
-  const storeMsg = `🛒 ¡Hola!  
-Esperamos que estés teniendo un excelente día ✨
-────────────────────────
+  const storeMsg = `🛍️ ¡Comprar nunca fue tan fácil!  
+Descubre nuestra tienda en línea y encuentra todo lo que necesitas ✨
+👇  
+🔗 ¡Visita nuestra tienda aquí! 👉 ${storeURL} 🔗
 
-🎉 Queremos invitarte a visitar nuestra tienda en línea y descubrir todos nuestros productos y ofertas exclusivas.
+🚀 Productos de calidad y envío rápido, directo a tu puerta!`;
 
-🔗 *¡VISITA NUESTRA TIENDA AQUÍ!* 👉 ${storeURL} 🔗  
-
-💙 ¡Puedes solicitar el envio de tus productos sin costo!  
-🛍️ ¡Comprar nunca fue tan fácil!`;
-
-  // ----- FUNCIONES -----
+  // Función para enviar mensaje por WhatsApp
   function quickMsg(msg){
-    const number = document.getElementById('number').value;
-    const country = document.getElementById('countryCode').value;
+    const number = document.getElementById('number').value.trim();
+    const country = document.getElementById('countryCode').value.trim();
     if(!number) return alert("Por favor ingresa un número de teléfono.");
+
+    // Codificamos correctamente todos los caracteres
     const url = `https://wa.me/${country}${number}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
   }
