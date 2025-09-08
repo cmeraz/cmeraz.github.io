@@ -188,11 +188,10 @@
       </div>
     </div>
 
-    <!-- Mensajes rápidos -->
+    <!-- Mensajes rápidos: reseña y tienda -->
     <div class="buttons is-centered">
-      <button class="button is-small is-info" onclick="quickMsg('Hola, ¿cómo estás?')">Saludo</button>
-      <button class="button is-small is-warning" onclick="quickMsg('Envíame tu ubicación 📍')">Ubicación</button>
-      <button class="button is-small is-danger" onclick="quickMsg('Lláma cuando puedas 📞')">Llamada</button>
+      <button class="button is-small is-info" onclick="quickMsg(reviewMsg)">Dejar reseña</button>
+      <button class="button is-small is-warning" onclick="quickMsg(storeMsg)">Visitar tienda</button>
     </div>
 
     <!-- Botones principales -->
@@ -225,8 +224,8 @@
     <section class="modal-card-body">
       <ul>
         <li>Selecciona el país y escribe el número de teléfono (sin espacios ni guiones).</li>
-        <li>Escribe el mensaje o usa los botones de mensajes rápidos.</li>
-        <li>Haz clic en <b>Enviar</b> para abrir WhatsApp.</li>
+        <li>Haz clic en <b>Dejar reseña</b> o <b>Visitar tienda</b> para rellenar el mensaje automáticamente.</li>
+        <li>Haz clic en <b>Enviar</b> para abrir WhatsApp con el mensaje listo.</li>
         <li>El historial guarda tus últimos 10 mensajes para reutilizarlos.</li>
         <li>Usa <b>Limpiar</b> para borrar los campos.</li>
         <li>Activa <b>Modo oscuro</b> si quieres un fondo invertido.</li>
@@ -237,6 +236,62 @@
     </footer>
   </div>
 </div>
+
+<script>
+// URLs y mensajes variables
+let reviewUrl = 'https://tusitio.com/review'; // URL de la página de reseña
+let storeUrl = 'https://tienda.tusitio.com';  // URL de la tienda en línea
+
+let reviewMsg = `¡Hola! Quiero dejar una reseña sobre mi experiencia: ${reviewUrl}`;
+let storeMsg = `¡Hola! Te comparto la tienda en línea: ${storeUrl}`;
+
+// Función para rellenar el input de mensaje
+function quickMsg(msg) {
+    document.getElementById('message').value = msg;
+}
+
+// Función para enviar WhatsApp
+document.getElementById('sendBtn').addEventListener('click', () => {
+    const country = document.getElementById('countryCode').value;
+    const number = document.getElementById('number').value.replace(/\D/g,''); // solo números
+    const message = encodeURIComponent(document.getElementById('message').value);
+    if(number) {
+        const waUrl = `https://wa.me/${country}${number}?text=${message}`;
+        window.open(waUrl, '_blank');
+        addToHistory(message);
+    } else {
+        alert('Ingresa un número de teléfono válido');
+    }
+});
+
+// Historial
+function addToHistory(msg){
+    const list = document.getElementById('historyList');
+    const li = document.createElement('li');
+    li.textContent = msg;
+    list.prepend(li);
+    if(list.children.length > 10) list.removeChild(list.lastChild);
+}
+function clearHistory(){
+    document.getElementById('historyList').innerHTML = '';
+}
+
+// Limpiar inputs
+function clearInputs(){
+    document.getElementById('number').value = '';
+    document.getElementById('message').value = '';
+}
+
+// Modal de ayuda
+function openHelp(){ document.getElementById('helpModal').classList.add('is-active'); }
+function closeHelp(){ document.getElementById('helpModal').classList.remove('is-active'); }
+
+// Opcional: modo oscuro
+function toggleDarkMode(){
+    document.body.classList.toggle('dark-mode');
+}
+</script>
+
 
 <script>
   const numberInput = document.getElementById('number');
