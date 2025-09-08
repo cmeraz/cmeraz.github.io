@@ -244,10 +244,34 @@
 </div>
 
 <script>
-  // Mensajes rápidos como variables
-  const reviewMsg = "¡Hola! Me encantaría que dejaras tu reseña: https://tusitio.com/review";
-  const storeMsg = "¡Hola! Mira nuestra tienda en línea: https://tienda.tusitio.com";
+  // ----- VARIABLES MODIFICABLES -----
+  const reviewURL = "https://www.norttek.com.mx/review";
+  const storeURL  = "https://tienda.norttek.com.mx";
 
+  const reviewMsg = `😃 ¡Hola!  
+Esperamos que estés disfrutando tu compra 🛒✨
+────────────────────────
+
+🤗 Nos encantaría conocer tu opinión sobre tu experiencia con nosotros.
+
+⭐⭐⭐⭐⭐  
+👇  
+🔗 *¡DÉJANOS TU RESEÑA AQUÍ!* 👉 ${reviewURL} 🔗  
+
+💙 ¡Tu opinión nos ayuda a seguir mejorando y ofreciendo un mejor servicio!`;
+
+  const storeMsg = `🛒 ¡Hola!  
+Esperamos que estés teniendo un excelente día ✨
+────────────────────────
+
+🎉 Queremos invitarte a visitar nuestra tienda en línea y descubrir todos nuestros productos y ofertas exclusivas.
+
+🔗 *¡VISITA NUESTRA TIENDA AQUÍ!* 👉 ${storeURL} 🔗  
+
+💙 ¡Puedes solicitar el envio de tus productos sin costo!  
+🛍️ ¡Comprar nunca fue tan fácil!`;
+
+  // ----- FUNCIONES -----
   function quickMsg(msg){
     const number = document.getElementById('number').value;
     const country = document.getElementById('countryCode').value;
@@ -273,6 +297,7 @@
   function openHelp(){ document.getElementById('helpModal').classList.add('is-active'); }
   function closeHelp(){ document.getElementById('helpModal').classList.remove('is-active'); }
 </script>
+
 
 
 
