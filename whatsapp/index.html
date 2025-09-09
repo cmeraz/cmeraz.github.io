@@ -246,73 +246,43 @@
 <meta charset="UTF-8">
 
 <script>
-  // ============================
-  // 🔧 Variables fáciles de editar
-  // ============================
+  // URLs configurables
+  const reviewUrl = "https://www.norttek.com.mx/review";
+  const storeUrl  = "https://tienda.norttek.com.mx";
 
-  // URL de reseñas (Google Business)
-  const reviewUrl = "https://g.page/r/CX5aW7FJPwJCEBM/review";
+  // Mensajes en una sola línea (sin saltos de línea)
+  const reviewMsg = "😃 ¡Hola! Esperamos que estés disfrutando tu compra 🛒✨ Nos encantaría conocer tu opinión sobre tu experiencia con nosotros. ⭐⭐⭐⭐⭐ Déjanos tu reseña aquí 👉 " + reviewUrl + " 💙 ¡Tu opinión nos ayuda a seguir mejorando y ofreciendo un mejor servicio!";
+  
+  const storeMsg  = "🛒 ¡Comprar nunca fue tan fácil! ✨ Descubre nuestra tienda en línea y encuentra todo lo que necesitas con solo un clic. Visítanos aquí 👉 " + storeUrl + " 💳 Encuentra todo lo que necesitas desde la comodidad de tu casa 🚀";
 
-  // URL de tienda en línea
-  const storeUrl = "https://tienda.norttek.com.mx";
-
-  // Mensaje para reseñas (con emojis)
-  const reviewMsg = `😃 ¡Hola!  
-Esperamos que estés disfrutando tu compra 🛒✨
-────────────────────────
-
-🤗 Nos encantaría conocer tu opinión sobre tu experiencia con nosotros.
-
-⭐⭐⭐⭐⭐  
-👇  
-🔗 *¡DÉJANOS TU RESEÑA AQUÍ!* 👉 ${reviewUrl} 🔗  
-
-💙 ¡Tu opinión nos ayuda a seguir mejorando y ofreciendo un mejor servicio!`;
-
-  // Mensaje para tienda en línea (con emojis)
-  const storeMsg = `🛒 Comprar nunca fue tan fácil ✨  
-────────────────────────
-
-Explora nuestra *TIENDA EN LÍNEA* con productos de seguridad, telefonía y más.
-
-✅ Compra rápida y segura  
-✅ Entrega confiable  
-✅ Atención personalizada  
-
-👇  
-🔗 Visítala aquí 👉 ${storeUrl} 🔗  
-
-💙 ¡Gracias por elegirnos, tu confianza es nuestra prioridad!`;
-
-  // ============================
-  // 📲 Funciones principales
-  // ============================
-
-  function quickMsg(msg) {
+  // Función para enviar mensaje a WhatsApp
+  function quickMsg(msg){
     const number = document.getElementById('number').value;
     const country = document.getElementById('countryCode').value;
-    if (!number) return alert("Por favor ingresa un número de teléfono.");
-    const url = `https://wa.me/${country}${number}?text=${encodeURIComponent(msg)}`;
+    if(!number) return alert("Por favor ingresa un número de teléfono.");
+    const url = "https://api.whatsapp.com/send?phone=" + country + number + "&text=" + encodeURIComponent(msg);
     window.open(url, '_blank');
   }
 
-  function clearInputs() {
+  // Funciones auxiliares
+  function clearInputs(){
     document.getElementById('number').value = '';
     document.getElementById('message').value = '';
   }
 
-  function clearHistory() {
+  function clearHistory(){
     document.getElementById('historyList').innerHTML = '';
   }
 
-  function toggleDarkMode() {
+  function toggleDarkMode(){
     document.body.classList.toggle('has-background-dark');
     document.body.classList.toggle('has-text-white');
   }
 
-  function openHelp() { document.getElementById('helpModal').classList.add('is-active'); }
-  function closeHelp() { document.getElementById('helpModal').classList.remove('is-active'); }
+  function openHelp(){ document.getElementById('helpModal').classList.add('is-active'); }
+  function closeHelp(){ document.getElementById('helpModal').classList.remove('is-active'); }
 </script>
+
 
 
 
