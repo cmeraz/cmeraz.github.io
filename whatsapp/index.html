@@ -243,12 +243,20 @@
   </div>
 </div>
 
-<script>
-  // URLs base modificables
-  const reviewURL = "https://www.norttek.com.mx/review";
-  const storeURL  = "https://tienda.norttek.com.mx";
+<meta charset="UTF-8">
 
-  // Mensajes rápidos con emojis
+<script>
+  // ============================
+  // 🔧 Variables fáciles de editar
+  // ============================
+
+  // URL de reseñas (Google Business)
+  const reviewUrl = "https://g.page/r/CX5aW7FJPwJCEBM/review";
+
+  // URL de tienda en línea
+  const storeUrl = "https://tienda.norttek.com.mx";
+
+  // Mensaje para reseñas (con emojis)
   const reviewMsg = `😃 ¡Hola!  
 Esperamos que estés disfrutando tu compra 🛒✨
 ────────────────────────
@@ -257,45 +265,55 @@ Esperamos que estés disfrutando tu compra 🛒✨
 
 ⭐⭐⭐⭐⭐  
 👇  
-🔗 *¡DÉJANOS TU RESEÑA AQUÍ!* 👉 ${reviewURL} 🔗  
+🔗 *¡DÉJANOS TU RESEÑA AQUÍ!* 👉 ${reviewUrl} 🔗  
 
 💙 ¡Tu opinión nos ayuda a seguir mejorando y ofreciendo un mejor servicio!`;
 
-  const storeMsg = `🛍️ ¡Comprar nunca fue tan fácil!  
-Descubre nuestra tienda en línea y encuentra todo lo que necesitas ✨
+  // Mensaje para tienda en línea (con emojis)
+  const storeMsg = `🛒 Comprar nunca fue tan fácil ✨  
+────────────────────────
+
+Explora nuestra *TIENDA EN LÍNEA* con productos de seguridad, telefonía y más.
+
+✅ Compra rápida y segura  
+✅ Entrega confiable  
+✅ Atención personalizada  
+
 👇  
-🔗 ¡Visita nuestra tienda aquí! 👉 ${storeURL} 🔗
+🔗 Visítala aquí 👉 ${storeUrl} 🔗  
 
-🚀 Productos de calidad y envío rápido, directo a tu puerta!`;
+💙 ¡Gracias por elegirnos, tu confianza es nuestra prioridad!`;
 
-  // Función para enviar mensaje por WhatsApp
-  function quickMsg(msg){
-    const number = document.getElementById('number').value.trim();
-    const country = document.getElementById('countryCode').value.trim();
-    if(!number) return alert("Por favor ingresa un número de teléfono.");
+  // ============================
+  // 📲 Funciones principales
+  // ============================
 
-    // Codificamos correctamente todos los caracteres
+  function quickMsg(msg) {
+    const number = document.getElementById('number').value;
+    const country = document.getElementById('countryCode').value;
+    if (!number) return alert("Por favor ingresa un número de teléfono.");
     const url = `https://wa.me/${country}${number}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
   }
 
-  function clearInputs(){
+  function clearInputs() {
     document.getElementById('number').value = '';
     document.getElementById('message').value = '';
   }
 
-  function clearHistory(){
+  function clearHistory() {
     document.getElementById('historyList').innerHTML = '';
   }
 
-  function toggleDarkMode(){
+  function toggleDarkMode() {
     document.body.classList.toggle('has-background-dark');
     document.body.classList.toggle('has-text-white');
   }
 
-  function openHelp(){ document.getElementById('helpModal').classList.add('is-active'); }
-  function closeHelp(){ document.getElementById('helpModal').classList.remove('is-active'); }
+  function openHelp() { document.getElementById('helpModal').classList.add('is-active'); }
+  function closeHelp() { document.getElementById('helpModal').classList.remove('is-active'); }
 </script>
+
 
 
 
