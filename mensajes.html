@@ -280,6 +280,15 @@
             filter: brightness(1.1);
         }
 
+        .btn-success {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            filter: brightness(1.1);
+        }
+
         .btn .icon {
             font-size: 1.3em;
         }
@@ -616,7 +625,11 @@
                         <span class="icon">🔄</span>
                         Generar Mensajes
                     </button>
-                    <button class="btn btn-secondary" onclick="sendRandomMessage()">
+                    <button class="btn btn-success" onclick="generatePreview()">
+                        <span class="icon">👁️</span>
+                        Generar Vista Previa
+                    </button>
+                    <button class="btn btn-secondary" onclick="sendMessage()">
                         <span class="icon">📤</span>
                         Enviar Mensaje
                     </button>
@@ -1054,13 +1067,40 @@
             "Chécalo. ¿Tienes alguna requisición pendiente que pueda cotizarte? �"
         ];
 
+        /**
+         * Frases motivadoras y alegres para agregar a los mensajes
+         * Se anexan al final para dar un toque personal y positivo
+         */
+        const frasesMotivadoras = [
+            "¡Que tengas un excelente día! ✨",
+            "¡Mucho éxito en todo lo que emprendas! 🌟",
+            "¡Que sigan los éxitos! 🎯",
+            "¡Ánimo, tú puedes con todo! 💪",
+            "¡Hoy es un gran día para lograr cosas increíbles! ☀️",
+            "¡Sigue adelante, vas muy bien! 🚀",
+            "¡Que tu día esté lleno de momentos positivos! 😊",
+            "¡Recuerda que cada día es una nueva oportunidad! 🌈",
+            "¡Tú eres capaz de lograr grandes cosas! 💫",
+            "¡Que la buena energía te acompañe siempre! ⚡",
+            "¡Confía en ti, todo saldrá bien! 🍀",
+            "¡Hoy es un excelente día para brillar! ⭐",
+            "¡Sigue así, lo estás haciendo genial! 👏",
+            "¡Que tu semana esté llena de logros! 🎊",
+            "¡No te rindas, estás muy cerca del éxito! 🏆",
+            "¡Cada paso cuenta, sigue avanzando! 👣",
+            "¡Tu esfuerzo siempre vale la pena! 💝",
+            "¡Que tengas un día productivo y feliz! 🎈",
+            "¡Sonríe, todo va a salir perfecto! 😄",
+            "¡Eres increíble, sigue así! 🌺"
+        ];
+
         /* ═══════════════════════════════════════════════════════════
            FUNCIONES PRINCIPALES
            ═══════════════════════════════════════════════════════════ */
 
         /**
          * Genera 20 mensajes conversacionales únicos
-         * Combina plantillas, productos y cierres de forma inteligente y natural
+         * Combina plantillas, productos, cierres y frases motivadoras de forma inteligente y natural
          */
         function generateMessages() {
             AppState.mensajesGenerados = [];
@@ -1070,11 +1110,12 @@
                 const plantilla = plantillasConversacion[i % plantillasConversacion.length];
                 const producto = productos[i % productos.length];
                 const cierre = cierresConversacion[i % cierresConversacion.length];
+                const frase = frasesMotivadoras[i % frasesMotivadoras.length];
                 const conector = plantilla.conectores[Math.floor(Math.random() * plantilla.conectores.length)];
                 const transicion = transicionesProducto[Math.floor(Math.random() * transicionesProducto.length)];
                 
-                // Construir mensaje conversacional más natural
-                const mensaje = `${plantilla.saludo}, ${plantilla.transicion}. ${conector} ${transicion} *${producto.nombre}* ${producto.descripcion} 💰 ${producto.precio}.\n\n🔗 ${producto.link}\n\n${cierre}`;
+                // Construir mensaje conversacional más natural con frase motivadora
+                const mensaje = `${plantilla.saludo}, ${plantilla.transicion}. ${conector} ${transicion} *${producto.nombre}* ${producto.descripcion} 💰 ${producto.precio}.\n\n🔗 ${producto.link}\n\n${cierre}\n\n${frase}`;
                 
                 AppState.mensajesGenerados.push(mensaje);
             }
@@ -1121,10 +1162,10 @@
         }
 
         /**
-         * Envía un mensaje aleatorio por WhatsApp
-         * Valida el número y muestra preview antes de enviar
+         * Genera y muestra una vista previa del mensaje sin enviarlo
+         * Permite revisar el mensaje antes de enviarlo
          */
-        function sendRandomMessage() {
+        function generatePreview() {
             // Validar número de teléfono
             const phoneNumber = validatePhoneNumber();
             if (!phoneNumber) return;
@@ -1144,20 +1185,39 @@
             
             // Mostrar preview
             showPreview(mensajeAleatorio, phoneNumber);
+            showNotification('✓ Vista previa generada. Revisa el mensaje antes de enviar', 'success');
             
-            // Construir URL de WhatsApp
-            const mensajeCodificado = encodeURIComponent(mensajeAleatorio);
+            // Log para desarrollo
+            console.log('👁️ Preview generado para: +' + phoneNumber);
+            console.log('💬 Mensaje:', mensajeAleatorio);
+        }
+
+        /**
+         * Envía el mensaje actual de la vista previa por WhatsApp
+         * No genera nuevo mensaje, solo envía el que está en preview
+         */
+        function sendMessage() {
+            // Validar número de teléfono
+            const phoneNumber = validatePhoneNumber();
+            if (!phoneNumber) return;
+            
+            // Verificar que hay un mensaje en preview
+            if (!AppState.mensajeActual) {
+                showNotification('❌ Primero genera una vista previa del mensaje', 'error');
+                return;
+            }
+            
+            // Construir URL de WhatsApp con el mensaje actual
+            const mensajeCodificado = encodeURIComponent(AppState.mensajeActual);
             const whatsappURL = `https://wa.me/${phoneNumber}?text=${mensajeCodificado}`;
             
-            // Abrir WhatsApp después de un pequeño delay para que se vea el preview
-            setTimeout(() => {
-                window.open(whatsappURL, '_blank');
-                showNotification('✓ Abriendo WhatsApp...', 'success');
-            }, 500);
+            // Abrir WhatsApp
+            window.open(whatsappURL, '_blank');
+            showNotification('✓ Abriendo WhatsApp...', 'success');
             
             // Log para desarrollo
             console.log('📤 Enviando a: +' + phoneNumber);
-            console.log('💬 Mensaje:', mensajeAleatorio);
+            console.log('💬 Mensaje:', AppState.mensajeActual);
         }
 
         /**
@@ -1280,7 +1340,7 @@
             // Permitir envío con Enter
             phoneInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    sendRandomMessage();
+                    sendMessage();
                 }
             });
             
