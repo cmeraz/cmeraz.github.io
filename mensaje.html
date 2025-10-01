@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Generador de Mensajes WhatsApp</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  h1 {
+    color: #25D366;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 28px;
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #25D366;
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 15px;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+  }
+  
+  .btn:hover {
+    background: #20BA5A;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+  }
+  
+  .btn:active {
+    transform: translateY(0);
+  }
+  
+  .info {
+    background: #f0f9ff;
+    border-left: 4px solid #3b82f6;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #1e40af;
+  }
+  
+  .icon {
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .helper-text {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="icon">💬</div>
+  <h1>Generador de Mensajes</h1>
+  <p class="subtitle">Mensajes dinámicos para WhatsApp</p>
+  
+  <div class="input-group">
+    <label for="phoneNumber">Número de WhatsApp (con código de país):</label>
+    <input 
+      type="tel" 
+      id="phoneNumber" 
+      placeholder="Ejemplo: 521234567890" 
+      pattern="[0-9]+"
+    />
+    <p class="helper-text">Incluye el código de país sin signos (ej: 52 para México)</p>
+  </div>
+  
+  <button class="btn" id="sendBtn">📱 Enviar Mensaje Aleatorio</button>
+  
+  <div class="info">
+    <strong>💡 Cómo funciona:</strong><br>
+    Se generan 20 mensajes únicos combinando saludos, frases motivadoras, productos y preguntas. 
+    Al hacer clic, se enviará un mensaje aleatorio al número ingresado vía WhatsApp Web.
+    Los mensajes se muestran en la consola del navegador (F12).
+  </div>
+</div>
+
+<script>
+  // Lista de saludos
+  const saludos = [
+    "Hola 👋, buen día.",
+    "¡Hola! 😊 Qué gusto saludarte.",
+    "Buenos días 🌅, espero estés muy bien.",
+    "¡Hola! Un gusto contactarte.",
+    "¡Saludos! 👋 Feliz día.",
+  ];
+
+  // Lista de 20 frases motivadoras
+  const frases = [
+    "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+    "Cree en ti mismo y todo será posible.",
+    "Cada día es una nueva oportunidad para mejorar.",
+    "La mejor inversión es la que haces en ti mismo.",
+    "No cuentes los días, haz que los días cuenten.",
+    "El único modo de hacer un gran trabajo es amar lo que haces.",
+    "La vida es 10% lo que te pasa y 90% cómo reaccionas.",
+    "Sé el cambio que quieres ver en el mundo.",
+    "La motivación te impulsa a comenzar, el hábito te mantiene en marcha.",
+    "Hoy es el día perfecto para empezar algo nuevo.",
+    "Tu actitud determina tu dirección.",
+    "Los sueños no tienen fecha de caducidad.",
+    "Pequeños pasos cada día llevan a grandes cambios.",
+    "La constancia es la clave del éxito.",
+    "No esperes oportunidades, créalas.",
+    "El fracaso es solo la oportunidad de comenzar de nuevo con más inteligencia.",
+    "La mejor manera de predecir el futuro es crearlo.",
+    "El optimismo es el imán de la felicidad.",
+    "Cada experto fue alguna vez un principiante.",
+    "Tu único límite eres tú mismo."
+  ];
+
+  // Lista de 10 productos con ofertas
+  const productos = [
+    "Cámara de seguridad HD a $1,200 💰",
+    "Laptop Core i5 16GB RAM en $8,999 🎯",
+    "Impresora multifuncional WiFi por $2,499 🖨️",
+    "Smartphone 128GB en oferta a $4,999 📱",
+    "Mouse inalámbrico ergonómico a $299 🖱️",
+    "Teclado mecánico RGB por $899 ⌨️",
+    "Monitor LED 24\" Full HD a $2,799 🖥️",
+    "Audífonos Bluetooth Premium a $599 🎧",
+    "Disco duro externo 1TB por $899 💾",
+    "Router WiFi 6 de alta velocidad a $1,499 📡"
+  ];
+
+  // Lista de preguntas finales
+  const preguntas = [
+    "¿Necesitas que te preparemos este producto o algo más de nuestra línea esta semana?",
+    "¿Te gustaría que apartáramos este artículo para ti?",
+    "¿Qué te parece si revisamos juntos más opciones?",
+    "¿Te interesa conocer más detalles de este producto?",
+    "¿Quieres que te enviemos más información sobre nuestros productos?"
+  ];
+
+  // Función para generar los 20 mensajes únicos
+  function generarMensajes() {
+    const mensajes = [];
+    
+    for (let i = 0; i < 20; i++) {
+      const saludo = saludos[i % saludos.length];
+      const frase = frases[i];
+      const producto = productos[i % productos.length];
+      const pregunta = preguntas[i % preguntas.length];
+      
+      const mensaje = `${saludo}\n\n${frase}\n\n${producto}\n\n${pregunta}`;
+      
+      mensajes.push({
+        id: i + 1,
+        mensaje: mensaje
+      });
+    }
+    
+    return mensajes;
+  }
+
+  // Generar los mensajes al cargar la página
+  const mensajesGenerados = generarMensajes();
+
+  // Mostrar los mensajes en consola
+  console.log("=== MENSAJES GENERADOS ===");
+  console.log(JSON.stringify(mensajesGenerados, null, 2));
+  console.log(`Total de mensajes: ${mensajesGenerados.length}`);
+
+  // Función para seleccionar un mensaje aleatorio
+  function obtenerMensajeAleatorio() {
+    const indiceAleatorio = Math.floor(Math.random() * mensajesGenerados.length);
+    return mensajesGenerados[indiceAleatorio];
+  }
+
+  // Event listener para el botón de envío
+  document.getElementById('sendBtn').addEventListener('click', () => {
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    
+    // Validar el número de teléfono
+    if (!phoneNumber) {
+      alert('Por favor ingresa un número de WhatsApp válido.');
+      return;
+    }
+    
+    if (!/^\d{8,15}$/.test(phoneNumber)) {
+      alert('El número debe contener entre 8 y 15 dígitos (solo números).');
+      return;
+    }
+    
+    // Obtener mensaje aleatorio
+    const mensajeSeleccionado = obtenerMensajeAleatorio();
+    
+    console.log("=== MENSAJE SELECCIONADO ===");
+    console.log(`ID: ${mensajeSeleccionado.id}`);
+    console.log(`Mensaje:\n${mensajeSeleccionado.mensaje}`);
+    
+    // Codificar el mensaje para URL
+    const mensajeCodificado = encodeURIComponent(mensajeSeleccionado.mensaje);
+    
+    // Crear URL de WhatsApp
+    const url = `https://wa.me/${phoneNumber}?text=${mensajeCodificado}`;
+    
+    // Abrir WhatsApp en nueva pestaña
+    window.open(url, '_blank');
+  });
+
+  // Permitir enviar con Enter en el input
+  document.getElementById('phoneNumber').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      document.getElementById('sendBtn').click();
+    }
+  });
+</script>
+
+</body>
+</html>
