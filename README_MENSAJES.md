@@ -21,10 +21,12 @@ Sistema inteligente para generar y enviar mensajes conversacionales personalizad
 - Mensajes de error claros y útiles
 
 ### 👀 Preview del Mensaje
+- **Botón dedicado** para generar vista previa antes de enviar
 - Vista previa antes de enviar el mensaje
 - Diseño estilo burbuja de WhatsApp
 - Muestra destinatario y hora actual
-- Botón para cerrar y cancelar el envío
+- Botón para cerrar y revisar otro mensaje
+- **Auto-preview** cuando se completan los 10 dígitos del teléfono
 
 ### 🔔 Sistema de Notificaciones
 - Notificaciones flotantes elegantes
@@ -58,11 +60,19 @@ Abre el archivo `mensajes.html` en tu navegador preferido.
 - Los mensajes ya se generan automáticamente al cargar la página
 ```
 
+### 3️⃣ **Generar Vista Previa**
+```
+- Clic en el botón "👁️ Generar Vista Previa"
+- Se generará un mensaje aleatorio para revisar
+- Puedes hacer clic múltiples veces para ver diferentes mensajes
+- El mensaje incluye una frase motivadora al final
+```
+
 ### 4️⃣ **Enviar Mensaje**
 ```
+- Una vez que estés satisfecho con el mensaje del preview
 - Clic en el botón "📤 Enviar Mensaje"
-- Verás un preview del mensaje que se enviará
-- Se abrirá WhatsApp Web automáticamente con el mensaje listo
+- Se abrirá WhatsApp Web con el mensaje exacto del preview
 - Solo tienes que hacer clic en enviar en WhatsApp
 ```
 
@@ -71,19 +81,25 @@ Abre el archivo `mensajes.html` en tu navegador preferido.
 ## 🎯 Flujo de Uso Completo
 
 ```
-┌─────────────────────────────────────┐
-│  1. Abrir mensajes.html             │
-│     ↓                               │
-│  2. Ingresar número (10 dígitos)    │
-│     ↓                               │
-│  3. Clic en "Enviar Mensaje"        │
-│     ↓                               │
-│  4. Ver preview del mensaje         │
-│     ↓                               │
-│  5. Se abre WhatsApp Web            │
-│     ↓                               │
-│  6. Clic en enviar en WhatsApp      │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│  1. Abrir mensajes.html                 │
+│     ↓                                   │
+│  2. Ingresar número (10 dígitos)        │
+│     ↓                                   │
+│  3. Se muestra auto-preview             │
+│     ↓                                   │
+│  4. Clic "Generar Vista Previa"         │
+│     (opcional, para ver otros mensajes) │
+│     ↓                                   │
+│  5. Revisar mensaje con frase           │
+│     motivadora                          │
+│     ↓                                   │
+│  6. Clic "Enviar Mensaje"               │
+│     ↓                                   │
+│  7. Se abre WhatsApp Web                │
+│     ↓                                   │
+│  8. Clic en enviar en WhatsApp          │
+└─────────────────────────────────────────┘
 ```
 
 ---
@@ -94,15 +110,20 @@ Los mensajes generados siguen esta estructura natural:
 
 ```
 [Saludo] + [Transición] + [Conector] + [Producto] + [Descripción] + 
-[Precio] + [Link] + [Cierre con Pregunta]
+[Precio] + [Link] + [Cierre con Pregunta] + [Frase Motivadora]
 ```
 
 ### Ejemplo de Mensaje:
 ```
-Hola, buen día, hoy hace un excelente día para caminar. 
-Aprovechando que tenemos papel bond de muy buena calidad a 
-$950 la caja. Puedes verlo aquí: [link]. 
-¿Tienes algún pedido pendiente para esta semana?
+Buenos días ☀️, espero que andes súper bien. Quería platicarte que 
+me topé con *tóner para impresora* diferentes modelos, con garantía 
+incluida 💰 .
+
+🔗 https://tienda.norttek.com.mx/
+
+¿Qué te parece? ¿Necesitas que te cotice algo adicional? 📋
+
+¡Mucho éxito en todo lo que emprendas! 🌟
 ```
 
 ---
@@ -215,12 +236,15 @@ const AppState = {
 };
 
 // Funciones principales
-generateMessages()      // Genera 20 mensajes únicos
+generateMessages()      // Genera 20 mensajes únicos con frases motivadoras
 validatePhoneNumber()   // Valida el formato del número
-sendRandomMessage()     // Envía mensaje aleatorio
+generatePreview()       // Genera y muestra vista previa del mensaje
+sendMessage()           // Envía el mensaje actual del preview
 showPreview()          // Muestra vista previa
 showNotification()     // Muestra notificaciones
 updateStats()          // Actualiza estadísticas
+formatPhoneInput()     // Formatea input y muestra auto-preview
+showAutoPreview()      // Muestra preview automático al completar número
 ```
 
 ### Personalización
@@ -244,6 +268,12 @@ updateStats()          // Actualiza estadísticas
     transicion: "tu transición",
     conectores: ["Conector 1", "Conector 2"]
 }
+```
+
+**Agregar frases motivadoras:**
+```javascript
+// Busca el array 'frasesMotivadoras' y agrega:
+"¡Tu frase motivadora aquí! 🎉"
 ```
 
 **Cambiar colores:**

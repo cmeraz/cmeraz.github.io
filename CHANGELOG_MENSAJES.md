@@ -1,5 +1,61 @@
 # 📋 CHANGELOG - Generador de Mensajes WhatsApp
 
+## Versión 2.1 - Mejoras en Funcionalidad (Actual)
+
+### 🆕 **NUEVAS CARACTERÍSTICAS**
+
+#### Botón de Vista Previa Dedicado
+- ✅ **Nuevo botón "Generar Vista Previa"** separado del envío
+- ✅ **Revisión antes de enviar** - permite ver múltiples mensajes antes de decidir
+- ✅ **Botón verde distintivo** con ícono de ojo (👁️)
+- ✅ **Notificación informativa** al generar preview
+
+#### Frases Motivadoras
+- ✅ **20 frases motivadoras y alegres** incluidas en cada mensaje
+- ✅ **Rotación automática** - cada mensaje lleva una frase diferente
+- ✅ **Variedad de estilos** - desde motivacionales hasta alegres
+- ✅ **Emojis contextuales** en cada frase
+- ✅ **Ejemplos:** "¡Que tengas un excelente día! ✨", "¡Mucho éxito en todo lo que emprendas! 🌟"
+
+#### Flujo de Envío Mejorado
+- ✅ **Separación de funciones** - generar preview vs enviar mensaje
+- ✅ **Validación de preview** - no permite enviar sin preview activo
+- ✅ **Envío del mensaje exacto** del preview (no genera uno nuevo)
+- ✅ **Mensaje de error claro** si intenta enviar sin preview
+
+### 🔄 **CAMBIOS EN FUNCIONALIDADES**
+
+#### Botón "Enviar Mensaje" Modificado
+- 🔄 **Ya NO genera mensaje aleatorio** al hacer clic
+- 🔄 **Solo envía el mensaje del preview** actual
+- 🔄 **Requiere preview activo** para funcionar
+- 🔄 **Eliminado el delay** - envío inmediato
+
+#### Estructura de Mensajes
+- 🔄 **Nueva estructura:** `[Saludo] + [Transición] + [Conector] + [Producto] + [Descripción] + [Precio] + [Link] + [Cierre] + [Frase Motivadora]`
+- 🔄 **Mensajes más largos** por inclusión de frases motivadoras
+- 🔄 **Más personalizados** con toque humano adicional
+
+### 🎨 **MEJORAS EN UI/UX**
+
+#### Layout de Tres Botones
+- ✅ **Diseño responsive** con grid adaptativo
+- ✅ **Tres botones claramente diferenciados:**
+  - Verde: Generar Mensajes (🔄)
+  - Verde esmeralda: Generar Vista Previa (👁️)
+  - Azul: Enviar Mensaje (📤)
+- ✅ **Iconos descriptivos** en cada botón
+- ✅ **Hover effects** en los tres botones
+
+### 📝 **DOCUMENTACIÓN**
+
+- ✅ **README actualizado** con nuevo flujo de uso
+- ✅ **Ejemplos actualizados** con frases motivadoras
+- ✅ **Diagramas de flujo** renovados
+- ✅ **Instrucciones claras** del nuevo proceso
+
+---
+
 ## Versión 2.0 - Rediseño Completo (Octubre 2025)
 
 ### 🎨 **DISEÑO Y ESTILOS**
