@@ -110,7 +110,7 @@ comentario filename: mensajes.html
         
         <div class="form-group">
             <label for="phoneNumber">Número de WhatsApp (con código de país):</label>
-            <input type="text" id="phoneNumber" placeholder="Ejemplo: +52 1234567890 o 521234567890">
+            <input type="text" id="phoneNumber" placeholder="Ejemplo: +52 1234567890" value="+52 ">
             <div class="help-text">Ingresa el número con código de país (ej: +521234567890)</div>
         </div>
 
@@ -197,7 +197,7 @@ comentario filename: mensajes.html
             {
                 nombre: "Sacapuntas Nextep Eléctrico con AutoStop",
                 precio: "$450",
-                descripcion: "practico y recargable,
+                descripcion: "practico y recargable",
                 link: "https://norttek.sicarx.shop?p=2sQDFN0YGnWGFWemvLUSLwYWdBr"
             },
             {
@@ -253,7 +253,7 @@ comentario filename: mensajes.html
                 nombre: "bolígrafos Pelikan Soft Gel",
                 precio: "$14 cada uno",
                 descripcion: "azules, escriben súper suave",
-                link: "https://norttek.sicarx.shop?p=2klYHpb2jKJXosMFaR6yJgP3dMt
+                link: "https://norttek.sicarx.shop?p=2klYHpb2jKJXosMFaR6yJgP3dMt"
             },
             {
                 nombre: "pegamento UHU",
@@ -446,7 +446,23 @@ comentario filename: mensajes.html
 
         let mensajesGenerados = [];
 
-        function generateMessages() {
+        // Función para mostrar preview automáticamente
+        function showPreviewMessage() {
+            // Generar mensajes si no existen
+            if (mensajesGenerados.length === 0) {
+                generateMessagesQuietly();
+            }
+            
+            // Seleccionar mensaje aleatorio
+            const mensajeAleatorio = mensajesGenerados[Math.floor(Math.random() * mensajesGenerados.length)];
+            
+            // Mostrar vista previa
+            document.getElementById('messagePreview').style.display = 'block';
+            document.getElementById('previewText').textContent = mensajeAleatorio;
+        }
+
+        // Función para generar mensajes sin alertas
+        function generateMessagesQuietly() {
             mensajesGenerados = [];
             
             // Generar 20 mensajes conversacionales únicos
@@ -461,6 +477,10 @@ comentario filename: mensajes.html
                 
                 mensajesGenerados.push(mensaje);
             }
+        }
+
+        function generateMessages() {
+            generateMessagesQuietly();
             
             // Mostrar en consola como JSON
             console.log("📋 Mensajes conversacionales generados:");
@@ -517,9 +537,39 @@ comentario filename: mensajes.html
             console.log('💬 Contenido:', mensajeAleatorio);
         }
 
-        // Generar mensajes automáticamente al cargar la página
+        // Generar mensajes automáticamente al cargar la página y configurar eventos
         window.onload = function() {
-            generateMessages();
+            generateMessagesQuietly();
+            
+            // Agregar event listener al input de teléfono
+            const phoneInput = document.getElementById('phoneNumber');
+            
+            phoneInput.addEventListener('input', function(e) {
+                // Asegurar que siempre empiece con +52
+                if (!this.value.startsWith('+52 ')) {
+                    this.value = '+52 ';
+                    return;
+                }
+                
+                // Limpiar el número (sin +52 y espacios)
+                const cleanNumber = this.value.substring(4).replace(/[\s\-\(\)]/g, '');
+                
+                // Si tiene exactamente 10 dígitos, mostrar preview
+                if (/^\d{10}$/.test(cleanNumber)) {
+                    showPreviewMessage();
+                }
+            });
+            
+            // Prevenir que se borre el +52
+            phoneInput.addEventListener('keydown', function(e) {
+                const cursorPosition = this.selectionStart;
+                if (cursorPosition <= 4 && (e.key === 'Backspace' || e.key === 'Delete')) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Mostrar preview inicial
+            showPreviewMessage();
         };
     </script>
 </body>
