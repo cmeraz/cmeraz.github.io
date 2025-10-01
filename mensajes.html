@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Business - Generador de Mensajes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #25D366;
+            --primary-dark: #1DA851;
+            --secondary-color: #128C7E;
+            --accent-color: #34B7F1;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e5e7eb;
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-large: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-large);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 25px 30px;
+            color: white;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--bg-secondary);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+            background: white;
+        }
+
+        .help-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-large);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #2196F3 100%);
+            color: white;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-large);
+        }
+
+        .preview-card {
+            margin-top: 30px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .preview-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 25px;
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .preview-body {
+            padding: 25px;
+            background: var(--bg-secondary);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        .message-bubble {
+            background: var(--primary-color);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 18px 18px 4px 18px;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: var(--shadow-light);
+        }
+
+        .json-card {
+            margin-top: 30px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .json-header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            padding: 20px 25px;
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .json-body {
+            padding: 0;
+            background: #1f2937;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .json-content {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            padding: 25px;
+            margin: 0;
+            color: #e5e7eb;
+            background: transparent;
+            border: none;
+            white-space: pre-wrap;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+            
+            .main-container {
+                padding: 0 10px;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1><i class="fab fa-whatsapp"></i> WhatsApp Business</h1>
+            <p class="subtitle">Generador Inteligente de Mensajes Comerciales</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-mobile-alt"></i> Configuración de Envío</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label" for="phoneNumber">
+                        <i class="fas fa-phone"></i> Número de WhatsApp
+                    </label>
+                    <input 
+                        type="text" 
+                        id="phoneNumber" 
+                        class="form-input" 
+                        placeholder="Ejemplo: 5551234567 (10 dígitos)"
+                        autocomplete="tel"
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                    >
+                    <div class="help-text">
+                        <i class="fas fa-info-circle"></i>
+                        Ingresa solo los 10 dígitos (se agregará +52 automáticamente)
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="generateMessages()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Generar Mensajes</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="sendRandomMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Enviar Aleatorio</span>
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalMessages">20</div>
+                        <div class="stat-label">Mensajes Únicos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">20</div>
+                        <div class="stat-label">Productos Disponibles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTemplates">8</div>
+                        <div class="stat-label">Plantillas de Conversación</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card preview-card" id="messagePreview">
+            <div class="preview-header">
+                <h2><i class="fas fa-eye"></i> Vista Previa del Mensaje</h2>
+            </div>
+            <div class="preview-body">
+                <div class="message-bubble" id="previewText"></div>
+            </div>
+        </div>
+
+        <div class="card json-card" id="jsonOutput">
+            <div class="json-header">
+                <h2><i class="fas fa-code"></i> Mensajes Generados (JSON)</h2>
+            </div>
+            <div class="json-body">
+                <pre class="json-content" id="jsonContent"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Arrays de plantillas de conversación natural mejoradas
+        const plantillasConversacion = [
+            {
+                saludo: "¡Hola! ¿Cómo has estado?",
+                transicion: "Espero que todo vaya muy bien por allá",
+                conectores: ["Por cierto", "Oye", "Te comento"]
+            },
+            {
+                saludo: "¡Buenos días!",
+                transicion: "¿Qué tal tu semana?",
+                conectores: ["Aprovecho para platicarte que", "Te tengo una buena noticia", "Quería contarte que"]
+            },
+            {
+                saludo: "Hola, ¿cómo estás?",
+                transicion: "Espero que hayas tenido un buen inicio de semana",
+                conectores: ["Oye", "Por cierto", "Te cuento que"]
+            },
+            {
+                saludo: "¡Saludos!",
+                transicion: "¿Cómo va todo por el trabajo?",
+                conectores: ["Justamente", "Hablando de trabajo", "Te comento que"]
+            },
+            {
+                saludo: "¡Hola! Buen día",
+                transicion: "Espero que tengas una excelente semana",
+                conectores: ["Oye", "Te platico que", "Quería comentarte que"]
+            },
+            {
+                saludo: "¿Qué tal? ¿Cómo estás?",
+                transicion: "Todo bien por aquí, trabajando como siempre",
+                conectores: ["Por cierto", "Te tengo algo que te puede interesar", "Oye, te comento que"]
+            },
+            {
+                saludo: "¡Buenos días!",
+                transicion: "¿Cómo amaneciste hoy?",
+                conectores: ["Aprovecho para decirte que", "Te cuento que", "Oye"]
+            },
+            {
+                saludo: "Hola, ¿qué tal tu día?",
+                transicion: "Espero que todo vaya de maravilla",
+                conectores: ["Te platico que", "Quería contarte que", "Por cierto"]
+            }
+        ];
+
+        const productos = [
+            {
+                nombre: "papel bond",
+                precio: "$200 la caja",
+                descripcion: "de muy buena calidad",
+                link: "https://tienda.ejemplo.com/papel-bond-calidad"
+            },
+            {
+                nombre: "tóner para impresora",
+                precio: "$850",
+                descripcion: "original, con garantía incluida",
+                link: "https://tienda.ejemplo.com/toner-impresora-original"
+            },
+            {
+                nombre: "archiveros metálicos",
+                precio: "$1,500",
+                descripcion: "súper resistentes",
+                link: "https://tienda.ejemplo.com/archiveros-metalicos"
+            },
+            {
+                nombre: "sillas ejecutivas",
+                precio: "$2,800",
+                descripcion: "muy cómodas y ergonómicas",
+                link: "https://tienda.ejemplo.com/sillas-ejecutivas-ergonomicas"
+            },
+            {
+                nombre: "carpetas",
+                precio: "$15 cada una",
+                descripcion: "tamaño carta, varios colores",
+                link: "https://tienda.ejemplo.com/carpetas-carta-colores"
+            },
+            {
+                nombre: "cuadernos profesionales",
+                precio: "$45 cada uno",
+                descripcion: "de 200 hojas, excelente papel",
+                link: "https://tienda.ejemplo.com/cuadernos-profesionales"
+            },
+            {
+                nombre: "bolígrafos de gel",
+                precio: "$120 la caja de 12",
+                descripcion: "escriben súper suave",
+                link: "https://tienda.ejemplo.com/boligrafos-gel-premium"
+            },
+            {
+                nombre: "grapadora industrial",
+                precio: "$680",
+                descripcion: "para uso rudo",
+                link: "https://tienda.ejemplo.com/grapadora-industrial"
+            },
+            {
+                nombre: "papel fotográfico",
+                precio: "$320 el paquete",
+                descripcion: "alta resolución, queda padrísimo",
+                link: "https://tienda.ejemplo.com/papel-fotografico-hd"
+            },
+            {
+                nombre: "organizadores de escritorio",
+                precio: "$280",
+                descripcion: "muy prácticos y se ven elegantes",
+                link: "https://tienda.ejemplo.com/organizadores-escritorio"
+            },
+            {
+                nombre: "impresoras láser",
+                precio: "$3,200",
+                descripcion: "súper rápidas",
+                link: "https://tienda.ejemplo.com/impresoras-laser-rapidas"
+            },
+            {
+                nombre: "calculadoras científicas",
+                precio: "$450",
+                descripcion: "con muchas funciones",
+                link: "https://tienda.ejemplo.com/calculadoras-cientificas"
+            },
+            {
+                nombre: "destructoras de papel",
+                precio: "$1,800",
+                descripcion: "muy silenciosas y seguras",
+                link: "https://tienda.ejemplo.com/destructoras-papel"
+            },
+            {
+                nombre: "mesas de trabajo",
+                precio: "$2,500",
+                descripcion: "resistentes y amplias",
+                link: "https://tienda.ejemplo.com/mesas-trabajo-oficina"
+            },
+            {
+                nombre: "lámparas LED para escritorio",
+                precio: "$380",
+                descripcion: "con regulador de luz",
+                link: "https://tienda.ejemplo.com/lamparas-led-escritorio"
+            },
+            {
+                nombre: "etiquetas adhesivas",
+                precio: "$80 el rollo",
+                descripcion: "resistentes al agua",
+                link: "https://tienda.ejemplo.com/etiquetas-adhesivas"
+            },
+            {
+                nombre: "tijeras profesionales",
+                precio: "$150",
+                descripcion: "de acero inoxidable, cortan padrísimo",
+                link: "https://tienda.ejemplo.com/tijeras-profesionales"
+            },
+            {
+                nombre: "clips y sujetadores",
+                precio: "$60 la caja",
+                descripcion: "varios tamaños",
+                link: "https://tienda.ejemplo.com/clips-sujetadores"
+            },
+            {
+                nombre: "marcadores permanentes",
+                precio: "$200 el set",
+                descripcion: "colores súper vivos",
+                link: "https://tienda.ejemplo.com/marcadores-permanentes"
+            },
+            {
+                nombre: "fundas para documentos",
+                precio: "$25 cada una",
+                descripcion: "transparentes y resistentes",
+                link: "https://tienda.ejemplo.com/fundas-documentos"
+            }
+        ];
+
+        const cierresConversacion = [
+            "¿Necesitas algo para esta semana?",
+            "¿Cómo andas de material en la oficina?",
+            "¿Hay algo que necesites que te tenga listo?",
+            "¿Te hace falta algo para el trabajo?",
+            "¿Necesitas que te prepare algún pedido?",
+            "¿Andas buscando algo en particular?",
+            "¿Cómo vas con tus cosas de oficina?",
+            "¿Hay algo urgente que necesites?",
+            "¿Te falta algo para completar algún proyecto?",
+            "¿Necesitas que te cotice algo más?"
+        ];
+
+        let mensajesGenerados = [];
+
+        function generateMessages() {
+            const generateBtn = document.querySelector('.btn-primary');
+            const originalContent = generateBtn.innerHTML;
+            
+            // Mostrar loading
+            generateBtn.innerHTML = '<div class="loading"></div> Generando...';
+            generateBtn.disabled = true;
+            
+            setTimeout(() => {
+                mensajesGenerados = [];
+                
+                // Generar 20 mensajes conversacionales únicos
+                for (let i = 0; i < 20; i++) {
+                    const plantilla = plantillasConversacion[i % plantillasConversacion.length];
+                    const producto = productos[i % productos.length];
+                    const cierre = cierresConversacion[i % cierresConversacion.length];
+                    const conector = plantilla.conectores[Math.floor(Math.random() * plantilla.conectores.length)];
+                    
+                    // Crear mensaje conversacional más natural
+                    const mensaje = `${plantilla.saludo}. ${plantilla.transicion}. ${conector} tengo ${producto.nombre} ${producto.descripcion} en ${producto.precio}. Si te interesa lo puedes ver aquí: ${producto.link}. ${cierre}`;
+                    
+                    mensajesGenerados.push(mensaje);
+                }
+                
+                // Mostrar en consola como JSON
+                console.log("📋 Mensajes conversacionales generados:");
+                console.log(JSON.stringify(mensajesGenerados, null, 2));
+                
+                // Mostrar en la interfaz
+                document.getElementById('jsonOutput').style.display = 'block';
+                document.getElementById('jsonContent').textContent = JSON.stringify(mensajesGenerados, null, 2);
+                
+                // Actualizar estadísticas
+                updateStats();
+                
+                // Mostrar notificación de éxito
+                showNotification('✅ Mensajes generados exitosamente', 'success');
+                
+                // Restaurar botón
+                generateBtn.innerHTML = originalContent;
+                generateBtn.disabled = false;
+            }, 1000);
+        }
+
+        function sendRandomMessage() {
+            const phoneInput = document.getElementById('phoneNumber');
+            const phoneNumber = phoneInput.value.trim();
+            const sendBtn = document.querySelector('.btn-secondary');
+            const originalContent = sendBtn.innerHTML;
+            
+            // Validar número de teléfono
+            if (!phoneNumber) {
+                showNotification('❌ Por favor ingresa un número de WhatsApp', 'error');
+                phoneInput.focus();
+                return;
+            }
+            
+            // Limpiar el número (quitar espacios, guiones, paréntesis)
+            const cleanNumber = phoneNumber.replace(/[\s\-\(\)]/g, '');
+            
+            // Validar que sea un número válido de 10 dígitos
+            if (!/^\d{10}$/.test(cleanNumber)) {
+                showNotification('❌ Por favor ingresa exactamente 10 dígitos', 'error');
+                phoneInput.focus();
+                return;
+            }
+            
+            // Agregar automáticamente el código de país +52
+            const fullNumber = `52${cleanNumber}`;
+            
+            // Generar mensajes si no existen
+            if (mensajesGenerados.length === 0) {
+                generateMessages();
+                setTimeout(() => {
+                    sendRandomMessage();
+                }, 1500);
+                return;
+            }
+            
+            // Mostrar loading
+            sendBtn.innerHTML = '<div class="loading"></div> Enviando...';
+            sendBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Seleccionar mensaje aleatorio
+                const mensajeAleatorio = mensajesGenerados[Math.floor(Math.random() * mensajesGenerados.length)];
+                
+                // Mostrar vista previa
+                document.getElementById('messagePreview').style.display = 'block';
+                document.getElementById('previewText').textContent = mensajeAleatorio;
+                
+                // Codificar el mensaje para URL
+                const mensajeCodificado = encodeURIComponent(mensajeAleatorio);
+                
+                // Crear URL de WhatsApp con +52 automático
+                const whatsappURL = `https://wa.me/${fullNumber}?text=${mensajeCodificado}`;
+                
+                // Abrir WhatsApp
+                window.open(whatsappURL, '_blank');
+                
+                console.log('📤 Mensaje enviado a: +' + fullNumber);
+                console.log('💬 Contenido:', mensajeAleatorio);
+                
+                showNotification(`🚀 Mensaje enviado a +${fullNumber}`, 'success');
+                
+                // Restaurar botón
+                sendBtn.innerHTML = originalContent;
+                sendBtn.disabled = false;
+            }, 800);
+        }
+
+        function updateStats() {
+            document.getElementById('totalMessages').textContent = mensajesGenerados.length;
+        }
+
+        function showNotification(message, type) {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? 'var(--primary-color)' : '#ef4444'};
+                    color: white;
+                    padding: 16px 24px;
+                    border-radius: 10px;
+                    box-shadow: var(--shadow-large);
+                    z-index: 1000;
+                    animation: slideInRight 0.3s ease-out;
+                    max-width: 300px;
+                    font-weight: 500;
+                ">
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remover después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Agregar animaciones CSS dinámicamente
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Generar mensajes automáticamente al cargar la página
+        window.onload = function() {
+            generateMessages();
+            
+            // Agregar validación en tiempo real para el input de teléfono
+            const phoneInput = document.getElementById('phoneNumber');
+            
+            phoneInput.addEventListener('input', function(e) {
+                // Solo permitir números
+                this.value = this.value.replace(/[^0-9]/g, '');
+                
+                // Limitar a 10 dígitos
+                if (this.value.length > 10) {
+                    this.value = this.value.slice(0, 10);
+                }
+                
+                // Cambiar color del borde según la validez
+                if (this.value.length === 10) {
+                    this.style.borderColor = 'var(--primary-color)';
+                } else if (this.value.length > 0) {
+                    this.style.borderColor = '#fbbf24';
+                } else {
+                    this.style.borderColor = 'var(--border-color)';
+                }
+            });
+            
+            phoneInput.addEventListener('keypress', function(e) {
+                // Solo permitir números
+                if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
