@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Mensajes WhatsApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #25D366;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            border-color: #25D366;
+            outline: none;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-generate {
+            background-color: #25D366;
+            color: white;
+        }
+        .btn-generate:hover {
+            background-color: #128C7E;
+        }
+        .btn-send {
+            background-color: #34B7F1;
+            color: white;
+        }
+        .btn-send:hover {
+            background-color: #2196F3;
+        }
+        .message-preview {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #25D366;
+            border-radius: 5px;
+            display: none;
+        }
+        .message-preview h3 {
+            margin-top: 0;
+            color: #25D366;
+        }
+        .help-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .json-output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Generador de Mensajes WhatsApp</h1>
+        
+        <div class="form-group">
+            <label for="phoneNumber">Número de WhatsApp (con código de país):</label>
+            <input type="text" id="phoneNumber" placeholder="Ejemplo: +52 1234567890 o 521234567890">
+            <div class="help-text">Ingresa el número con código de país (ej: +521234567890)</div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-generate" onclick="generateMessages()">🔄 Generar Mensajes</button>
+            <button class="btn-send" onclick="sendRandomMessage()">📤 Enviar Mensaje Aleatorio</button>
+        </div>
+
+        <div class="message-preview" id="messagePreview">
+            <h3>Vista previa del mensaje:</h3>
+            <p id="previewText"></p>
+        </div>
+
+        <div class="json-output" id="jsonOutput">
+            <h3>Mensajes generados (JSON):</h3>
+            <pre id="jsonContent"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Arrays de plantillas de conversación natural
+        const plantillasConversacion = [
+            {
+                saludo: "Hola, buen día",
+                transicion: "hoy hace un excelente día para caminar",
+                conectores: ["Aprovechando que", "Por cierto", "Hablando de cosas buenas"]
+            },
+            {
+                saludo: "¡Buenos días!",
+                transicion: "espero que hayas descansado bien",
+                conectores: ["Ya que estamos en contacto", "Aprovecho para contarte", "Te comento que"]
+            },
+            {
+                saludo: "Hola, ¿cómo estás?",
+                transicion: "espero que todo vaya de maravilla por allá",
+                conectores: ["Por cierto", "Aprovecho la ocasión", "Te tengo una excelente noticia"]
+            },
+            {
+                saludo: "¡Saludos!",
+                transicion: "qué bonito está el día de hoy",
+                conectores: ["Hablando de cosas buenas", "Te comento que", "Tengo algo que te puede interesar"]
+            },
+            {
+                saludo: "Buen día",
+                transicion: "espero que tengas una semana productiva",
+                conectores: ["Precisamente para eso", "Hablando de productividad", "Te tengo algo perfecto"]
+            },
+            {
+                saludo: "Hola",
+                transicion: "que tengas una linda mañana llena de bendiciones",
+                conectores: ["Y para que sea aún mejor", "Aprovecho para ofrecerte", "Te traigo una oportunidad"]
+            },
+            {
+                saludo: "¡Buenos días!",
+                transicion: "se siente la buena energía del día",
+                conectores: ["Con esa misma energía", "Aprovechando las buenas vibras", "Te comento que"]
+            },
+            {
+                saludo: "Hola, ¿qué tal?",
+                transicion: "espero que hayas empezado la semana con el pie derecho",
+                conectores: ["Para seguir con esa buena racha", "Hablando de empezar bien", "Te tengo algo que te gustará"]
+            }
+        ];
+
+        const productos = [
+            {
+                nombre: "Memoria USB de 64 GB versión 20 metálica",
+                precio: "$110",
+                descripcion: "compatible con Windows, Mac y Linux",
+                link: "https://norttek.com/productos/memoria-usb-64gb"
+            },
+            {
+                nombre: "Memoria USB de 32 GB versión 20 metálica",
+                precio: "$95",
+                descripcion: "compatible con Windows, Mac y Linux",
+                link: "https://norttek.com/productos/memoria-usb-32gb"
+            },
+            {
+                nombre: "Memoria USB Adata C906 de 32GB",
+                precio: "$98",
+                descripcion: "resistente y confiable",
+                link: "https://norttek.com/productos/memoria-adata-32gb"
+            },
+            {
+                nombre: "Memoria Micro SD 32GB Clase 10 Hiksemi",
+                precio: "$90",
+                descripcion: "ideal para celulares y cámaras",
+                link: "https://norttek.com/productos/microsd-32gb-hiksemi"
+            },
+            {
+                nombre: "Memoria microSD NEO 32GB con Adaptador",
+                precio: "$95",
+                descripcion: "perfecta para celular o tablet",
+                link: "https://norttek.com/productos/microsd-neo-32gb"
+            },
+            {
+                nombre: "Mouse Pad Nextep Ergonómico con Gel",
+                precio: "$152",
+                descripcion: "color negro, comodidad superior",
+                link: "https://norttek.com/productos/mousepad-ergonomico-gel"
+            },
+            {
+                nombre: "Mouse Nextep Inalámbrico USB",
+                precio: "$145",
+                descripcion: "1600 dpi, baterías incluidas",
+                link: "https://norttek.com/productos/mouse-nextep-inalambrico"
+            },
+            {
+                nombre: "Mouse Nextep Inalámbrico Ergonómico",
+                precio: "$145",
+                descripcion: "diseño ergonómico, USB",
+                link: "https://norttek.com/productos/mouse-nextep-ergonomico"
+            },
+            {
+                nombre: "Kit Teclado y Mouse Inalámbrico MK440 Acteck",
+                precio: "$350",
+                descripcion: "combo perfecto para oficina",
+                link: "https://norttek.com/productos/kit-teclado-mouse-mk440"
+            },
+            {
+                nombre: "Mouse Logitech M170 Inalámbrico",
+                precio: "$325",
+                descripcion: "plug and play, color rojo",
+                link: "https://norttek.com/productos/mouse-logitech-m170"
+            },
+            {
+                nombre: "Mouse Logitech M240 Bluetooth",
+                precio: "$450",
+                descripcion: "click silencioso, color rosa",
+                link: "https://norttek.com/productos/mouse-logitech-m240"
+            },
+            {
+                nombre: "Mouse inalámbrico UGREEN Ultra Delgado",
+                precio: "$320",
+                descripcion: "silencioso, disponible en varios colores",
+                link: "https://norttek.com/productos/mouse-ugreen-delgado"
+            },
+            {
+                nombre: "Mouse Inalámbrico UGREEN Ergonómico",
+                precio: "$290",
+                descripcion: "alcance 10m, silencioso, batería incluida",
+                link: "https://norttek.com/productos/mouse-ugreen-ergonomico"
+            },
+            {
+                nombre: "Hub USB-A 3.0 4 en 1 UGREEN",
+                precio: "$250",
+                descripcion: "4 puertos USB-A 3.0",
+                link: "https://norttek.com/productos/hub-usb-ugreen"
+            },
+            {
+                nombre: "Teclado Numérico Acteck TN220",
+                precio: "$189",
+                descripcion: "alámbrico USB, color negro",
+                link: "https://norttek.com/productos/teclado-numerico-acteck"
+            },
+            {
+                nombre: "Teclado Multidispositivo Acteck TX20",
+                precio: "$369",
+                descripcion: "inalámbrico, Bluetooth",
+                link: "https://norttek.com/productos/teclado-acteck-tx20"
+            },
+            {
+                nombre: "Calculadora Nextep Científica",
+                precio: "$145",
+                descripcion: "10+2 dígitos, 240 funciones, batería/solar",
+                link: "https://norttek.com/productos/calculadora-cientifica-nextep"
+            },
+            {
+                nombre: "Sacapuntas Nextep Eléctrico con AutoStop",
+                precio: "$450",
+                descripcion: "automático y seguro",
+                link: "https://norttek.com/productos/sacapuntas-electrico-nextep"
+            },
+            {
+                nombre: "Barra Multicontacto Nextep 6 Contactos",
+                precio: "$135",
+                descripcion: "supresor 490J, cable 50cm",
+                link: "https://norttek.com/productos/multicontacto-nextep"
+            },
+            {
+                nombre: "Cable USB-C a Lightning 1 Metro",
+                precio: "$285",
+                descripcion: "MFi certificado, ideal para iPhone/iPad",
+                link: "https://norttek.com/productos/cable-usb-c-lightning"
+            },
+            {
+                nombre: "Cable USB-C a USB-C 1 Metro",
+                precio: "$50",
+                descripcion: "carga rápida 3 Amp para Android",
+                link: "https://norttek.com/productos/cable-usb-c-usb-c"
+            },
+            {
+                nombre: "Papel Fotográfico Carta 25 hojas IKW",
+                precio: "$160",
+                descripcion: "alta calidad de impresión",
+                link: "https://norttek.com/productos/papel-fotografico-ikw"
+            },
+            {
+                nombre: "Disco Duro SATA II 500GB",
+                precio: "$500",
+                descripcion: "almacenamiento confiable",
+                link: "https://norttek.com/productos/disco-duro-500gb"
+            },
+            {
+                nombre: "Despachador de Cinta Colores Pastel INDRA",
+                precio: "$140",
+                descripcion: "estilo y funcionalidad",
+                link: "https://norttek.com/productos/despachador-cinta-indra"
+            },
+            {
+                nombre: "Tapete de Corte A2 60x45cm INDRA",
+                precio: "$350",
+                descripcion: "profesional para diseño",
+                link: "https://norttek.com/productos/tapete-corte-indra"
+            }
+        ];
+
+        const cierresConversacion = [
+            "¿Tienes algún pedido pendiente para esta semana?",
+            "¿Necesitas que te prepare algún producto para estos días?",
+            "¿Hay algo que requieras para tu oficina o negocio esta semana?",
+            "¿Tienes alguna necesidad de material que pueda ayudarte a resolver?",
+            "¿Cómo vas con tus pedidos de la semana? ¿Necesitas algo más?",
+            "¿Hay algún producto que tengas en mente para solicitar?",
+            "¿Requieres que te cotice algo específico para tu empresa?",
+            "¿Tienes algún proyecto en el que pueda apoyarte con material?",
+            "¿Necesitas que te tenga listo algún pedido para entregar esta semana?",
+            "¿Hay algo urgente que necesites o algún pedido que deba priorizar?"
+        ];
+
+        let mensajesGenerados = [];
+
+        function generateMessages() {
+            mensajesGenerados = [];
+            
+            // Generar 20 mensajes conversacionales únicos
+            for (let i = 0; i < 20; i++) {
+                const plantilla = plantillasConversacion[i % plantillasConversacion.length];
+                const producto = productos[i % productos.length];
+                const cierre = cierresConversacion[i % cierresConversacion.length];
+                const conector = plantilla.conectores[Math.floor(Math.random() * plantilla.conectores.length)];
+                
+                // Crear mensaje conversacional fluido con link
+                const mensaje = `${plantilla.saludo}, ${plantilla.transicion}. ${conector} tenemos ${producto.nombre} ${producto.descripcion} a ${producto.precio}. Puedes verlo aquí: ${producto.link}. ${cierre}`;
+                
+                mensajesGenerados.push(mensaje);
+            }
+            
+            // Mostrar en consola como JSON
+            console.log("📋 Mensajes conversacionales generados:");
+            console.log(JSON.stringify(mensajesGenerados, null, 2));
+            
+            // Mostrar en la interfaz
+            document.getElementById('jsonOutput').style.display = 'block';
+            document.getElementById('jsonContent').textContent = JSON.stringify(mensajesGenerados, null, 2);
+            
+            alert(`✅ Se han generado ${mensajesGenerados.length} mensajes conversacionales únicos. Revisa la consola del navegador para ver el JSON completo.`);
+        }
+
+        function sendRandomMessage() {
+            const phoneInput = document.getElementById('phoneNumber');
+            const phoneNumber = phoneInput.value.trim();
+            
+            // Validar número de teléfono
+            if (!phoneNumber) {
+                alert('❌ Por favor ingresa un número de WhatsApp');
+                return;
+            }
+            
+            // Limpiar el número (quitar espacios, guiones, paréntesis)
+            const cleanNumber = phoneNumber.replace(/[\s\-\(\)\+]/g, '');
+            
+            // Validar que sea un número válido
+            if (!/^\d{10,15}$/.test(cleanNumber)) {
+                alert('❌ Por favor ingresa un número válido (10-15 dígitos)');
+                return;
+            }
+            
+            // Generar mensajes si no existen
+            if (mensajesGenerados.length === 0) {
+                generateMessages();
+            }
+            
+            // Seleccionar mensaje aleatorio
+            const mensajeAleatorio = mensajesGenerados[Math.floor(Math.random() * mensajesGenerados.length)];
+            
+            // Mostrar vista previa
+            document.getElementById('messagePreview').style.display = 'block';
+            document.getElementById('previewText').textContent = mensajeAleatorio;
+            
+            // Codificar el mensaje para URL
+            const mensajeCodificado = encodeURIComponent(mensajeAleatorio);
+            
+            // Crear URL de WhatsApp
+            const whatsappURL = `https://wa.me/${cleanNumber}?text=${mensajeCodificado}`;
+            
+            // Abrir WhatsApp
+            window.open(whatsappURL, '_blank');
+            
+            console.log('📤 Mensaje enviado a:', cleanNumber);
+            console.log('💬 Contenido:', mensajeAleatorio);
+        }
+
+        // Generar mensajes automáticamente al cargar la página
+        window.onload = function() {
+            generateMessages();
+        };
+    </script>
+</body>
+</html>
