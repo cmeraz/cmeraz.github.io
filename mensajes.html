@@ -1,180 +1,758 @@
-comentario filename: mensajes.html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Mensajes WhatsApp</title>
+    <title>Generador de Mensajes WhatsApp - Norttek</title>
+    <!-- 
+        ═══════════════════════════════════════════════════════════
+        GENERADOR DE MENSAJES DE WHATSAPP - NORTTEK
+        ═══════════════════════════════════════════════════════════
+        Propósito: Sistema automatizado para generar y enviar 
+                   mensajes conversacionales personalizados por WhatsApp
+        Versión: 2.0 (Rediseño Completo)
+        Fecha: Octubre 2025
+        Autor: Norttek
+        ═══════════════════════════════════════════════════════════
+    -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        /* ═══════════════════════════════════════════════════════════
+           VARIABLES CSS Y CONFIGURACIÓN GLOBAL
+           ═══════════════════════════════════════════════════════════ */
+        :root {
+            --whatsapp-green: #25D366;
+            --whatsapp-dark: #128C7E;
+            --whatsapp-blue: #34B7F1;
+            --whatsapp-dark-blue: #2196F3;
+            --background-light: #E5DDD5;
+            --card-bg: #FFFFFF;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #E0E0E0;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --radius-small: 8px;
+            --radius-medium: 12px;
+            --radius-large: 16px;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #25D366;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+
+        /* ═══════════════════════════════════════════════════════════
+           RESET Y ESTILOS BASE
+           ═══════════════════════════════════════════════════════════ */
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        input[type="text"]:focus {
-            border-color: #25D366;
-            outline: none;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ECE9E6 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
         }
-        .button-group {
+
+        /* ═══════════════════════════════════════════════════════════
+           CONTENEDOR PRINCIPAL
+           ═══════════════════════════════════════════════════════════ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-heavy);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ENCABEZADO
+           ═══════════════════════════════════════════════════════════ */
+        .header {
+            background: linear-gradient(135deg, var(--whatsapp-green) 0%, var(--whatsapp-dark) 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .logo {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+            animation: bounce 2s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ÁREA DE CONTENIDO
+           ═══════════════════════════════════════════════════════════ */
+        .content {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-weight: 600;
             display: flex;
+            align-items: center;
             gap: 10px;
-            margin-top: 20px;
         }
-        button {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+
+        .section-title .icon {
+            font-size: 1.2em;
         }
-        .btn-generate {
-            background-color: #25D366;
-            color: white;
+
+        /* ═══════════════════════════════════════════════════════════
+           FORMULARIOS Y CAMPOS DE ENTRADA
+           ═══════════════════════════════════════════════════════════ */
+        .form-group {
+            margin-bottom: 25px;
         }
-        .btn-generate:hover {
-            background-color: #128C7E;
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95em;
         }
-        .btn-send {
-            background-color: #34B7F1;
-            color: white;
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
-        .btn-send:hover {
-            background-color: #2196F3;
+
+        .country-code {
+            position: absolute;
+            left: 15px;
+            font-weight: 600;
+            color: var(--whatsapp-dark);
+            font-size: 1em;
+            pointer-events: none;
+            z-index: 1;
         }
-        .message-preview {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-left: 4px solid #25D366;
-            border-radius: 5px;
-            display: none;
+
+        input[type="tel"] {
+            width: 100%;
+            padding: 14px 14px 14px 55px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-small);
+            font-size: 1em;
+            transition: all var(--transition-normal);
+            font-family: inherit;
         }
-        .message-preview h3 {
-            margin-top: 0;
-            color: #25D366;
+
+        input[type="tel"]:focus {
+            border-color: var(--whatsapp-green);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
         }
+
+        input[type="tel"]:invalid {
+            border-color: #ff4444;
+        }
+
         .help-text {
-            font-size: 14px;
-            color: #666;
-            margin-top: 5px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .json-output {
-            margin-top: 20px;
+
+        .help-text::before {
+            content: 'ℹ️';
+            font-size: 1.1em;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           BOTONES
+           ═══════════════════════════════════════════════════════════ */
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: var(--radius-small);
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--whatsapp-green) 0%, var(--whatsapp-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--whatsapp-blue) 0%, var(--whatsapp-dark-blue) 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn .icon {
+            font-size: 1.3em;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           PREVIEW DEL MENSAJE
+           ═══════════════════════════════════════════════════════════ */
+        .message-preview {
+            background: linear-gradient(135deg, #DCF8C6 0%, #B8E986 100%);
+            border-radius: var(--radius-medium);
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: var(--shadow-medium);
+            display: none;
+            animation: slideIn 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message-preview.active {
+            display: block;
+        }
+
+        .message-preview::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -10px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent #DCF8C6 transparent transparent;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .preview-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-close {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all var(--transition-fast);
+        }
+
+        .preview-close:hover {
+            background: rgba(0, 0, 0, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .preview-content {
+            background: white;
             padding: 15px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            max-height: 300px;
+            border-radius: var(--radius-small);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 0.95em;
+            word-wrap: break-word;
+            white-space: pre-wrap; /* Respeta los saltos de línea */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-meta {
+            margin-top: 10px;
+            font-size: 0.75em;
+            color: #666;
+            text-align: right;
+            opacity: 0.7;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ESTADÍSTICAS
+           ═══════════════════════════════════════════════════════════ */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: var(--radius-small);
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            transition: all var(--transition-normal);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--whatsapp-dark);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           JSON OUTPUT (OCULTO POR DEFECTO)
+           ═══════════════════════════════════════════════════════════ */
+        .json-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: var(--radius-small);
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            max-height: 400px;
             overflow-y: auto;
             display: none;
+            margin-top: 25px;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .json-output.active {
+            display: block;
+        }
+
+        .json-output pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           NOTIFICACIONES
+           ═══════════════════════════════════════════════════════════ */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--radius-small);
+            box-shadow: var(--shadow-heavy);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            animation: slideInRight 0.4s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.active {
+            display: flex;
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--whatsapp-green);
+        }
+
+        .notification.error {
+            border-left: 4px solid #ff4444;
+        }
+
+        .notification-icon {
+            font-size: 1.5em;
+        }
+
+        .notification-text {
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESPONSIVE DESIGN
+           ═══════════════════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .content {
+                padding: 25px 20px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           UTILIDADES
+           ═══════════════════════════════════════════════════════════ */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--whatsapp-green);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--whatsapp-dark);
         }
     </style>
 </head>
 <body>
+    <!-- ═══════════════════════════════════════════════════════════
+         NOTIFICACIÓN FLOTANTE
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="notification" id="notification">
+        <span class="notification-icon">✓</span>
+        <span class="notification-text" id="notificationText"></span>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CONTENEDOR PRINCIPAL
+         ═══════════════════════════════════════════════════════════ -->
     <div class="container">
-        <h1>📱 Generador de Mensajes WhatsApp</h1>
         
-        <div class="form-group">
-            <label for="phoneNumber">Número de WhatsApp (con código de país):</label>
-            <input type="text" id="phoneNumber" placeholder="Ejemplo: +52 1234567890 o 521234567890">
-            <div class="help-text">Ingresa el número con código de país (ej: +521234567890)</div>
+        <!-- ENCABEZADO -->
+        <div class="header">
+            <span class="logo">�</span>
+            <h1>Generador de Mensajes WhatsApp</h1>
+            <p class="subtitle">Sistema inteligente para envío automatizado de mensajes promocionales</p>
         </div>
 
-        <div class="button-group">
-            <button class="btn-generate" onclick="generateMessages()">🔄 Generar Mensajes</button>
-            <button class="btn-send" onclick="sendRandomMessage()">📤 Enviar Mensaje Aleatorio</button>
-        </div>
+        <!-- CONTENIDO -->
+        <div class="content">
+            
+            <!-- SECCIÓN 1: CONFIGURACIÓN DE DESTINATARIO -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">📱</span>
+                    Configuración de Destinatario
+                </h2>
+                
+                <div class="form-group">
+                    <label class="form-label" for="phoneNumber">Número de WhatsApp</label>
+                    <div class="input-wrapper">
+                        <span class="country-code">+52</span>
+                        <input 
+                            type="tel" 
+                            id="phoneNumber" 
+                            placeholder="1234567890"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            required
+                        >
+                    </div>
+                    <div class="help-text">Ingresa 10 dígitos sin espacios ni guiones</div>
+                </div>
+            </div>
 
-        <div class="message-preview" id="messagePreview">
-            <h3>Vista previa del mensaje:</h3>
-            <p id="previewText"></p>
-        </div>
+            <!-- SECCIÓN 2: ACCIONES -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">⚡</span>
+                    Acciones
+                </h2>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="generateMessages()">
+                        <span class="icon">🔄</span>
+                        Generar Mensajes
+                    </button>
+                    <button class="btn btn-secondary" onclick="sendRandomMessage()">
+                        <span class="icon">📤</span>
+                        Enviar Mensaje
+                    </button>
+                </div>
+            </div>
 
-        <div class="json-output" id="jsonOutput">
-            <h3>Mensajes generados (JSON):</h3>
-            <pre id="jsonContent"></pre>
+            <!-- SECCIÓN 3: VISTA PREVIA DEL MENSAJE -->
+            <div class="message-preview" id="messagePreview">
+                <div class="preview-header">
+                    <div class="preview-title">
+                        <span>💬</span>
+                        Vista Previa del Mensaje
+                    </div>
+                    <button class="preview-close" onclick="closePreview()">✕</button>
+                </div>
+                <div class="preview-content" id="previewContent">
+                    <!-- El contenido del mensaje se insertará aquí -->
+                </div>
+                <div class="preview-meta" id="previewMeta">
+                    <!-- Metadatos del mensaje -->
+                </div>
+            </div>
+
+            <!-- SECCIÓN 4: ESTADÍSTICAS -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="icon">📊</span>
+                    Estadísticas
+                </h2>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalMessages">0</span>
+                        <span class="stat-label">Mensajes Generados</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalProducts">50+</span>
+                        <span class="stat-label">Productos Disponibles</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalTemplates">8</span>
+                        <span class="stat-label">Plantillas Activas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 5: SALIDA JSON (OPCIONAL) -->
+            <div class="json-output" id="jsonOutput">
+                <h3 style="color: #4EC9B0; margin-bottom: 10px;">📋 Mensajes Generados (JSON)</h3>
+                <pre id="jsonContent"></pre>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Arrays de plantillas de conversación natural
+        /* ═══════════════════════════════════════════════════════════
+           CONFIGURACIÓN Y DATOS GLOBALES
+           ═══════════════════════════════════════════════════════════ */
+        
+        /**
+         * Sistema de Generación de Mensajes WhatsApp
+         * @version 2.0
+         * @description Sistema completo para generar y enviar mensajes conversacionales
+         */
+
+        // Estado global de la aplicación
+        const AppState = {
+            mensajesGenerados: [],
+            mensajeActual: null,
+            numeroDestinatario: null
+        };
+
+        /**
+         * Plantillas de conversación natural y fluida
+         * Cada plantilla incluye: saludo con emoji, transición natural y conectores suaves
+         * Diseñadas para sonar más humanas y menos automatizadas
+         */
         const plantillasConversacion = [
             {
-                saludo: "Hola, buen día",
-                transicion: "hoy hace un excelente día para caminar",
-                conectores: ["Aprovechando que", "Por cierto", "Hablando de cosas buenas"]
+                saludo: "¡Hola! 😊 ¿Cómo estás?",
+                transicion: "qué lindo día hace hoy",
+                conectores: ["Oye, recordé que", "Mira, justo", "Por cierto"]
             },
             {
-                saludo: "¡Buenos días!",
-                transicion: "espero que hayas descansado bien",
-                conectores: ["Ya que estamos en contacto", "Aprovecho para contarte", "Te comento que"]
+                saludo: "Buenos días ☀️",
+                transicion: "espero que andes súper bien",
+                conectores: ["Te comento algo", "Quería platicarte que", "Oye, me acordé"]
             },
             {
-                saludo: "Hola, ¿cómo estás?",
-                transicion: "espero que todo vaya de maravilla por allá",
-                conectores: ["Por cierto", "Aprovecho la ocasión", "Te tengo una excelente noticia"]
+                saludo: "¡Qué tal! 👋",
+                transicion: "por acá trabajando como siempre jaja",
+                conectores: ["Y bueno, platicándote", "Ah, se me ocurrió algo", "Mira, te quiero comentar"]
             },
             {
-                saludo: "¡Saludos!",
-                transicion: "qué bonito está el día de hoy",
-                conectores: ["Hablando de cosas buenas", "Te comento que", "Tengo algo que te puede interesar"]
+                saludo: "Hola 😄 ¿todo bien?",
+                transicion: "ojalá que sí",
+                conectores: ["Fíjate que", "Te cuento que", "Ah, justo ahora"]
             },
             {
-                saludo: "Buen día",
-                transicion: "espero que tengas una semana productiva",
-                conectores: ["Precisamente para eso", "Hablando de productividad", "Te tengo algo perfecto"]
+                saludo: "¡Hey! 🙌 ¿Cómo va todo?",
+                transicion: "espero que muy bien por allá",
+                conectores: ["Oye, mira", "Se me vino a la mente", "Ah, casi se me olvida"]
             },
             {
-                saludo: "Hola",
-                transicion: "que tengas una linda mañana llena de bendiciones",
-                conectores: ["Y para que sea aún mejor", "Aprovecho para ofrecerte", "Te traigo una oportunidad"]
+                saludo: "Buen día 🌟",
+                transicion: "ojalá sea una semana tranquila para ti",
+                conectores: ["Platicándote", "Ah sí, te quería decir", "Mira qué interesante"]
             },
             {
-                saludo: "¡Buenos días!",
-                transicion: "se siente la buena energía del día",
-                conectores: ["Con esa misma energía", "Aprovechando las buenas vibras", "Te comento que"]
+                saludo: "¿Qué onda? 😊",
+                transicion: "todo tranquilo por aquí",
+                conectores: ["Oye, sabes qué", "Te comento", "Mira esto"]
             },
             {
-                saludo: "Hola, ¿qué tal?",
-                transicion: "espero que hayas empezado la semana con el pie derecho",
-                conectores: ["Para seguir con esa buena racha", "Hablando de empezar bien", "Te tengo algo que te gustará"]
+                saludo: "¡Hola! 💚 ¿Cómo amaneciste?",
+                transicion: "espero que bien y con energía",
+                conectores: ["Bueno, te platico", "Fíjate que", "Ah mira"]
+            },
+            {
+                saludo: "Buenos días 🌤️",
+                transicion: "espero no molestarte",
+                conectores: ["Te escribo porque", "Quería comentarte", "Se me ocurrió"]
+            },
+            {
+                saludo: "¡Hola! 😃 ¿Qué tal tu día?",
+                transicion: "ojalá esté yendo genial",
+                conectores: ["Aprovecho para decirte", "Ah, me acordé de algo", "Mira"]
             }
         ];
 
+        /**
+         * Catálogo completo de productos disponibles
+         * Cada producto incluye: nombre, precio, descripción y link de compra
+         * Total: 50+ productos de oficina y tecnología
+         */
         const productos = [
             {
                 nombre: "papel bond",
@@ -197,7 +775,7 @@ comentario filename: mensajes.html
             {
                 nombre: "Sacapuntas Nextep Eléctrico con AutoStop",
                 precio: "$450",
-                descripcion: "practico y recargable,
+                descripcion: "práctico y recargable",
                 link: "https://norttek.sicarx.shop?p=2sQDFN0YGnWGFWemvLUSLwYWdBr"
             },
             {
@@ -238,7 +816,7 @@ comentario filename: mensajes.html
             },
             {
                 nombre: "etiquetas adhesivas Laser Inkjet Janel",
-                precio: "$120 el rollo",
+                precio: "$120 hojas tamaño carta",
                 descripcion: "para impresion en laser o tinta",
                 link: "https://norttek.sicarx.shop?p=2klYHwZpkG9JnKZlEmeNIKm2dcI"
             },
@@ -253,7 +831,7 @@ comentario filename: mensajes.html
                 nombre: "bolígrafos Pelikan Soft Gel",
                 precio: "$14 cada uno",
                 descripcion: "azules, escriben súper suave",
-                link: "https://norttek.sicarx.shop?p=2klYHpb2jKJXosMFaR6yJgP3dMt
+                link: "https://norttek.sicarx.shop?p=2klYHpb2jKJXosMFaR6yJgP3dMt"
             },
             {
                 nombre: "pegamento UHU",
@@ -431,93 +1009,292 @@ comentario filename: mensajes.html
             }
         ];
 
-        const cierresConversacion = [
-            "¿Tienes algún pedido pendiente para esta semana?",
-            "¿Necesitas que te prepare algún producto para estos días?",
-            "¿Hay algo que requieras para tu oficina o negocio esta semana?",
-            "¿Tienes alguna necesidad de material que pueda ayudarte a resolver?",
-            "¿Cómo vas con tus pedidos de la semana? ¿Necesitas algo más?",
-            "¿Hay algún producto que tengas en mente para solicitar?",
-            "¿Requieres que te cotice algo específico para tu empresa?",
-            "¿Tienes algún proyecto en el que pueda apoyarte con material?",
-            "¿Necesitas que te tenga listo algún pedido para entregar esta semana?",
-            "¿Hay algo urgente que necesites o algún pedido que deba priorizar?"
+        /**
+         * Frases de transición para introducir el producto de forma natural
+         * Estas frases conectan la conversación con el producto sin ser tan directas
+         */
+        const transicionesProducto = [
+            "acabo de ver que tenemos",
+            "me topé con",
+            "llegó",
+            "tenemos disponible",
+            "hay",
+            "conseguimos",
+            "te puedo conseguir",
+            "me llegó",
+            "tengo aquí",
+            "encontré"
         ];
 
-        let mensajesGenerados = [];
+        /**
+         * Preguntas de cierre exploratorias y conversacionales
+         * Diseñadas para indagar sobre necesidades adicionales, cotizaciones y pedidos pendientes
+         * Mantienen el tono amigable e invitan al diálogo continuo
+         */
+        const cierresConversacion = [
+            "¿Te sirve? ¿O andas buscando algo más en específico? �",
+            "¿Qué te parece? ¿Necesitas que te cotice algo adicional? 📋",
+            "¿Cómo ves? ¿Tienes algún pedido pendiente que pueda ayudarte? 🤔",
+            "¿Te interesa? ¿O hay algo más que estés necesitando para tu negocio? 🏢",
+            "¿Qué dices? ¿Ocupas algo más aparte de esto? Avísame �",
+            "¿Te late? Por cierto, ¿tienes algún proyecto en mente que requiera material? 🎯",
+            "¿Lo necesitas? ¿Hay algo más que quieras que te prepare? �",
+            "Échale un ojo. ¿Tienes lista de cosas pendientes por pedir? 📝",
+            "¿Qué opinas? ¿Necesitas que te arme una cotización de varios productos? �",
+            "¿Te funciona? ¿O andas buscando algo más en particular? Dime 👀",
+            "¿Te sirve algo? Por cierto, ¿cómo vas con tus pedidos de esta semana? �",
+            "Míralo bien. ¿Hay algo más que andes necesitando para la oficina? 🖥️",
+            "¿Te interesa? ¿Tienes alguna otra necesidad que pueda resolver? �",
+            "¿Qué tal? ¿Quieres que te haga una lista de productos disponibles? 📃",
+            "¿Lo ocupas? Y oye, ¿no se te ofrece algo más para tus proyectos? �",
+            "Si te sirve, avísame. ¿Tienes algún pedido atrasado que deba priorizar? ⚡",
+            "¿Te late? ¿O prefieres que te muestre otras opciones similares? �",
+            "Déjame saber qué opinas. ¿Hay algo más en lo que te pueda ayudar? �",
+            "¿Lo necesitas? Por cierto, ¿qué tal vas con tu inventario? ¿Falta algo? �",
+            "Chécalo. ¿Tienes alguna requisición pendiente que pueda cotizarte? �"
+        ];
 
+        /* ═══════════════════════════════════════════════════════════
+           FUNCIONES PRINCIPALES
+           ═══════════════════════════════════════════════════════════ */
+
+        /**
+         * Genera 20 mensajes conversacionales únicos
+         * Combina plantillas, productos y cierres de forma inteligente y natural
+         */
         function generateMessages() {
-            mensajesGenerados = [];
+            AppState.mensajesGenerados = [];
             
-            // Generar 20 mensajes conversacionales únicos
+            // Generar 20 mensajes únicos
             for (let i = 0; i < 20; i++) {
                 const plantilla = plantillasConversacion[i % plantillasConversacion.length];
                 const producto = productos[i % productos.length];
                 const cierre = cierresConversacion[i % cierresConversacion.length];
                 const conector = plantilla.conectores[Math.floor(Math.random() * plantilla.conectores.length)];
+                const transicion = transicionesProducto[Math.floor(Math.random() * transicionesProducto.length)];
                 
-                // Crear mensaje conversacional fluido con link
-                const mensaje = `${plantilla.saludo}, ${plantilla.transicion}. ${conector} tenemos ${producto.nombre} ${producto.descripcion} a ${producto.precio}. Puedes verlo aquí: ${producto.link}. ${cierre}`;
+                // Construir mensaje conversacional más natural
+                const mensaje = `${plantilla.saludo}, ${plantilla.transicion}. ${conector} ${transicion} *${producto.nombre}* ${producto.descripcion} 💰 ${producto.precio}.\n\n🔗 ${producto.link}\n\n${cierre}`;
                 
-                mensajesGenerados.push(mensaje);
+                AppState.mensajesGenerados.push(mensaje);
             }
             
-            // Mostrar en consola como JSON
-            console.log("📋 Mensajes conversacionales generados:");
-            console.log(JSON.stringify(mensajesGenerados, null, 2));
+            // Actualizar UI
+            updateStats();
+            showNotification('✓ Se generaron ' + AppState.mensajesGenerados.length + ' mensajes exitosamente', 'success');
             
-            // Mostrar en la interfaz
-            document.getElementById('jsonOutput').style.display = 'block';
-            document.getElementById('jsonContent').textContent = JSON.stringify(mensajesGenerados, null, 2);
+            // Mostrar JSON (opcional)
+            document.getElementById('jsonOutput').classList.add('active');
+            document.getElementById('jsonContent').textContent = JSON.stringify(AppState.mensajesGenerados, null, 2);
             
-            alert(`✅ Se han generado ${mensajesGenerados.length} mensajes conversacionales únicos. Revisa la consola del navegador para ver el JSON completo.`);
+            // Log para desarrollo
+            console.log('📋 Mensajes generados:', AppState.mensajesGenerados.length);
         }
 
-        function sendRandomMessage() {
-            const phoneInput = document.getElementById('phoneNumber');
-            const phoneNumber = phoneInput.value.trim();
+        /**
+         * Valida el número de teléfono ingresado
+         * @returns {string|null} Número limpio o null si es inválido
+         */
+        function validatePhoneNumber() {
+            const input = document.getElementById('phoneNumber');
+            const phoneNumber = input.value.trim();
             
-            // Validar número de teléfono
+            // Validar que no esté vacío
             if (!phoneNumber) {
-                alert('❌ Por favor ingresa un número de WhatsApp');
-                return;
+                showNotification('❌ Por favor ingresa un número de teléfono', 'error');
+                input.focus();
+                return null;
             }
             
-            // Limpiar el número (quitar espacios, guiones, paréntesis)
-            const cleanNumber = phoneNumber.replace(/[\s\-\(\)\+]/g, '');
+            // Limpiar y validar formato
+            const cleanNumber = phoneNumber.replace(/[\s\-\(\)]/g, '');
             
-            // Validar que sea un número válido
-            if (!/^\d{10,15}$/.test(cleanNumber)) {
-                alert('❌ Por favor ingresa un número válido (10-15 dígitos)');
-                return;
+            // Debe tener exactamente 10 dígitos
+            if (!/^\d{10}$/.test(cleanNumber)) {
+                showNotification('❌ El número debe tener exactamente 10 dígitos', 'error');
+                input.focus();
+                return null;
             }
+            
+            // Retornar con código de país
+            return '52' + cleanNumber;
+        }
+
+        /**
+         * Envía un mensaje aleatorio por WhatsApp
+         * Valida el número y muestra preview antes de enviar
+         */
+        function sendRandomMessage() {
+            // Validar número de teléfono
+            const phoneNumber = validatePhoneNumber();
+            if (!phoneNumber) return;
             
             // Generar mensajes si no existen
-            if (mensajesGenerados.length === 0) {
+            if (AppState.mensajesGenerados.length === 0) {
                 generateMessages();
             }
             
             // Seleccionar mensaje aleatorio
-            const mensajeAleatorio = mensajesGenerados[Math.floor(Math.random() * mensajesGenerados.length)];
+            const mensajeAleatorio = AppState.mensajesGenerados[
+                Math.floor(Math.random() * AppState.mensajesGenerados.length)
+            ];
             
-            // Mostrar vista previa
-            document.getElementById('messagePreview').style.display = 'block';
-            document.getElementById('previewText').textContent = mensajeAleatorio;
+            AppState.mensajeActual = mensajeAleatorio;
+            AppState.numeroDestinatario = phoneNumber;
             
-            // Codificar el mensaje para URL
+            // Mostrar preview
+            showPreview(mensajeAleatorio, phoneNumber);
+            
+            // Construir URL de WhatsApp
             const mensajeCodificado = encodeURIComponent(mensajeAleatorio);
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${mensajeCodificado}`;
             
-            // Crear URL de WhatsApp
-            const whatsappURL = `https://wa.me/${cleanNumber}?text=${mensajeCodificado}`;
+            // Abrir WhatsApp después de un pequeño delay para que se vea el preview
+            setTimeout(() => {
+                window.open(whatsappURL, '_blank');
+                showNotification('✓ Abriendo WhatsApp...', 'success');
+            }, 500);
             
-            // Abrir WhatsApp
-            window.open(whatsappURL, '_blank');
-            
-            console.log('📤 Mensaje enviado a:', cleanNumber);
-            console.log('💬 Contenido:', mensajeAleatorio);
+            // Log para desarrollo
+            console.log('📤 Enviando a: +' + phoneNumber);
+            console.log('💬 Mensaje:', mensajeAleatorio);
         }
 
-        // Generar mensajes automáticamente al cargar la página
+        /**
+         * Muestra el preview del mensaje antes de enviar
+         * @param {string} mensaje - El mensaje a previsualizar
+         * @param {string} numero - Número de destinatario
+         */
+        function showPreview(mensaje, numero) {
+            const preview = document.getElementById('messagePreview');
+            const content = document.getElementById('previewContent');
+            const meta = document.getElementById('previewMeta');
+            
+            content.textContent = mensaje;
+            meta.textContent = `Destinatario: +${numero} • ${new Date().toLocaleTimeString('es-MX')}`;
+            
+            preview.classList.add('active');
+            
+            // Scroll suave hacia el preview
+            preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        /**
+         * Cierra el preview del mensaje
+         */
+        function closePreview() {
+            const preview = document.getElementById('messagePreview');
+            preview.classList.remove('active');
+        }
+
+        /**
+         * Muestra una notificación temporal
+         * @param {string} text - Texto de la notificación
+         * @param {string} type - Tipo: 'success' o 'error'
+         */
+        function showNotification(text, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const icon = notification.querySelector('.notification-icon');
+            
+            notificationText.textContent = text;
+            notification.className = `notification ${type} active`;
+            icon.textContent = type === 'success' ? '✓' : '⚠';
+            
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        /**
+         * Actualiza las estadísticas en la UI
+         */
+        function updateStats() {
+            document.getElementById('totalMessages').textContent = AppState.mensajesGenerados.length;
+            document.getElementById('totalProducts').textContent = productos.length;
+            document.getElementById('totalTemplates').textContent = plantillasConversacion.length;
+        }
+
+        /**
+         * Formatea el input de teléfono en tiempo real
+         * Solo permite números y limita a 10 dígitos
+         * Muestra preview automático cuando se completan los 10 dígitos
+         */
+        function formatPhoneInput(event) {
+            const input = event.target;
+            let value = input.value.replace(/\D/g, ''); // Solo números
+            
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            
+            input.value = value;
+            
+            // Mostrar preview automáticamente cuando se completen 10 dígitos
+            if (value.length === 10) {
+                showAutoPreview();
+            }
+        }
+
+        /**
+         * Muestra un preview automático sin enviar el mensaje
+         * Se activa cuando el usuario completa el número de teléfono
+         */
+        function showAutoPreview() {
+            // Generar mensajes si no existen
+            if (AppState.mensajesGenerados.length === 0) {
+                generateMessages();
+            }
+            
+            // Seleccionar mensaje aleatorio
+            const mensajeAleatorio = AppState.mensajesGenerados[
+                Math.floor(Math.random() * AppState.mensajesGenerados.length)
+            ];
+            
+            const phoneInput = document.getElementById('phoneNumber');
+            const phoneNumber = '52' + phoneInput.value.trim();
+            
+            AppState.mensajeActual = mensajeAleatorio;
+            AppState.numeroDestinatario = phoneNumber;
+            
+            // Mostrar preview
+            showPreview(mensajeAleatorio, phoneNumber);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           INICIALIZACIÓN
+           ═══════════════════════════════════════════════════════════ */
+
+        /**
+         * Inicializa la aplicación cuando la página carga
+         */
+        window.addEventListener('DOMContentLoaded', function() {
+            // Generar mensajes automáticamente
+            generateMessages();
+            
+            // Configurar validación en tiempo real del input
+            const phoneInput = document.getElementById('phoneNumber');
+            phoneInput.addEventListener('input', formatPhoneInput);
+            
+            // Permitir envío con Enter
+            phoneInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendRandomMessage();
+                }
+            });
+            
+            // Mostrar notificación de bienvenida
+            setTimeout(() => {
+                showNotification('🎉 Sistema listo para generar mensajes', 'success');
+            }, 500);
+            
+            console.log('✅ Aplicación inicializada correctamente');
+            console.log('📊 Productos disponibles:', productos.length);
+            console.log('🎭 Plantillas disponibles:', plantillasConversacion.length);
+        });
+
+        // Generar mensajes automáticamente al cargar la página (legacy support)
         window.onload = function() {
             generateMessages();
         };
