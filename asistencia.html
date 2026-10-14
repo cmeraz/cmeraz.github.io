@@ -56,7 +56,11 @@
   .cab dt{font-size:.72em;text-transform:uppercase;letter-spacing:.08em;color:var(--gris)}
   .cab dd{margin:.15em 0 0;font-weight:600;font-variant-numeric:tabular-nums}
 
-  .empleado{display:grid;grid-template-columns:2.4fr 1fr 1fr .7fr;gap:1em;border:1px solid var(--linea);border-radius:.4em;padding:.6em .9em;background:#f7f9fb}
+  .empleado{display:flex;gap:1em;border:1px solid var(--linea);border-radius:.4em;padding:.6em .9em;background:#f7f9fb}
+  .empleado > div{flex:1 1 0;min-width:0}
+  .empleado > div:first-child{flex:2.2 1 0}
+  .empleado > div:last-child{flex:.6 1 0}
+  .empleado .varia{font-weight:400;font-size:.8em;color:var(--aviso)}
   .empleado .etq{display:block;font-size:.72em;text-transform:uppercase;letter-spacing:.08em;color:var(--gris)}
   .empleado strong{display:block;font-size:1.25em;margin-top:.1em}
   .empleado span.val{display:block;font-weight:600;margin-top:.2em}
@@ -92,7 +96,8 @@
 
   .firmas{border-top:1px solid var(--linea);padding-top:.7em}
   .firmas .texto{margin:0 0 3em;font-size:.9em}
-  .firmas-fila{display:grid;grid-template-columns:1.6fr .7fr 1.6fr;gap:2.5em}
+  .firmas-fila{display:flex;justify-content:center}
+  .firma{width:46%;text-align:center}
   .firma .linea{border-bottom:1.5px solid var(--tinta);height:.2em}
   .firma b{display:block;margin-top:.35em;font-size:.85em}
   .firma span{display:block;font-size:.8em;color:var(--gris)}
@@ -159,6 +164,8 @@ const CONFIG = {
     empleado:         'Nombre completo',
     id:               'ID',
     departamento:     'Departamento',
+    inicioTrabajo:    'Hora de inicio del trabajo',   // horario establecido (entrada)
+    finTrabajo:       'Hora final del trabajo',       // horario establecido (salida)
     fecha:            'Fecha',
     dia:              'Día laborable',
     entrada:          'Hora de fichaje a la entrada',
@@ -306,6 +313,20 @@ function resumenDe(regs) {
   return t;
 }
 
+// Horario establecido del empleado: el más frecuente del periodo; «varia» si cambia entre días.
+function horarioDe(regs) {
+  const cuenta = new Map();
+  for (const r of regs) {
+    if (faltaMarca(r.inicio) && faltaMarca(r.fin)) continue;
+    const k = r.inicio + '|' + r.fin;
+    cuenta.set(k, (cuenta.get(k) || 0) + 1);
+  }
+  if (!cuenta.size) return { inicio: '', fin: '', varia: false };
+  const [k] = [...cuenta.entries()].sort((a, b) => b[1] - a[1])[0];
+  const [inicio, fin] = k.split('|');
+  return { inicio, fin, varia: cuenta.size > 1 };
+}
+
 function procesar(texto) {
   const claveEmp = norm(CONFIG.columnas.empleado);
   const lineaCab = texto.split(/\r?\n/).find(l => norm(l).includes(claveEmp));
@@ -343,6 +364,7 @@ function procesar(texto) {
     const nombre = get('empleado');
     if (!nombre) continue;
     const reg = { empleado: nombre, id: get('id'), departamento: get('departamento'), fecha: get('fecha'), dia: get('dia'),
+      inicio: get('inicioTrabajo'), fin: get('finTrabajo'),
       entrada: get('entrada'), salida: get('salida'), estado: get('estado'), horas: get('horas'), ausencia: get('ausencia'),
       retraso: get('retraso'), salidaAnticipada: get('salidaAnticipada'), extras: get('extras') };
     reg.analisis = analizar(reg, hayMarcajes);
@@ -363,6 +385,7 @@ function procesar(texto) {
   for (const e of empleados) {
     e.registros.sort((a, b) => claveFecha(a.fecha) - claveFecha(b.fecha));
     e.totales = resumenDe(e.registros);
+    e.horario = horarioDe(e.registros);
   }
 
   // Periodo del archivo
@@ -418,6 +441,15 @@ function hojaHTML(emp, d, emitido, n, total) {
   const empresa = (estado.empresa || '').trim() || 'Nombre de la empresa';
   const t = emp.totales;
 
+  // Horario establecido (para contrastar con los marcajes de entrada y salida)
+  const h = emp.horario || { inicio: '', fin: '', varia: false };
+  const varia = h.varia ? ' <span class="varia">· varía</span>' : '';
+  const horarioHTML =
+    (d.col.inicioTrabajo !== undefined
+      ? `<div><span class="etq">Entrada programada</span><span class="val">${h.inicio ? esc(hora12(h.inicio)) : '—'}${varia}</span></div>` : '') +
+    (d.col.finTrabajo !== undefined
+      ? `<div><span class="etq">Salida programada</span><span class="val">${h.fin ? esc(hora12(h.fin)) : '—'}${varia}</span></div>` : '');
+
   const thead =
     `<tr>${d.grupos.map(g => `<th class="grupo" colspan="${g.campos.length}">${esc(g.titulo)}</th>`).join('')}</tr>` +
     `<tr>${d.grupos.flatMap(g => g.campos.map(c => `<th class="${c.tipo}">${esc(c.etiqueta)}</th>`)).join('')}</tr>`;
@@ -454,6 +486,7 @@ function hojaHTML(emp, d, emitido, n, total) {
     <div><span class="etq">Empleado</span><strong>${esc(emp.nombre)}</strong></div>
     <div><span class="etq">Departamento</span><span class="val">${esc(emp.departamento || '—')}</span></div>
     <div><span class="etq">ID</span><span class="val">${esc(emp.id || '—')}</span></div>
+    ${horarioHTML}
     <div><span class="etq">Hoja</span><span class="val">${n} de ${total}</span></div>
   </div>
   <table class="tabla"><thead>${thead}</thead><tbody>${filas}</tbody></table>
@@ -461,9 +494,7 @@ function hojaHTML(emp, d, emitido, n, total) {
   <div class="firmas">
     <p class="texto">${esc(CONFIG.textoConformidad)}</p>
     <div class="firmas-fila">
-      <div class="firma"><div class="linea"></div><b>Firma del empleado</b><span>${esc(emp.nombre)}</span></div>
-      <div class="firma"><div class="linea"></div><b>Fecha</b></div>
-      <div class="firma"><div class="linea"></div><b>Recursos Humanos</b><span>Nombre y firma</span></div>
+      <div class="firma"><div class="linea"></div><b>Firma de conformidad del empleado</b><span>${esc(emp.nombre)}</span></div>
     </div>
   </div>
 </section>`;
