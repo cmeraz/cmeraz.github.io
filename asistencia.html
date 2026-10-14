@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reportes de tiempo y asistencia</title>
+<style>
+  :root{
+    --tinta:#1b1f24; --gris:#5b6470; --linea:#c9ced6; --fondo:#e6e9ee;
+    --acento:#1f4e79;
+    --alerta:#b42318; --alerta-bg:#fde8e6;
+    --aviso:#9a5b00;  --aviso-bg:#fff1d6;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  html,body{margin:0}
+  body{font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--fondo);color:var(--tinta)}
+
+  /* ---------- Pantalla: barra y mensajes ---------- */
+  .barra{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;
+         padding:10px 18px;background:#1f2933;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+  .barra-titulo{font-weight:600;font-size:15px;margin-right:6px}
+  .barra .campo{display:flex;align-items:center;gap:6px;font-size:13px}
+  .barra input[type=text],.barra select{font:inherit;padding:6px 8px;border-radius:5px;border:1px solid #4b5866;background:#fff;color:#111;min-width:190px}
+  .barra .resumen{margin-left:auto;font-size:13px;color:#c9d3de}
+  .btn{display:inline-block;font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:6px;border:1px solid #4b5866;
+       background:#323f4b;color:#fff;cursor:pointer}
+  .btn:hover{background:#3e4c59}
+  .btn.primario{background:#1f6feb;border-color:#1f6feb}
+  .btn.primario:hover{background:#1a5fcb}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  main{padding:18px;overflow-x:auto}
+  .mensaje{max-width:11in;margin:0 auto 12px;padding:10px 14px;border-radius:6px;font-size:14px;line-height:1.4}
+  .mensaje.error{background:var(--alerta-bg);border:1px solid var(--alerta);color:#7a1810}
+  .mensaje.aviso{background:var(--aviso-bg);border:1px solid var(--aviso);color:#6b4000}
+
+  .soltar{display:flex;justify-content:center;padding:40px 0}
+  .soltar-caja{width:min(640px,100%);text-align:center;background:#fff;border:2px dashed #8d99a8;border-radius:12px;padding:44px 28px}
+  .soltar-caja h2{margin:0 0 8px;font-size:22px}
+  .soltar-caja p{margin:0 0 20px;color:var(--gris)}
+  .soltar-caja small{display:block;margin-top:18px;color:var(--gris)}
+  .soltar-caja .btn{background:#1f6feb;border-color:#1f6feb}
+  body.arrastrando::after{content:"Suelta el CSV para importarlo";position:fixed;inset:0;z-index:50;display:flex;align-items:center;
+       justify-content:center;font-size:28px;font-weight:600;color:#fff;background:rgba(31,78,121,.85)}
+
+  /* ---------- Hoja carta horizontal ---------- */
+  .hoja{width:11in;height:8.48in;padding:.4in .45in;margin:0 auto 18px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.25);
+        display:flex;flex-direction:column;gap:.75em;font-size:12px;line-height:1.3;overflow:hidden}
+  .hoja > *{flex:none}
+
+  .cab{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5em;border-bottom:2px solid var(--acento);padding-bottom:.6em}
+  .cab h1{margin:0;font-size:2em;line-height:1.1;letter-spacing:.02em;text-transform:uppercase}
+  .cab p{margin:.25em 0 0;color:var(--gris)}
+  .cab dl{display:flex;gap:1.6em;margin:0}
+  .cab dt{font-size:.72em;text-transform:uppercase;letter-spacing:.08em;color:var(--gris)}
+  .cab dd{margin:.15em 0 0;font-weight:600;font-variant-numeric:tabular-nums}
+
+  .empleado{display:grid;grid-template-columns:2.4fr 1fr 1fr .7fr;gap:1em;border:1px solid var(--linea);border-radius:.4em;padding:.6em .9em;background:#f7f9fb}
+  .empleado .etq{display:block;font-size:.72em;text-transform:uppercase;letter-spacing:.08em;color:var(--gris)}
+  .empleado strong{display:block;font-size:1.25em;margin-top:.1em}
+  .empleado span.val{display:block;font-weight:600;margin-top:.2em}
+
+  .tabla{width:100%;border-collapse:collapse}
+  .tabla th,.tabla td{border:1px solid var(--linea);padding:.5em .6em;text-align:left;vertical-align:middle}
+  .tabla th.grupo{background:#dfe7f0;text-align:center;font-size:.78em;text-transform:uppercase;letter-spacing:.1em;color:var(--acento);padding:.35em}
+  .tabla thead tr:nth-child(2) th{background:#f3f5f8;font-size:.8em;color:var(--gris);font-weight:600}
+  .tabla th.marcaje,.tabla th.duracion,.tabla td.hora,.tabla td.dur{text-align:center;font-variant-numeric:tabular-nums}
+  .tabla td.fecha{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600}
+  .tabla td.dur.cero{color:#8a929c}
+  .tabla td.dur.valor{font-weight:700}
+  .tabla td.estado.aus{color:var(--alerta);font-weight:700}
+  .tabla td.inc{font-weight:600}
+  .tabla .ok{color:#8a929c}
+  .sin-marca{font-weight:700;font-size:.85em;text-transform:uppercase;letter-spacing:.03em}
+  .sin-guion{color:#8a929c}
+  tr.inc-total td{background:var(--alerta-bg)}
+  tr.inc-parcial td{background:var(--aviso-bg)}
+  tr.inc-total td:first-child{border-left:5px solid var(--alerta)}
+  tr.inc-parcial td:first-child{border-left:5px solid var(--aviso)}
+  tr.inc-total .sin-marca,tr.inc-total .marca,tr.inc-total td.inc{color:var(--alerta)}
+  tr.inc-parcial .sin-marca,tr.inc-parcial .marca,tr.inc-parcial td.inc{color:var(--aviso)}
+
+  .resumen-periodo{display:flex;gap:.6em;margin-top:auto}
+  .caja{flex:1;border:1px solid var(--linea);border-radius:.4em;padding:.5em .7em}
+  .caja.ancha{flex:2}
+  .caja .etq{display:block;font-size:.7em;text-transform:uppercase;letter-spacing:.08em;color:var(--gris)}
+  .caja .val{display:block;font-size:1.5em;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
+  .caja .nota{display:block;font-size:.75em;color:var(--gris);min-height:1.2em}
+  .caja.alerta{border-color:var(--alerta);background:var(--alerta-bg)}
+  .caja.alerta .val,.caja.alerta .nota{color:var(--alerta)}
+
+  .firmas{border-top:1px solid var(--linea);padding-top:.7em}
+  .firmas .texto{margin:0 0 3em;font-size:.9em}
+  .firmas-fila{display:grid;grid-template-columns:1.6fr .7fr 1.6fr;gap:2.5em}
+  .firma .linea{border-bottom:1.5px solid var(--tinta);height:.2em}
+  .firma b{display:block;margin-top:.35em;font-size:.85em}
+  .firma span{display:block;font-size:.8em;color:var(--gris)}
+
+  /* ---------- Impresión: carta horizontal, una hoja por empleado ---------- */
+  @page{size:letter landscape;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .no-print{display:none !important}
+    main{padding:0;overflow:visible}
+    .hoja{margin:0;box-shadow:none;break-after:page;page-break-after:always}
+    .hoja:last-child{break-after:auto;page-break-after:auto}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<header class="barra no-print">
+  <div class="barra-titulo">Reportes de tiempo y asistencia</div>
+  <label class="btn" for="archivo">Importar CSV</label>
+  <input id="archivo" type="file" accept=".csv,text/csv,text/plain" hidden>
+  <label class="campo">Empresa <input id="empresa" type="text" placeholder="Nombre de la empresa" disabled></label>
+  <label class="campo">Empleado <select id="filtro" disabled><option>—</option></select></label>
+  <button id="imprimir" class="btn primario" disabled>Imprimir / Guardar PDF</button>
+  <span id="resumen" class="resumen"></span>
+</header>
+
+<main>
+  <div id="mensaje" class="mensaje no-print" hidden></div>
+
+  <section id="bienvenida" class="soltar no-print">
+    <div class="soltar-caja">
+      <h2>Importa el CSV de Hik-Connect</h2>
+      <p>Arrastra aquí el archivo «Tarjeta de registro de tiempo» o haz clic para elegirlo.</p>
+      <label class="btn" for="archivo">Elegir archivo CSV</label>
+      <small>El archivo se procesa solo en este navegador; no se envía a ningún servidor.</small>
+    </div>
+  </section>
+
+  <div id="hojas"></div>
+</main>
+
+<script>
+(() => {
+'use strict';
+
+/* =====================================================================
+   CONFIGURACIÓN — aquí se define qué se muestra en el reporte
+   ===================================================================== */
+const CONFIG = {
+  // Si el CSV no trae el nombre de la empresa en la primera línea, se usa este.
+  empresaPorDefecto: '',
+
+  titulo: 'Reporte de tiempo y asistencia',
+
+  textoConformidad:
+    'Firmo de conformidad con los registros de asistencia de este periodo. ' +
+    'Las incidencias señaladas en la columna «Revisión RH» serán revisadas por Recursos Humanos.',
+
+  // Nombre de cada columna tal como viene en el CSV de Hik-Connect.
+  // (El CSV crudo con todas las columnas también funciona: solo se leen estas.)
+  columnas: {
+    empleado:         'Nombre completo',
+    id:               'ID',
+    departamento:     'Departamento',
+    fecha:            'Fecha',
+    dia:              'Día laborable',
+    entrada:          'Hora de fichaje a la entrada',
+    salida:           'Hora de fichaje a la salida',
+    estado:           'Estado de asistencia',
+    horas:            'Horas trabajadas',
+    ausencia:         'Duración de ausencia',
+    retraso:          'Duración del retraso',
+    salidaAnticipada: 'Duración de salida anticipada',
+    extras:           'Duración de las horas extras'
+  },
+
+  // Columnas opcionales: si no existen en el CSV no se avisa.
+  opcionales: ['id'],
+
+  // Grupos y campos de la tabla. Para ocultar un campo, quítalo de la lista.
+  // tipo: texto | fecha | estado | marcaje | duracion | incidencia
+  // (el tipo «fecha» ya incluye el día de la semana, por eso no hay columna «Día»)
+  tabla: [
+    { titulo: 'Día', campos: [
+      { clave: 'fecha',  etiqueta: 'Fecha',  tipo: 'fecha'  },
+      { clave: 'estado', etiqueta: 'Estado', tipo: 'estado' }
+    ]},
+    { titulo: 'Marcajes', campos: [
+      { clave: 'entrada', etiqueta: 'Entrada', tipo: 'marcaje' },
+      { clave: 'salida',  etiqueta: 'Salida',  tipo: 'marcaje' }
+    ]},
+    { titulo: 'Tiempos', campos: [
+      { clave: 'horas',            etiqueta: 'Horas trabajadas',  tipo: 'duracion' },
+      { clave: 'retraso',          etiqueta: 'Retardo',           tipo: 'duracion' },
+      { clave: 'salidaAnticipada', etiqueta: 'Salida anticipada', tipo: 'duracion' },
+      { clave: 'ausencia',         etiqueta: 'Ausencia',          tipo: 'duracion' },
+      { clave: 'extras',           etiqueta: 'Horas extras',      tipo: 'duracion' }
+    ]},
+    { titulo: 'Revisión RH', campos: [
+      { clave: 'incidencia', etiqueta: 'Incidencia', tipo: 'incidencia' }
+    ]}
+  ]
+};
+
+/* =====================================================================
+   Utilidades
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g,
+  c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .toLowerCase().replace(/\s+/g, ' ').trim();
+const pad = n => String(n).padStart(2, '0');
+
+const aMinutos = v => { const m = /^(\d+):(\d{2})/.exec(String(v ?? '').trim()); return m ? (+m[1]) * 60 + (+m[2]) : 0; };
+const fmtMin = min => pad(Math.floor(min / 60)) + ':' + pad(min % 60);
+const plural = (n, s) => n + ' ' + s + (n === 1 ? '' : 's');
+const faltaMarca = v => !v || /^[-–—\s]*$/.test(v);
+
+function claveFecha(s) {
+  let m = /^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/.exec(String(s).trim());
+  if (m) return (+m[3]) * 10000 + (+m[2]) * 100 + (+m[1]);
+  m = /^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/.exec(String(s).trim());
+  if (m) return (+m[1]) * 10000 + (+m[2]) * 100 + (+m[3]);
+  return 0;
+}
+
+/* ---- Formato de fechas y horas: «lun 12/oct/2026» y «07:32 AM» ---- */
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+
+// "17:01" -> "05:01 PM"
+function hora12(s) {
+  const m = /^(\d{1,2}):(\d{2})/.exec(String(s ?? '').trim());
+  if (!m) return s || '';
+  const h = +m[1];
+  return `${pad(h % 12 || 12)}:${m[2]} ${h < 12 ? 'AM' : 'PM'}`;
+}
+// "12-10-2026" -> "lun 12/oct/2026" (el día de la semana se calcula con la fecha)
+function fechaCorta(s) {
+  const k = claveFecha(s);
+  if (!k) return s || '';
+  const a = Math.floor(k / 10000), m = Math.floor(k / 100) % 100, d = k % 100;
+  const dia = DIAS[new Date(Date.UTC(a, m - 1, d)).getUTCDay()];
+  return `${dia} ${pad(d)}/${MESES[m - 1] || pad(m)}/${a}`;
+}
+// "13-10-2026 20:59" -> "lun 13/oct/2026, 08:59 PM"
+function fechaHoraCorta(s) {
+  const m = /^(\S+)\s+(\d{1,2}:\d{2})/.exec(String(s ?? '').trim());
+  return m ? `${fechaCorta(m[1])}, ${hora12(m[2])}` : (s || '');
+}
+const fechaHora = d => `${DIAS[d.getDay()]} ${pad(d.getDate())}/${MESES[d.getMonth()]}/${d.getFullYear()}, ${hora12(pad(d.getHours()) + ':' + pad(d.getMinutes()))}`;
+
+/* =====================================================================
+   Lectura y procesamiento del CSV
+   ===================================================================== */
+async function leerArchivo(file) {
+  const buf = await file.arrayBuffer();
+  let texto = new TextDecoder('utf-8').decode(buf);
+  if (texto.includes('\uFFFD')) texto = new TextDecoder('windows-1252').decode(buf);
+  return texto.replace(/^\uFEFF/, '');
+}
+
+function parseCSV(texto, sep) {
+  const filas = []; let fila = [], campo = '', comillas = false;
+  for (let i = 0; i < texto.length; i++) {
+    const c = texto[i];
+    if (comillas) {
+      if (c === '"') { if (texto[i + 1] === '"') { campo += '"'; i++; } else comillas = false; }
+      else campo += c;
+    } else if (c === '"') comillas = true;
+    else if (c === sep) { fila.push(campo); campo = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && texto[i + 1] === '\n') i++;
+      fila.push(campo); filas.push(fila); fila = []; campo = '';
+    } else campo += c;
+  }
+  if (campo !== '' || fila.length) { fila.push(campo); filas.push(fila); }
+  return filas;
+}
+
+function analizar(r, hayMarcajes) {
+  const sinE = faltaMarca(r.entrada), sinS = faltaMarca(r.salida);
+  const ausente = !r.estado || norm(r.estado).includes('ausen');
+  let incidencia = null, tipo = null;
+  if (hayMarcajes) {
+    if (sinE && sinS) { if (ausente) { incidencia = 'Sin marcajes (ausente)'; tipo = 'total'; } }
+    else if (sinE)    { incidencia = 'Sin marcaje de entrada'; tipo = 'entrada'; }
+    else if (sinS)    { incidencia = 'Sin marcaje de salida';  tipo = 'salida';  }
+  }
+  return { sinE, sinS, incidencia, tipo };
+}
+
+function resumenDe(regs) {
+  const t = { dias: regs.length, horas: 0, retraso: 0, diasRetraso: 0, salAnt: 0, diasSalAnt: 0,
+              ausencia: 0, diasAus: 0, extras: 0, sinE: 0, sinS: 0, sinAmbas: 0 };
+  for (const r of regs) {
+    t.horas += aMinutos(r.horas);
+    const rt = aMinutos(r.retraso);          t.retraso += rt; if (rt > 0) t.diasRetraso++;
+    const sa = aMinutos(r.salidaAnticipada); t.salAnt  += sa; if (sa > 0) t.diasSalAnt++;
+    const au = aMinutos(r.ausencia);         t.ausencia += au;
+    if (au > 0 || norm(r.estado).includes('ausen')) t.diasAus++;
+    t.extras += aMinutos(r.extras);
+    if (r.analisis.tipo === 'entrada') t.sinE++;
+    else if (r.analisis.tipo === 'salida') t.sinS++;
+    else if (r.analisis.tipo === 'total') t.sinAmbas++;
+  }
+  t.incompletos = t.sinE + t.sinS + t.sinAmbas;
+  return t;
+}
+
+function procesar(texto) {
+  const claveEmp = norm(CONFIG.columnas.empleado);
+  const lineaCab = texto.split(/\r?\n/).find(l => norm(l).includes(claveEmp));
+  if (!lineaCab) throw new Error('No encontré la fila de encabezados (columna «' + CONFIG.columnas.empleado +
+    '»). ¿Es el CSV de «Tarjeta de registro de tiempo» exportado de Hik-Connect?');
+  const sep = [',', ';', '\t'].map(s => [s, lineaCab.split(s).length]).sort((a, b) => b[1] - a[1])[0][0];
+
+  const filas = parseCSV(texto, sep);
+  const idxCab = filas.findIndex(r => r.some(c => norm(c) === claveEmp));
+  if (idxCab < 0) throw new Error('No pude leer la fila de encabezados del CSV.');
+
+  // Líneas previas al encabezado: empresa, título del reporte y hora de exportación
+  const preambulo = filas.slice(0, idxCab).map(r => r.map(c => c.trim()).filter(Boolean).join(' ')).filter(Boolean);
+  let empresa = preambulo[0] || '';
+  if (norm(empresa).startsWith('tarjeta de registro') || norm(empresa).startsWith('hora de exportacion')) empresa = '';
+  const mExp = /(\d{1,2}[-\/.]\d{1,2}[-\/.]\d{4}\s+\d{1,2}:\d{2})/.exec(preambulo.join(' '));
+  const exportado = mExp ? fechaHoraCorta(mExp[1]) : '';
+
+  // Mapa de columnas por nombre
+  const cab = filas[idxCab].map(norm);
+  const col = {}, faltantes = [];
+  for (const [k, nombre] of Object.entries(CONFIG.columnas)) {
+    const i = cab.indexOf(norm(nombre));
+    if (i >= 0) col[k] = i;
+    else if (!CONFIG.opcionales.includes(k)) faltantes.push(nombre);
+  }
+  if (col.empleado === undefined || col.fecha === undefined)
+    throw new Error('Al CSV le faltan las columnas «' + CONFIG.columnas.empleado + '» o «' + CONFIG.columnas.fecha + '».');
+  const hayMarcajes = col.entrada !== undefined && col.salida !== undefined;
+
+  // Registros
+  const registros = [];
+  for (const r of filas.slice(idxCab + 1)) {
+    const get = k => col[k] === undefined ? '' : String(r[col[k]] ?? '').trim();
+    const nombre = get('empleado');
+    if (!nombre) continue;
+    const reg = { empleado: nombre, id: get('id'), departamento: get('departamento'), fecha: get('fecha'), dia: get('dia'),
+      entrada: get('entrada'), salida: get('salida'), estado: get('estado'), horas: get('horas'), ausencia: get('ausencia'),
+      retraso: get('retraso'), salidaAnticipada: get('salidaAnticipada'), extras: get('extras') };
+    reg.analisis = analizar(reg, hayMarcajes);
+    registros.push(reg);
+  }
+  if (!registros.length) throw new Error('El archivo no contiene registros de empleados.');
+
+  // Agrupar por empleado
+  const mapa = new Map();
+  for (const r of registros) {
+    const clave = r.id + '|' + r.empleado;
+    if (!mapa.has(clave)) mapa.set(clave, { clave, nombre: r.empleado, id: r.id, departamento: r.departamento, registros: [] });
+    const e = mapa.get(clave);
+    if (!e.departamento && r.departamento) e.departamento = r.departamento;
+    e.registros.push(r);
+  }
+  const empleados = [...mapa.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  for (const e of empleados) {
+    e.registros.sort((a, b) => claveFecha(a.fecha) - claveFecha(b.fecha));
+    e.totales = resumenDe(e.registros);
+  }
+
+  // Periodo del archivo
+  const conFecha = registros.filter(r => claveFecha(r.fecha) > 0).sort((a, b) => claveFecha(a.fecha) - claveFecha(b.fecha));
+  const fIni = conFecha.length ? conFecha[0].fecha : '';
+  const fFin = conFecha.length ? conFecha[conFecha.length - 1].fecha : '';
+  const periodo = conFecha.length
+    ? (fIni === fFin ? fechaCorta(fIni) : fechaCorta(fIni) + ' al ' + fechaCorta(fFin))
+    : '—';
+  // Versión sin diagonales para el título de la página (nombre sugerido del PDF)
+  const periodoTitulo = conFecha.length ? (fIni === fFin ? fIni : fIni + ' al ' + fFin) : '';
+
+  // Grupos de la tabla que sí existen en este CSV
+  const grupos = CONFIG.tabla
+    .map(g => ({ titulo: g.titulo,
+      campos: g.campos.filter(c => c.clave === 'incidencia' ? hayMarcajes : col[c.clave] !== undefined) }))
+    .filter(g => g.campos.length);
+
+  return { empresa, exportado, periodo, periodoTitulo, empleados, grupos, col, hayMarcajes, faltantes, totalRegistros: registros.length };
+}
+
+/* =====================================================================
+   Generación de la hoja
+   ===================================================================== */
+function celda(c, r) {
+  const v = r[c.clave] ?? '';
+  const a = r.analisis;
+  switch (c.tipo) {
+    case 'fecha':
+      return `<td class="fecha">${esc(fechaCorta(v))}</td>`;
+    case 'estado': {
+      const aus = norm(v).includes('ausen');
+      return `<td class="estado${aus ? ' aus' : ''}">${esc(v)}</td>`;
+    }
+    case 'marcaje': {
+      const falta = c.clave === 'entrada' ? a.sinE : a.sinS;
+      if (falta && a.tipo) return `<td class="hora"><span class="sin-marca">Sin marcaje</span></td>`;
+      if (falta) return `<td class="hora"><span class="sin-guion">—</span></td>`;
+      return `<td class="hora">${esc(hora12(v))}</td>`;
+    }
+    case 'duracion': {
+      const cero = aMinutos(v) === 0;
+      return `<td class="dur ${cero ? 'cero' : 'valor'}">${esc(v || '00:00')}</td>`;
+    }
+    case 'incidencia':
+      return `<td class="inc">${a.incidencia ? '<span class="marca">▲</span> ' + esc(a.incidencia) : '<span class="ok">—</span>'}</td>`;
+    default:
+      return `<td>${esc(v)}</td>`;
+  }
+}
+
+function hojaHTML(emp, d, emitido, n, total) {
+  const empresa = (estado.empresa || '').trim() || 'Nombre de la empresa';
+  const t = emp.totales;
+
+  const thead =
+    `<tr>${d.grupos.map(g => `<th class="grupo" colspan="${g.campos.length}">${esc(g.titulo)}</th>`).join('')}</tr>` +
+    `<tr>${d.grupos.flatMap(g => g.campos.map(c => `<th class="${c.tipo}">${esc(c.etiqueta)}</th>`)).join('')}</tr>`;
+
+  const filas = emp.registros.map(r => {
+    const cls = r.analisis.tipo === 'total' ? 'inc-total' : r.analisis.tipo ? 'inc-parcial' : '';
+    return `<tr class="${cls}">${d.grupos.flatMap(g => g.campos.map(c => celda(c, r))).join('')}</tr>`;
+  }).join('');
+
+  const cajas = [{ etq: 'Días en el periodo', val: t.dias, nota: '' }];
+  if (d.col.horas !== undefined)            cajas.push({ etq: 'Horas trabajadas', val: fmtMin(t.horas), nota: '' });
+  if (d.col.retraso !== undefined)          cajas.push({ etq: 'Retardos', val: fmtMin(t.retraso), nota: plural(t.diasRetraso, 'día') });
+  if (d.col.salidaAnticipada !== undefined) cajas.push({ etq: 'Salidas anticipadas', val: fmtMin(t.salAnt), nota: plural(t.diasSalAnt, 'día') });
+  if (d.col.ausencia !== undefined)         cajas.push({ etq: 'Ausencia', val: fmtMin(t.ausencia), nota: plural(t.diasAus, 'día') });
+  if (d.col.extras !== undefined)           cajas.push({ etq: 'Horas extras', val: fmtMin(t.extras), nota: '' });
+  if (d.hayMarcajes) cajas.push({ etq: 'Marcajes incompletos', val: t.incompletos, ancha: true, alerta: t.incompletos > 0,
+    nota: `${t.sinE} sin entrada · ${t.sinS} sin salida · ${t.sinAmbas} sin marcajes` });
+
+  const resumen = cajas.map(c =>
+    `<div class="caja${c.ancha ? ' ancha' : ''}${c.alerta ? ' alerta' : ''}"><span class="etq">${esc(c.etq)}</span>` +
+    `<span class="val">${esc(c.val)}</span><span class="nota">${esc(c.nota)}</span></div>`).join('');
+
+  return `
+<section class="hoja">
+  <div class="cab">
+    <div><h1>${esc(empresa)}</h1><p>${esc(CONFIG.titulo)}</p></div>
+    <dl>
+      <div><dt>Periodo</dt><dd>${esc(d.periodo)}</dd></div>
+      ${d.exportado ? `<div><dt>Exportado</dt><dd>${esc(d.exportado)}</dd></div>` : ''}
+      <div><dt>Emitido</dt><dd>${esc(emitido)}</dd></div>
+    </dl>
+  </div>
+  <div class="empleado">
+    <div><span class="etq">Empleado</span><strong>${esc(emp.nombre)}</strong></div>
+    <div><span class="etq">Departamento</span><span class="val">${esc(emp.departamento || '—')}</span></div>
+    <div><span class="etq">ID</span><span class="val">${esc(emp.id || '—')}</span></div>
+    <div><span class="etq">Hoja</span><span class="val">${n} de ${total}</span></div>
+  </div>
+  <table class="tabla"><thead>${thead}</thead><tbody>${filas}</tbody></table>
+  <div class="resumen-periodo">${resumen}</div>
+  <div class="firmas">
+    <p class="texto">${esc(CONFIG.textoConformidad)}</p>
+    <div class="firmas-fila">
+      <div class="firma"><div class="linea"></div><b>Firma del empleado</b><span>${esc(emp.nombre)}</span></div>
+      <div class="firma"><div class="linea"></div><b>Fecha</b></div>
+      <div class="firma"><div class="linea"></div><b>Recursos Humanos</b><span>Nombre y firma</span></div>
+    </div>
+  </div>
+</section>`;
+}
+
+// Reduce la letra de la hoja hasta que todo quepa en una sola página.
+function ajustar(hoja) {
+  let tam = 12;
+  hoja.style.fontSize = tam + 'px';
+  const ultimo = hoja.lastElementChild;
+  const padB = parseFloat(getComputedStyle(hoja).paddingBottom) || 0;
+  const desborda = () => ultimo.getBoundingClientRect().bottom > hoja.getBoundingClientRect().bottom - padB + 0.5;
+  while (desborda() && tam > 5.5) { tam -= 0.25; hoja.style.fontSize = tam + 'px'; }
+}
+
+/* =====================================================================
+   Estado e interfaz
+   ===================================================================== */
+const estado = { datos: null, empresa: '', filtro: '' };
+
+function mostrarMensaje(texto, tipo) {
+  const m = $('mensaje');
+  if (!texto) { m.hidden = true; return; }
+  m.className = 'mensaje no-print ' + (tipo || 'aviso');
+  m.textContent = texto;
+  m.hidden = false;
+}
+
+function render() {
+  const cont = $('hojas');
+  const d = estado.datos;
+  if (!d) { cont.innerHTML = ''; return; }
+  const lista = estado.filtro === '' ? d.empleados : d.empleados.filter(e => e.clave === estado.filtro);
+  const emitido = fechaHora(new Date());
+  cont.innerHTML = lista.map((e, i) => hojaHTML(e, d, emitido, i + 1, lista.length)).join('');
+  cont.querySelectorAll('.hoja').forEach(ajustar);
+  const quien = lista.length === 1 ? ' - ' + lista[0].nombre : '';
+  document.title = `Asistencia ${(estado.empresa || '').trim()} ${d.periodoTitulo}${quien}`.replace(/\s+/g, ' ').trim();
+}
+
+function llenarFiltro() {
+  const d = estado.datos;
+  $('filtro').innerHTML = `<option value="">Todos los empleados (${d.empleados.length})</option>` +
+    d.empleados.map(e => `<option value="${esc(e.clave)}">${esc(e.nombre)}</option>`).join('');
+  $('filtro').disabled = false;
+}
+
+async function cargar(file) {
+  try {
+    const datos = procesar(await leerArchivo(file));
+    estado.datos = datos;
+    estado.filtro = '';
+    estado.empresa = datos.empresa || CONFIG.empresaPorDefecto;
+    $('empresa').value = estado.empresa;
+    $('empresa').disabled = false;
+    $('imprimir').disabled = false;
+    $('bienvenida').hidden = true;
+    llenarFiltro();
+    const conInc = datos.empleados.filter(e => e.totales.incompletos > 0).length;
+    $('resumen').textContent = `${datos.empleados.length} empleados · ${datos.totalRegistros} registros · ` +
+      (datos.hayMarcajes ? `${conInc} con marcajes incompletos` : 'sin detección de marcajes');
+    const avisos = [];
+    if (datos.faltantes.length) avisos.push('Columnas no encontradas en el CSV (se omiten): ' + datos.faltantes.join(', ') + '.');
+    if (!estado.empresa) avisos.push('El CSV no trae el nombre de la empresa; escríbelo en el campo «Empresa».');
+    mostrarMensaje(avisos.join(' '), 'aviso');
+    render();
+  } catch (err) {
+    mostrarMensaje(err.message, 'error');
+  }
+}
+
+$('archivo').addEventListener('change', e => { const f = e.target.files[0]; if (f) cargar(f); e.target.value = ''; });
+$('empresa').addEventListener('input', e => { estado.empresa = e.target.value; render(); });
+$('filtro').addEventListener('change', e => { estado.filtro = e.target.value; render(); });
+$('imprimir').addEventListener('click', () => window.print());
+
+['dragenter', 'dragover'].forEach(ev => document.addEventListener(ev, e => {
+  e.preventDefault(); document.body.classList.add('arrastrando');
+}));
+document.addEventListener('dragleave', e => { if (e.relatedTarget === null) document.body.classList.remove('arrastrando'); });
+document.addEventListener('drop', e => {
+  e.preventDefault(); document.body.classList.remove('arrastrando');
+  const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (f) cargar(f);
+});
+})();
+</script>
+</body>
+</html>
