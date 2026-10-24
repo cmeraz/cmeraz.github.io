@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C2333">
+<meta name="description" content="Norttek Supply · Papelería para oficinas, negocios y empresas. Compra en línea y recibe en tu negocio en Cuauhtémoc y el Valle.">
+<title>Norttek Supply · Papelería</title>
+
+<!--
+  GUÍA RÁPIDA DE SUSTITUCIÓN
+  1. Número de WhatsApp: constante WA_NUMBER en el <script> del final.
+  2. Tienda en línea: enlace https://norttek.sicarx.shop (aparece en hero, catálogo, pasos y barra fija).
+  3. Fotos y logos: cada espacio punteado es un <div class="ph">. Para poner una imagen real,
+     agrega dentro del mismo div:  <img src="ruta.webp" alt="descripción" loading="lazy" width="800" height="600">
+     La imagen cubre el texto del placeholder automáticamente.
+  4. Dirección, horario y respuestas de preguntas frecuentes: busca los textos entre [corchetes].
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Íconos: solo los que usa la página (si agregas uno nuevo, añádelo a icon_names en orden alfabético) -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_balance,add_shopping_cart,attach_file,border_color,calculate,chat,check,content_cut,credit_card,description,edit,expand_more,fact_check,folder,folder_open,language,linear_scale,local_shipping,location_on,mail,mouse,payments,print,receipt_long,schedule,science,sticky_note_2,storefront,support_agent&display=block" rel="stylesheet">
+
+<style>
+/* ============ BASE (pensada primero para móvil) ============ */
+:root{
+  --navy:#1C2333; --navy-2:#243044; --blue:#3AAFE4; --blue-deep:#0B7CA3; --blue-deeper:#096A8C;
+  --ice:#EEF1F5; --white:#FFFFFF; --text:#1C2333; --muted:#5A6577; --line:#E2E7EE;
+  --r:14px; --shadow:0 6px 18px rgba(28,35,51,.08); --bar-h:76px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55;color:var(--text);background:var(--white);-webkit-tap-highlight-color:transparent}
+h1,h2,h3,p,ul{margin:0}
+ul{padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3{font-family:Montserrat,system-ui,sans-serif;line-height:1.15}
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 20px}
+section{padding:48px 0}
+section[id]{scroll-margin-top:12px}
+.eyebrow{color:var(--blue-deep);font-weight:600;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+.title{font-size:clamp(24px,6.6vw,34px);font-weight:800;margin:8px 0 10px}
+.lead{color:var(--muted);max-width:620px}
+
+/* Íconos de fuente */
+.ms{font-family:"Material Symbols Outlined";font-weight:400;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;font-feature-settings:"liga";-webkit-font-smoothing:antialiased;flex-shrink:0;user-select:none}
+.ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(58,175,228,.16);color:var(--blue)}
+.ico .ms{font-size:22px}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 22px;border-radius:12px;font-family:Montserrat,sans-serif;font-weight:700;font-size:16px;transition:transform .15s,background .15s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--blue-deep);color:#fff}
+.btn-primary:hover{background:var(--blue-deeper)}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+.btn-block{width:100%}
+
+/* Placeholders (se reemplazan por imagen real, ver guía arriba) */
+.ph{position:relative;overflow:hidden;display:grid;place-items:center;text-align:center;padding:8px;border-radius:10px;border:1.5px dashed #9AA6B8;background:repeating-linear-gradient(45deg,#E4E9F0 0 10px,#D9E0E9 10px 20px);color:var(--muted);font-size:12px;font-weight:600;line-height:1.3}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ============ ENCABEZADO ============ */
+.topbar{background:#fff;border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{width:150px;height:40px}
+.nav{display:none;gap:24px;font-weight:600;font-size:14px}
+.nav a{padding:8px 0}
+.nav a:hover{color:var(--blue-deep)}
+.head-shop{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 14px;border-radius:12px;background:var(--blue-deep);color:#fff;font-family:Montserrat,sans-serif;font-weight:700;font-size:14px}
+
+/* ============ HERO ============ */
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;padding:28px 0 36px}
+.hero .eyebrow{color:var(--blue)}
+.hero h1{font-size:clamp(28px,8.2vw,44px);font-weight:800;margin:10px 0 12px;letter-spacing:-.01em}
+.hero .sub{color:#C9D3E0;font-size:16.5px;max-width:540px}
+.adv{display:grid;gap:10px;margin:22px 0}
+.adv li{display:flex;align-items:center;gap:12px;font-weight:600;font-size:15.5px;line-height:1.3}
+.hero-ctas{display:grid;gap:10px}
+.hero-ctas .btn{min-height:54px}
+.bonus{margin-top:26px}
+.bonus-label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#AEBBCD;margin-bottom:10px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.tip{position:relative;display:inline-flex}
+.pill{min-width:44px;height:44px;padding:0 10px;border-radius:12px;background:rgba(255,255,255,.09);color:var(--blue);display:grid;place-items:center;font-weight:700;font-size:12px;font-family:Montserrat,sans-serif}
+.pill .ms{font-size:22px}
+.pill-text{color:#fff}
+.pill-ph{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.3);color:#AEBBCD;width:56px;padding:2px;font-size:10px}
+.tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,4px);white-space:nowrap;background:#fff;color:var(--navy);font-size:12.5px;font-weight:600;padding:6px 10px;border-radius:8px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:5}
+.tip:hover::after,.tip:focus-visible::after,.tip.open::after{opacity:1;transform:translate(-50%,0)}
+.tip:focus{outline:none}
+.hero-media{margin-top:26px;aspect-ratio:16/10;border-radius:var(--r);background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.3);color:#AEBBCD}
+
+/* ============ CATÁLOGO ============ */
+.shop-note{display:flex;align-items:center;gap:10px;margin-top:18px;padding:14px 16px;border-radius:var(--r);background:var(--sel);font-weight:600;font-size:15px}
+.shop-note .ms{color:var(--blue-deep)}
+.shop-note a{color:var(--blue-deep);text-decoration:underline;text-underline-offset:3px}
+.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+.cat{display:flex;flex-direction:column;gap:10px;background:var(--ice);border-radius:var(--r);padding:8px;transition:transform .15s,box-shadow .15s}
+.cat:active{transform:scale(.98)}
+.cat:hover{box-shadow:var(--shadow)}
+.cat .ph{aspect-ratio:4/3}
+.cat-name{display:flex;align-items:center;gap:6px;padding:0 4px 6px;font-family:Montserrat,sans-serif;font-weight:700;font-size:13.5px;line-height:1.25}
+.cat-name .ms{font-size:20px;color:var(--blue-deep)}
+
+/* ============ IMPRESIÓN DE PLANOS ============ */
+.service-grid{display:grid;gap:0}
+.feat{display:grid;gap:12px;margin-top:20px}
+.feat li{display:flex;align-items:center;gap:12px;font-weight:500}
+.feat .ms{color:var(--blue-deep)}
+.service-media{aspect-ratio:4/3;margin-top:22px}
+.service .btn{margin-top:22px}
+
+/* ============ COBERTURA ============ */
+.cover{background:var(--navy);color:#fff}
+.cover .eyebrow{color:var(--blue)}
+.cover .title{color:#fff}
+.cover .lead{color:#C9D3E0}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chip{display:flex;align-items:center;gap:6px;min-height:40px;padding:0 14px 0 10px;border-radius:999px;background:rgba(255,255,255,.09);font-weight:600;font-size:14px}
+.chip .ms{font-size:20px;color:var(--blue)}
+
+/* ============ CÓMO FUNCIONA ============ */
+.steps{display:grid;gap:12px;margin-top:22px}
+.step{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:var(--r);background:var(--ice)}
+.step-ico{width:48px;height:48px;border-radius:12px;background:#fff;color:var(--blue-deep);display:grid;place-items:center;flex-shrink:0;box-shadow:var(--shadow)}
+.step-ico svg{width:26px;height:26px}
+.step h3{font-size:16.5px;margin-bottom:4px}
+.step p{color:var(--muted);font-size:15px}
+.step a.inline{color:var(--blue-deep);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* ============ PAGOS: tarjetas de referencia ============ */
+.pay{background:var(--ice)}
+.pay-grid{display:grid;gap:14px;margin-top:22px}
+.card{background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.badge{align-self:flex-start;padding:5px 12px;border-radius:999px;color:#fff;font-family:Montserrat,sans-serif;font-weight:700;font-size:12px}
+.b-blue{background:#1E5BE0}
+.b-teal{background:#0F7F76}
+.b-green{background:#128A52}
+.b-indigo{background:#4F46C8}
+.b-navy{background:var(--navy)}
+.card h3{font-size:18px}
+.card p{color:var(--muted);font-size:15px}
+.card ul{display:grid;gap:8px;margin-top:2px}
+.card li{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500}
+.card li .ms{font-size:18px;color:var(--blue-deep)}
+.card-logos{display:flex;gap:8px;margin-top:2px}
+.card-logos .ph{width:58px;height:32px;font-size:10px;padding:2px}
+
+/* ============ PREGUNTAS ============ */
+.faq{margin-top:18px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:56px;padding:10px 0;font-family:Montserrat,sans-serif;font-weight:700;font-size:15.5px;cursor:pointer;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .ms{color:var(--blue-deep);transition:transform .2s}
+.faq details[open] summary .ms{transform:rotate(180deg)}
+.faq details p{padding:0 0 16px;color:var(--muted)}
+
+/* ============ CONTACTO ============ */
+.contact{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;text-align:center}
+.contact .eyebrow{color:var(--blue)}
+.contact .title{color:#fff}
+.contact .lead{color:#C9D3E0;margin:0 auto}
+.contact-info{display:grid;gap:14px;justify-items:center;margin:24px 0 26px;color:#DDE5F0;font-weight:500}
+.contact-info div{display:flex;align-items:center;gap:10px}
+.contact-info .ms{color:var(--blue)}
+.contact .btn{max-width:420px;margin:0 auto}
+
+/* ============ PIE MÍNIMO ============ */
+footer{background:#131928;color:#9AA6B8;font-size:13px;padding:22px 0 calc(22px + var(--bar-h) + env(safe-area-inset-bottom))}
+footer .wrap{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+footer .logo{width:140px;height:36px;font-size:11px}
+
+/* ============ BARRA FIJA (enfoque en venta en línea) ============ */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transform:translateY(110%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+.bar.show{transform:none;visibility:visible;transition-delay:0s}
+.bar .btn{flex:1;min-height:50px;font-size:15px}
+.bar .btn-wa{flex:0 0 auto;min-width:50px;padding:0 14px;background:#128C4A;color:#fff}
+
+/* ============ TABLET ============ */
+@media (min-width:640px){
+  section{padding:64px 0}
+  .hero-ctas{grid-template-columns:1fr 1fr}
+  .cats{grid-template-columns:repeat(3,1fr);gap:16px}
+  .pay-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .step{flex-direction:column}
+}
+
+/* ============ ESCRITORIO (menos del 5% de visitas: ajuste sencillo) ============ */
+@media (min-width:900px){
+  .nav{display:flex}
+  .hero{padding:72px 0}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .hero-ctas{grid-template-columns:auto auto;justify-content:start}
+  .hero-media{margin-top:0;aspect-ratio:4/3}
+  .cats{grid-template-columns:repeat(4,1fr)}
+  .service-grid{grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .service-media{margin-top:0}
+  .pay-grid{grid-template-columns:repeat(3,1fr)}
+  .contact-info{display:flex;justify-content:center;gap:36px;flex-wrap:wrap}
+  .bar{left:auto;right:24px;bottom:24px;width:420px;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(28,35,51,.18)}
+  footer{padding-bottom:22px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ENCABEZADO -->
+<header class="topbar">
+  <div class="wrap">
+    <!-- REEMPLAZAR: logo Norttek Supply (aprox. 150×40 px) -->
+    <div class="ph logo">LOGO NORTTEK SUPPLY</div>
+    <nav class="nav" aria-label="Principal">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#impresion">Impresión de planos</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#pagos">Pagos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="head-shop" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ms" aria-hidden="true">storefront</span>Tienda</a>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Para oficinas, negocios y empresas</p>
+      <h1>Papelería para tu oficina, lista cuando la necesitas.</h1>
+      <p class="sub">Compra en nuestra tienda en línea y te la llevamos a tu negocio en Cuauhtémoc y el Valle.</p>
+
+      <ul class="adv">
+        <li><span class="ico"><span class="ms" aria-hidden="true">local_shipping</span></span>Envío a domicilio</li>
+        <li><span class="ico"><span class="ms" aria-hidden="true">language</span></span>Catálogo en línea</li>
+        <li><span class="ico"><span class="ms" aria-hidden="true">support_agent</span></span>Atención personalizada</li>
+      </ul>
+
+      <div class="hero-ctas">
+        <a id="hero-cta" class="btn btn-primary btn-block" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+          <span class="ms" aria-hidden="true">add_shopping_cart</span>Comprar en línea
+        </a>
+        <a class="btn btn-ghost btn-block" data-wa="lista" href="#contacto">
+          <span class="ms" aria-hidden="true">chat</span>Pedir por WhatsApp
+        </a>
+      </div>
+
+      <!-- Bono: formas de pago en íconos con tooltip -->
+      <div class="bonus">
+        <p class="bonus-label">Bono · Paga como prefieras</p>
+        <div class="pills">
+          <button type="button" class="tip pill" data-tip="Efectivo" aria-label="Efectivo"><span class="ms" aria-hidden="true">payments</span></button>
+          <button type="button" class="tip pill" data-tip="Transferencia" aria-label="Transferencia"><span class="ms" aria-hidden="true">account_balance</span></button>
+          <button type="button" class="tip pill" data-tip="Tarjeta de crédito o débito" aria-label="Tarjeta de crédito o débito"><span class="ms" aria-hidden="true">credit_card</span></button>
+          <button type="button" class="tip pill pill-text" data-tip="Apple Pay" aria-label="Apple Pay">Apple Pay</button>
+          <button type="button" class="tip pill pill-text" data-tip="Google Pay" aria-label="Google Pay">G Pay</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REEMPLAZAR: foto del hero (oficina o productos, aprox. 800×500 px, menos de 100 KB) -->
+    <div class="ph hero-media">FOTO HERO<br>(oficina o productos)</div>
+  </div>
+</section>
+
+<!-- CATÁLOGO -->
+<section id="catalogo">
+  <div class="wrap">
+    <p class="eyebrow">Catálogo</p>
+    <h2 class="title">Todo lo que tu oficina necesita</h2>
+    <p class="lead">Explora por categoría en nuestra tienda en línea.</p>
+
+    <div class="shop-note">
+      <span class="ms" aria-hidden="true">storefront</span>
+      <span>Llévalo contigo o revísalo en <a href="https://norttek.sicarx.shop" target="_blank" rel="noopener">nuestra tienda en línea</a></span>
+    </div>
+
+    <div class="cats">
+      <!-- REEMPLAZAR en cada tarjeta: foto de referencia (aprox. 400×300 px, WebP). Cada tarjeta enlaza a la tienda. -->
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Cintas</span><span class="cat-name"><span class="ms" aria-hidden="true">linear_scale</span>Cintas</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Pegamento</span><span class="cat-name"><span class="ms" aria-hidden="true">science</span>Pegamento</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Papel</span><span class="cat-name"><span class="ms" aria-hidden="true">description</span>Papel</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Rollos térmicos</span><span class="cat-name"><span class="ms" aria-hidden="true">receipt_long</span>Rollos térmicos</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Folders</span><span class="cat-name"><span class="ms" aria-hidden="true">folder_open</span>Folders</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Sobres</span><span class="cat-name"><span class="ms" aria-hidden="true">mail</span>Sobres</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Calculadoras</span><span class="cat-name"><span class="ms" aria-hidden="true">calculate</span>Calculadoras</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Tecnología</span><span class="cat-name"><span class="ms" aria-hidden="true">mouse</span>Tecnología</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Carpetas y organización</span><span class="cat-name"><span class="ms" aria-hidden="true">folder</span>Carpetas y organización</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Grapas y clips</span><span class="cat-name"><span class="ms" aria-hidden="true">attach_file</span>Grapas, clips y sujetadores</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Marcadores</span><span class="cat-name"><span class="ms" aria-hidden="true">border_color</span>Marcadores y marcatextos</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Notas y tableros</span><span class="cat-name"><span class="ms" aria-hidden="true">sticky_note_2</span>Notas y tableros</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Escritorio</span><span class="cat-name"><span class="ms" aria-hidden="true">content_cut</span>Escritorio</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Escritura</span><span class="cat-name"><span class="ms" aria-hidden="true">edit</span>Escritura y correctores</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- IMPRESIÓN DE PLANOS -->
+<section id="impresion" class="service">
+  <div class="wrap service-grid">
+    <div>
+      <p class="eyebrow">Servicio</p>
+      <h2 class="title">Impresión de planos</h2>
+      <p class="lead">Imprimimos tus planos en gran formato, listos para tu proyecto o tu entrega.</p>
+      <ul class="feat">
+        <li><span class="ms" aria-hidden="true">print</span>Impresión en gran formato</li>
+        <li><span class="ms" aria-hidden="true">description</span>Papel para plotter en rollo y hoja</li>
+        <li><span class="ms" aria-hidden="true">local_shipping</span>Entrega en tu oficina o despacho</li>
+        <li><span class="ms" aria-hidden="true">fact_check</span>Revisión de archivo antes de imprimir</li>
+      </ul>
+      <a class="btn btn-primary btn-block" data-wa="fijo" data-msg="Hola, quiero cotizar la impresión de planos." href="#contacto">
+        <span class="ms" aria-hidden="true">chat</span>Cotizar impresión de planos
+      </a>
+    </div>
+    <!-- REEMPLAZAR: foto de plano impreso o plotter (aprox. 800×600 px) -->
+    <div class="ph service-media">FOTO · Plano impreso o plotter</div>
+  </div>
+</section>
+
+<!-- COBERTURA -->
+<section class="cover">
+  <div class="wrap">
+    <p class="eyebrow">Cobertura</p>
+    <h2 class="title">Entregamos en tu negocio</h2>
+    <p class="lead">Atendemos Cuauhtémoc y municipios cercanos del Valle.</p>
+    <div class="chips">
+      <span class="chip"><span class="ms" aria-hidden="true">location_on</span>Cuauhtémoc</span>
+      <span class="chip"><span class="ms" aria-hidden="true">location_on</span>Namiquipa</span>
+      <span class="chip"><span class="ms" aria-hidden="true">location_on</span>Guerrero</span>
+      <span class="chip"><span class="ms" aria-hidden="true">location_on</span>Buenaventura</span>
+      <span class="chip"><span class="ms" aria-hidden="true">location_on</span>Riva Palacio</span>
+      <span class="chip"><span class="ms" aria-hidden="true">location_on</span>La Junta</span>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="wrap">
+    <p class="eyebrow">Proceso</p>
+    <h2 class="title">Cómo funciona</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-ico" aria-hidden="true"><span class="ms">storefront</span></span>
+        <div><h3>Elige en la tienda en línea</h3><p>Busca tus productos en <a class="inline" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">norttek.sicarx.shop</a> y agrégalos a tu pedido.</p></div>
+      </div>
+      <div class="step">
+        <span class="step-ico" aria-hidden="true">
+          <!-- REEMPLAZAR si tienes el logo oficial de WhatsApp en archivo -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M3.5 20.5l1.2-4.1A8.5 8.5 0 1 1 8 19.3z"/><path d="M9 8.8c0 2.9 2.6 5.5 5.5 6.2l1.2-1.3c.2-.2.5-.2.7 0l1.6 1c.2.1.3.4.2.6-.4 1-1.4 1.6-2.5 1.5C11 16.5 7.4 13 7.2 9.5c0-1.1.6-2 1.6-2.4.2-.1.5 0 .6.2l1 1.6c.1.2.1.5-.1.7L9.1 10c-.1.2-.1.5 0 .6z" stroke-width="1.4"/></svg>
+        </span>
+        <div><h3>Confirmamos por WhatsApp</h3><p>Te confirmamos precio, disponibilidad y fecha de entrega.</p></div>
+      </div>
+      <div class="step">
+        <span class="step-ico" aria-hidden="true"><span class="ms">local_shipping</span></span>
+        <div><h3>Lo llevamos a tu negocio</h3><p>Entregamos en tu domicilio u oficina dentro de la zona de cobertura.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMAS DE PAGO: tarjetas de referencia -->
+<section id="pagos" class="pay">
+  <div class="wrap">
+    <p class="eyebrow">Pagos</p>
+    <h2 class="title">Paga como te sea más cómodo</h2>
+    <div class="pay-grid">
+
+      <article class="card">
+        <span class="badge b-green">Al recibir</span>
+        <h3>Efectivo</h3>
+        <p>Pagas al recibir tu pedido en tu negocio.</p>
+        <ul>
+          <li><span class="ms" aria-hidden="true">check</span>Pago al entregar</li>
+          <li><span class="ms" aria-hidden="true">check</span>Sin trámites</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <span class="badge b-blue">Datos por WhatsApp</span>
+        <h3>Transferencia</h3>
+        <p>Te enviamos los datos bancarios al confirmar tu pedido.</p>
+        <ul>
+          <li><span class="ms" aria-hidden="true">check</span>Datos en tu confirmación</li>
+          <li><span class="ms" aria-hidden="true">check</span>Transferencia bancaria</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <span class="badge b-indigo">Crédito y débito</span>
+        <h3>Tarjeta</h3>
+        <p>Paga con tu tarjeta de crédito o débito.</p>
+        <ul>
+          <li><span class="ms" aria-hidden="true">check</span>Tarjeta de crédito</li>
+          <li><span class="ms" aria-hidden="true">check</span>Tarjeta de débito</li>
+        </ul>
+        <!-- REEMPLAZAR: logos Visa y Mastercard -->
+        <div class="card-logos"><span class="ph">VISA</span><span class="ph">MC</span></div>
+      </article>
+
+      <article class="card">
+        <span class="badge b-navy">Pago rápido</span>
+        <h3>Apple Pay</h3>
+        <p>Paga con el teléfono, sin escribir datos de tu tarjeta.</p>
+        <ul>
+          <li><span class="ms" aria-hidden="true">check</span>Desde iPhone, iPad o Mac</li>
+          <li><span class="ms" aria-hidden="true">check</span>Confirmas con Face ID o Touch ID</li>
+        </ul>
+        <!-- REEMPLAZAR: logo oficial de Apple Pay -->
+        <div class="card-logos"><span class="ph">Apple Pay</span></div>
+      </article>
+
+      <article class="card">
+        <span class="badge b-teal">Pago rápido</span>
+        <h3>Google Pay</h3>
+        <p>Paga con el teléfono, sin escribir datos de tu tarjeta.</p>
+        <ul>
+          <li><span class="ms" aria-hidden="true">check</span>Desde tu Android o cuenta de Google</li>
+          <li><span class="ms" aria-hidden="true">check</span>Usa tus tarjetas guardadas</li>
+        </ul>
+        <!-- REEMPLAZAR: logo oficial de Google Pay -->
+        <div class="card-logos"><span class="ph">Google Pay</span></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- PREGUNTAS FRECUENTES -->
+<section id="faq">
+  <div class="wrap">
+    <p class="eyebrow">Dudas</p>
+    <h2 class="title">Preguntas frecuentes</h2>
+    <div class="faq">
+      <details><summary>¿Cuál es el monto mínimo de pedido?<span class="ms" aria-hidden="true">expand_more</span></summary><p>[Pendiente de confirmar]</p></details>
+      <details><summary>¿Cuánto tarda la entrega?<span class="ms" aria-hidden="true">expand_more</span></summary><p>[Pendiente de confirmar]</p></details>
+      <details><summary>¿Cómo pido precio de cuenta?<span class="ms" aria-hidden="true">expand_more</span></summary><p>[Pendiente de confirmar]</p></details>
+      <details><summary>¿Hay cargo adicional por pagar con tarjeta?<span class="ms" aria-hidden="true">expand_more</span></summary><p>[Pendiente de confirmar]</p></details>
+      <details><summary>¿Cuánto cuesta imprimir un plano?<span class="ms" aria-hidden="true">expand_more</span></summary><p>[Pendiente de confirmar]</p></details>
+      <details><summary>¿Cómo pido una cotización?<span class="ms" aria-hidden="true">expand_more</span></summary><p>Compra en la tienda en línea o escríbenos por WhatsApp con tu lista o tus planos. Te respondemos con precio y disponibilidad.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="contact">
+  <div class="wrap">
+    <p class="eyebrow">Contacto</p>
+    <h2 class="title">¿Listo para tu próximo pedido?</h2>
+    <p class="lead">Compra en línea o escríbenos por WhatsApp, te atendemos con gusto.</p>
+    <div class="contact-info">
+      <div><span class="ms" aria-hidden="true">chat</span><span data-wa-display>[NÚMERO DE WHATSAPP]</span></div>
+      <div><span class="ms" aria-hidden="true">location_on</span>[DIRECCIÓN]</div>
+      <div><span class="ms" aria-hidden="true">schedule</span>[HORARIO]</div>
+    </div>
+    <a class="btn btn-primary btn-block" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <span class="ms" aria-hidden="true">add_shopping_cart</span>Comprar en línea
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- PIE MÍNIMO -->
+<footer>
+  <div class="wrap">
+    <!-- REEMPLAZAR: logo Norttek Supply en versión clara -->
+    <div class="ph logo">LOGO</div>
+    <span>© 2026 Norttek Supply · Papelería · Cuauhtémoc, Chihuahua</span>
+  </div>
+</footer>
+
+<!-- BARRA FIJA: aparece cuando el botón del hero sale de la pantalla -->
+<div class="bar" id="bar" role="region" aria-label="Comprar o escribir por WhatsApp">
+  <a class="btn btn-primary" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+    <span class="ms" aria-hidden="true">add_shopping_cart</span>Comprar en línea
+  </a>
+  <a class="btn btn-wa" data-wa="lista" href="#contacto" aria-label="Escribir por WhatsApp">
+    <span class="ms" aria-hidden="true">chat</span>
+  </a>
+</div>
+
+<script>
+(() => {
+  // REEMPLAZAR: número con lada de país, solo dígitos (México: 521XXXXXXXXXX)
+  const WA_NUMBER = "521XXXXXXXXXX";
+  const DEFAULT_MSG = "Hola, quiero hacer un pedido de papelería para mi oficina.";
+
+  const link = (msg) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+  // Enlaces de WhatsApp
+  document.querySelectorAll("[data-wa]").forEach(a => {
+    a.href = link(a.dataset.wa === "fijo" ? a.dataset.msg : DEFAULT_MSG);
+    a.target = "_blank";
+    a.rel = "noopener";
+  });
+
+  // Número visible en contacto
+  if (/^\d+$/.test(WA_NUMBER)) {
+    document.querySelectorAll("[data-wa-display]").forEach(el => { el.textContent = "+" + WA_NUMBER; });
+  }
+
+  // Barra fija: aparece al salir el botón del hero
+  const bar = document.getElementById("bar");
+  const heroCta = document.getElementById("hero-cta");
+  if ("IntersectionObserver" in window && heroCta) {
+    new IntersectionObserver(([e]) => bar.classList.toggle("show", !e.isIntersecting))
+      .observe(heroCta);
+  } else {
+    bar.classList.add("show");
+  }
+
+  // Tooltips de pago: se abren al tocar (móvil) y se cierran al tocar fuera
+  const tips = [...document.querySelectorAll(".tip")];
+  tips.forEach(t => t.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const open = !t.classList.contains("open");
+    tips.forEach(x => x.classList.remove("open"));
+    t.classList.toggle("open", open);
+  }));
+  document.addEventListener("click", () => tips.forEach(x => x.classList.remove("open")));
+})();
+</script>
+
+</body>
+</html>
