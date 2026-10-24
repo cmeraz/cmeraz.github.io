@@ -11,9 +11,8 @@
   GUÍA RÁPIDA DE SUSTITUCIÓN
   1. Número de WhatsApp: constante WA_NUMBER en el <script> del final.
   2. Tienda en línea: enlace https://norttek.sicarx.shop (aparece en hero, catálogo, pasos y barra fija).
-  3. Fotos y logos: cada espacio punteado es un <div class="ph">. Para poner una imagen real,
-     agrega dentro del mismo div:  <img src="ruta.webp" alt="descripción" loading="lazy" width="800" height="600">
-     La imagen cubre el texto del placeholder automáticamente.
+  3. Fotos y logos: están en la carpeta img/ (WebP, optimizadas para móvil).
+     Para cambiar una imagen, reemplaza el archivo con el mismo nombre o cambia el src del <img>.
   4. Dirección, horario y respuestas de preguntas frecuentes: busca los textos entre [corchetes].
 -->
 
@@ -32,7 +31,7 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55;color:var(--text);background:var(--white);-webkit-tap-highlight-color:transparent}
+body{margin:0;overflow-x:clip;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55;color:var(--text);background:var(--white);-webkit-tap-highlight-color:transparent}
 h1,h2,h3,p,ul{margin:0}
 ul{padding:0;list-style:none}
 a{color:inherit;text-decoration:none}
@@ -58,7 +57,14 @@ section[id]{scroll-margin-top:12px}
 .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
 .btn-block{width:100%}
 
-/* Placeholders (se reemplazan por imagen real, ver guía arriba) */
+/* Imágenes reales */
+img.logo{display:block;object-fit:contain;width:auto;height:44px}
+.pic{position:relative;overflow:hidden;display:block;border-radius:10px;background:#fff}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.brand{display:block;height:30px;width:auto;max-width:90px;object-fit:contain}
+.pill-logo{background:#fff;padding:0 8px;min-width:58px}
+.pill-logo img{height:20px;width:auto;display:block}
+/* Placeholders (solo si se agregan nuevos) */
 .ph{position:relative;overflow:hidden;display:grid;place-items:center;text-align:center;padding:8px;border-radius:10px;border:1.5px dashed #9AA6B8;background:repeating-linear-gradient(45deg,#E4E9F0 0 10px,#D9E0E9 10px 20px);color:var(--muted);font-size:12px;font-weight:600;line-height:1.3}
 .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
@@ -91,17 +97,17 @@ section[id]{scroll-margin-top:12px}
 .tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,4px);white-space:nowrap;background:#fff;color:var(--navy);font-size:12.5px;font-weight:600;padding:6px 10px;border-radius:8px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:5}
 .tip:hover::after,.tip:focus-visible::after,.tip.open::after{opacity:1;transform:translate(-50%,0)}
 .tip:focus{outline:none}
-.hero-media{margin-top:26px;aspect-ratio:16/10;border-radius:var(--r);background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.3);color:#AEBBCD}
+.hero-media{margin-top:26px;aspect-ratio:16/10;border-radius:var(--r)}
 
 /* ============ CATÁLOGO ============ */
 .shop-note{display:flex;align-items:center;gap:10px;margin-top:18px;padding:14px 16px;border-radius:var(--r);background:var(--sel);font-weight:600;font-size:15px}
 .shop-note .ms{color:var(--blue-deep)}
 .shop-note a{color:var(--blue-deep);text-decoration:underline;text-underline-offset:3px}
-.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
-.cat{display:flex;flex-direction:column;gap:10px;background:var(--ice);border-radius:var(--r);padding:8px;transition:transform .15s,box-shadow .15s}
+.cats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+.cat{min-width:0;display:flex;flex-direction:column;gap:10px;background:var(--ice);border-radius:var(--r);padding:8px;transition:transform .15s,box-shadow .15s}
 .cat:active{transform:scale(.98)}
 .cat:hover{box-shadow:var(--shadow)}
-.cat .ph{aspect-ratio:4/3}
+.cat .pic{aspect-ratio:4/3}
 .cat-name{display:flex;align-items:center;gap:6px;padding:0 4px 6px;font-family:Montserrat,sans-serif;font-weight:700;font-size:13.5px;line-height:1.25}
 .cat-name .ms{font-size:20px;color:var(--blue-deep)}
 
@@ -110,7 +116,7 @@ section[id]{scroll-margin-top:12px}
 .feat{display:grid;gap:12px;margin-top:20px}
 .feat li{display:flex;align-items:center;gap:12px;font-weight:500}
 .feat .ms{color:var(--blue-deep)}
-.service-media{aspect-ratio:4/3;margin-top:22px}
+.service-media{aspect-ratio:4/3;margin-top:22px;border-radius:var(--r)}
 .service .btn{margin-top:22px}
 
 /* ============ COBERTURA ============ */
@@ -147,7 +153,7 @@ section[id]{scroll-margin-top:12px}
 .card li{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500}
 .card li .ms{font-size:18px;color:var(--blue-deep)}
 .card-logos{display:flex;gap:8px;margin-top:2px}
-.card-logos .ph{width:58px;height:32px;font-size:10px;padding:2px}
+.card-logos{align-items:center}
 
 /* ============ PREGUNTAS ============ */
 .faq{margin-top:18px}
@@ -183,7 +189,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
 @media (min-width:640px){
   section{padding:64px 0}
   .hero-ctas{grid-template-columns:1fr 1fr}
-  .cats{grid-template-columns:repeat(3,1fr);gap:16px}
+  .cats{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
   .pay-grid{grid-template-columns:repeat(2,1fr)}
   .steps{grid-template-columns:repeat(3,1fr)}
   .step{flex-direction:column}
@@ -196,7 +202,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
   .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
   .hero-ctas{grid-template-columns:auto auto;justify-content:start}
   .hero-media{margin-top:0;aspect-ratio:4/3}
-  .cats{grid-template-columns:repeat(4,1fr)}
+  .cats{grid-template-columns:repeat(4,minmax(0,1fr))}
   .service-grid{grid-template-columns:1fr 1fr;gap:48px;align-items:center}
   .service-media{margin-top:0}
   .pay-grid{grid-template-columns:repeat(3,1fr)}
@@ -216,8 +222,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
 <!-- ENCABEZADO -->
 <header class="topbar">
   <div class="wrap">
-    <!-- REEMPLAZAR: logo Norttek Supply (aprox. 150×40 px) -->
-    <div class="ph logo">LOGO NORTTEK SUPPLY</div>
+    <img class="logo" src="img/logo.webp" alt="Norttek Supply" width="44" height="44">
     <nav class="nav" aria-label="Principal">
       <a href="#catalogo">Catálogo</a>
       <a href="#impresion">Impresión de planos</a>
@@ -261,14 +266,12 @@ footer .logo{width:140px;height:36px;font-size:11px}
           <button type="button" class="tip pill" data-tip="Efectivo" aria-label="Efectivo"><span class="ms" aria-hidden="true">payments</span></button>
           <button type="button" class="tip pill" data-tip="Transferencia" aria-label="Transferencia"><span class="ms" aria-hidden="true">account_balance</span></button>
           <button type="button" class="tip pill" data-tip="Tarjeta de crédito o débito" aria-label="Tarjeta de crédito o débito"><span class="ms" aria-hidden="true">credit_card</span></button>
-          <button type="button" class="tip pill pill-text" data-tip="Apple Pay" aria-label="Apple Pay">Apple Pay</button>
-          <button type="button" class="tip pill pill-text" data-tip="Google Pay" aria-label="Google Pay">G Pay</button>
+          <button type="button" class="tip pill pill-logo" data-tip="Apple Pay" aria-label="Apple Pay"><img src="img/apple-pay.svg" alt="" width="46" height="20"></button>
+          <button type="button" class="tip pill pill-logo" data-tip="Google Pay" aria-label="Google Pay"><img src="img/google-pay.webp" alt="" width="20" height="20" style="height:20px;width:20px"></button>
         </div>
       </div>
     </div>
-
-    <!-- REEMPLAZAR: foto del hero (oficina o productos, aprox. 800×500 px, menos de 100 KB) -->
-    <div class="ph hero-media">FOTO HERO<br>(oficina o productos)</div>
+    <div class="pic hero-media"><img src="img/hero.webp" alt="Papelería y material de oficina" width="1000" height="750"></div>
   </div>
 </section>
 
@@ -285,21 +288,20 @@ footer .logo{width:140px;height:36px;font-size:11px}
     </div>
 
     <div class="cats">
-      <!-- REEMPLAZAR en cada tarjeta: foto de referencia (aprox. 400×300 px, WebP). Cada tarjeta enlaza a la tienda. -->
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Cintas</span><span class="cat-name"><span class="ms" aria-hidden="true">linear_scale</span>Cintas</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Pegamento</span><span class="cat-name"><span class="ms" aria-hidden="true">science</span>Pegamento</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Papel</span><span class="cat-name"><span class="ms" aria-hidden="true">description</span>Papel</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Rollos térmicos</span><span class="cat-name"><span class="ms" aria-hidden="true">receipt_long</span>Rollos térmicos</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Folders</span><span class="cat-name"><span class="ms" aria-hidden="true">folder_open</span>Folders</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Sobres</span><span class="cat-name"><span class="ms" aria-hidden="true">mail</span>Sobres</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Calculadoras</span><span class="cat-name"><span class="ms" aria-hidden="true">calculate</span>Calculadoras</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Tecnología</span><span class="cat-name"><span class="ms" aria-hidden="true">mouse</span>Tecnología</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Carpetas y organización</span><span class="cat-name"><span class="ms" aria-hidden="true">folder</span>Carpetas y organización</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Grapas y clips</span><span class="cat-name"><span class="ms" aria-hidden="true">attach_file</span>Grapas, clips y sujetadores</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Marcadores</span><span class="cat-name"><span class="ms" aria-hidden="true">border_color</span>Marcadores y marcatextos</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Notas y tableros</span><span class="cat-name"><span class="ms" aria-hidden="true">sticky_note_2</span>Notas y tableros</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Escritorio</span><span class="cat-name"><span class="ms" aria-hidden="true">content_cut</span>Escritorio</span></a>
-      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="ph">FOTO · Escritura</span><span class="cat-name"><span class="ms" aria-hidden="true">edit</span>Escritura y correctores</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/nextep-cintas.webp" alt="Cintas" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">linear_scale</span>Cintas</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/pegamento.webp" alt="Pegamento" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">science</span>Pegamento</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/papel.webp" alt="Papel" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">description</span>Papel</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/rollos.webp" alt="Rollos térmicos" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">receipt_long</span>Rollos térmicos</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/folders.webp" alt="Folders" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">folder_open</span>Folders</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/sobres.webp" alt="Sobres" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">mail</span>Sobres</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/calculadora.webp" alt="Calculadoras" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">calculate</span>Calculadoras</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/tecnologia.webp" alt="Tecnología" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">mouse</span>Tecnología</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/carpetas.webp" alt="Carpetas y organización" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">folder</span>Carpetas y organización</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/grapadoras.webp" alt="Grapas y clips" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">attach_file</span>Grapas, clips y sujetadores</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/marcadores.webp" alt="Marcadores" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">border_color</span>Marcadores y marcatextos</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/notas.webp" alt="Notas y tableros" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">sticky_note_2</span>Notas y tableros</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/escritorio.webp" alt="Escritorio" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">content_cut</span>Escritorio</span></a>
+      <a class="cat" href="https://norttek.sicarx.shop" target="_blank" rel="noopener"><span class="pic"><img src="img/escritura.webp" alt="Escritura" loading="lazy" width="600" height="600"></span><span class="cat-name"><span class="ms" aria-hidden="true">edit</span>Escritura y correctores</span></a>
     </div>
   </div>
 </section>
@@ -321,8 +323,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
         <span class="ms" aria-hidden="true">chat</span>Cotizar impresión de planos
       </a>
     </div>
-    <!-- REEMPLAZAR: foto de plano impreso o plotter (aprox. 800×600 px) -->
-    <div class="ph service-media">FOTO · Plano impreso o plotter</div>
+    <div class="pic service-media"><img src="img/planos.webp" alt="Impresión de planos en gran formato" loading="lazy" width="554" height="554"></div>
   </div>
 </section>
 
@@ -403,8 +404,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
           <li><span class="ms" aria-hidden="true">check</span>Tarjeta de crédito</li>
           <li><span class="ms" aria-hidden="true">check</span>Tarjeta de débito</li>
         </ul>
-        <!-- REEMPLAZAR: logos Visa y Mastercard -->
-        <div class="card-logos"><span class="ph">VISA</span><span class="ph">MC</span></div>
+        <div class="card-logos"><img class="brand" src="img/visa.webp" alt="Visa" width="600" height="337" loading="lazy"><img class="brand" src="img/mastercard.webp" alt="Mastercard" width="600" height="480" loading="lazy"></div>
       </article>
 
       <article class="card">
@@ -415,8 +415,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
           <li><span class="ms" aria-hidden="true">check</span>Desde iPhone, iPad o Mac</li>
           <li><span class="ms" aria-hidden="true">check</span>Confirmas con Face ID o Touch ID</li>
         </ul>
-        <!-- REEMPLAZAR: logo oficial de Apple Pay -->
-        <div class="card-logos"><span class="ph">Apple Pay</span></div>
+        <div class="card-logos"><img class="brand" src="img/apple-pay.svg" alt="Apple Pay" width="46" height="20"></div>
       </article>
 
       <article class="card">
@@ -427,8 +426,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
           <li><span class="ms" aria-hidden="true">check</span>Desde tu Android o cuenta de Google</li>
           <li><span class="ms" aria-hidden="true">check</span>Usa tus tarjetas guardadas</li>
         </ul>
-        <!-- REEMPLAZAR: logo oficial de Google Pay -->
-        <div class="card-logos"><span class="ph">Google Pay</span></div>
+        <div class="card-logos"><img class="brand" src="img/google-pay.webp" alt="Google Pay" width="300" height="300" loading="lazy"></div>
       </article>
 
     </div>
@@ -473,8 +471,7 @@ footer .logo{width:140px;height:36px;font-size:11px}
 <!-- PIE MÍNIMO -->
 <footer>
   <div class="wrap">
-    <!-- REEMPLAZAR: logo Norttek Supply en versión clara -->
-    <div class="ph logo">LOGO</div>
+    <img class="logo" src="img/logo.webp" alt="Norttek Supply" width="36" height="36" style="height:36px">
     <span>© 2026 Norttek Supply · Papelería · Cuauhtémoc, Chihuahua</span>
   </div>
 </footer>
