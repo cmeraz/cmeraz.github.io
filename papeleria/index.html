@@ -159,22 +159,9 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .hero-copy > *:nth-child(6){ animation-delay: .55s; }
 @keyframes fadeUp{from{ opacity:0; transform: translateY(24px); }to{ opacity:1; transform:none; }}
 
-.hero-marquee{position:relative;margin-top:0;padding:18px 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);background: rgba(0,0,0,.18);overflow:hidden;-webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)}
-.marquee-track{display:flex;width:max-content;animation: marquee 60s linear infinite}
-.marquee-track:hover{ animation-play-state: paused; }
-.marquee-set{display:flex;flex-shrink:0}
-.marquee-set span{position:relative;display:inline-flex;align-items:center;gap:10px;padding: 0 26px;color:#8FA3BA;font-family:Montserrat,sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.03em;white-space:nowrap}
-.marquee-set span + span::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background: rgba(58,175,228,.45)}
-.marquee-set span .ms{ font-size:18px; color:var(--blue); }
-@keyframes marquee{from{ transform: translateX(0); }to{ transform: translateX(-50%); }}
-
-/* ============ CATÁLOGO ============ */
-.catalog-section{background:#fff;padding:56px 0 72px;position:relative}
-.cat-header{margin-bottom:28px}
-.cat-header .lead{margin-top:6px}
-
-/* Banner de entrega */
-.delivery-banner{position:relative;background: linear-gradient(135deg, #0B7CA3 0%, #1C2333 100%);border-radius: 24px;padding: 28px 24px 24px;color: #fff;overflow: hidden;margin-bottom: 28px;box-shadow: 0 24px 48px -24px rgba(11,124,163,.55)}
+/* ============ SECCIÓN ENVÍO (De la tienda a tu puerta) ============ */
+.envio-section{padding:48px 0 24px;background:#fff}
+.delivery-banner{position:relative;background: linear-gradient(135deg, #0B7CA3 0%, #1C2333 100%);border-radius: 24px;padding: 28px 24px 24px;color: #fff;overflow: hidden;box-shadow: 0 24px 48px -24px rgba(11,124,163,.55)}
 .delivery-banner::before{content:"";position: absolute;top: -60%;right: -20%;width: 70%;height: 220%;background: radial-gradient(circle, rgba(58,175,228,.35), transparent 70%);pointer-events: none}
 .delivery-badge{display: inline-flex;align-items: center;gap: 8px;padding: 5px 12px;border-radius: 999px;background: rgba(255,255,255,.12);border: 1px solid rgba(255,255,255,.22);font-size: 11.5px;font-weight: 600;letter-spacing: 0.06em;text-transform: uppercase;color: #B5E5F9;margin-bottom: 12px}
 .badge-dot{width: 6px;height: 6px;border-radius: 50%;background: #25D366;animation: badgePulse 1.6s ease-in-out infinite}
@@ -196,6 +183,141 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .track-truck .ms{ font-size: 24px; }
 @keyframes truckDrive{0%{ left: 28px; opacity: 0; }8%{ opacity: 1; }50%{ left: calc(50% - 24px); }92%{ opacity: 1; }100%{ left: calc(100% - 76px); opacity: 0; }}
 
+/* ============ GIROS QUE ATENDEMOS ============ */
+.giros-section{padding:32px 0 48px;background:#fff}
+.giros-header{text-align:center;margin-bottom:28px}
+.giros-header .lead{margin:8px auto 0}
+.giros-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.giro-card{
+  display:flex;align-items:center;gap:10px;
+  padding:12px;background:#fff;
+  border:2px solid var(--line);border-radius:14px;
+  cursor:pointer;text-align:left;
+  transition:all .25s ease;font:inherit;color:inherit;
+  min-width:0;
+}
+.giro-card:hover{
+  border-color:var(--blue);
+  box-shadow:0 8px 20px -8px rgba(58,175,228,.35);
+  transform:translateY(-2px);
+}
+.giro-card:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(58,175,228,.4)}
+.giro-card.active{
+  background:var(--navy);border-color:var(--navy);color:#fff;
+  box-shadow:0 12px 24px -10px rgba(28,35,51,.5);
+}
+.giro-card.active .giro-icon{background:rgba(58,175,228,.25);color:#B5E5F9}
+.giro-card.active .giro-name small{color:#C4D0E0}
+.giro-icon{
+  width:40px;height:40px;border-radius:11px;
+  background:rgba(58,175,228,.12);color:var(--blue-deep);
+  display:grid;place-items:center;flex-shrink:0;
+  transition:all .25s;
+}
+.giro-icon svg{width:22px;height:22px;display:block}
+.giro-name{
+  font-family:Montserrat,sans-serif;
+  font-weight:700;font-size:12.5px;line-height:1.2;
+  letter-spacing:-.005em;min-width:0;
+}
+.giro-name small{
+  display:block;font-family:Inter,sans-serif;
+  font-weight:500;font-size:11px;color:var(--muted);
+  margin-top:2px;line-height:1.3;
+}
+
+/* ============ CATÁLOGO ============ */
+.catalog-section{background:#fff;padding:48px 0 72px;position:relative}
+.cat-header{margin-bottom:24px}
+.cat-header .lead{margin-top:6px}
+
+/* Sticky giros bar */
+.giros-sticky{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255,255,255,.98);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+  margin: 0 -20px 18px;
+  padding: 10px 20px;
+  transition: box-shadow .3s ease;
+}
+.giros-sticky.is-stuck{
+  box-shadow: 0 6px 20px -8px rgba(28,35,51,.2);
+}
+.giros-sticky-inner{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.giros-sticky-label{
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  flex-shrink: 0;
+  display: none;
+}
+@media (min-width: 900px){
+  .giros-sticky-label{ display: inline-block; }
+}
+.giros-sticky-chips{
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-width: 0;
+  padding: 2px 0;
+  -webkit-mask-image: linear-gradient(90deg, #000 95%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 95%, transparent 100%);
+}
+.giros-sticky-chips::-webkit-scrollbar{ display: none; }
+
+.giro-chip-mini{
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--ice);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+  transition: all .2s ease;
+  cursor: pointer;
+}
+.giro-chip-mini:hover{ background: #dde3eb; }
+.giro-chip-mini:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(58,175,228,.4); }
+.giro-chip-mini.active{
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+  font-weight: 700;
+  box-shadow: 0 4px 12px -4px rgba(28,35,51,.4);
+}
+.giros-clear{
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--ice);
+  color: var(--navy);
+  display: grid;
+  place-items: center;
+  transition: background .2s;
+  cursor: pointer;
+}
+.giros-clear:hover{ background: #dde3eb; }
+.giros-clear svg{ width: 14px; height: 14px; }
+
 /* Tabs */
 .cat-tabs{display: flex;gap: 8px;overflow-x: auto;-webkit-overflow-scrolling: touch;scrollbar-width: none;margin: 0 -20px 22px;padding: 4px 20px;-webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent)}
 .cat-tabs::-webkit-scrollbar{ display: none; }
@@ -205,11 +327,47 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .cat-tab-count{padding: 1px 8px;border-radius: 999px;background: rgba(28,35,51,.08);font-size: 11px;font-weight: 700;transition: background .25s}
 .cat-tab[aria-selected="true"] .cat-tab-count{ background: rgba(255,255,255,.22); }
 
-/* Bento grid */
-.bento-cats{display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));grid-auto-rows: 165px;gap: 12px}
-.bento-cat{position: relative;display: block;overflow: hidden;border-radius: 18px;background: var(--ice);transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, opacity .4s;will-change: transform}
+/* ============ BENTO GRID UNIFORME ============ */
+.bento-cats{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 165px;
+  gap: 12px;
+}
+.bento-cat{
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--ice);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, opacity .35s ease, filter .35s ease;
+  will-change: transform;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+}
 .bento-cat:hover{ transform: translateY(-4px);box-shadow: 0 24px 44px -20px rgba(28,35,51,.35); }
+.bento-cat:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(58,175,228,.55); }
 .bento-cat.is-hidden{ display: none !important; }
+
+.bento-cat.featured-giro{
+  box-shadow:0 0 0 3px rgba(58,175,228,.65),0 20px 40px -14px rgba(58,175,228,.5);
+  transform:translateY(-2px);
+  z-index:2;
+}
+.bento-cat.dimmed{
+  opacity:.28;
+  filter:grayscale(.7);
+  transform:scale(.97);
+}
+.bento-cat.dimmed:hover{
+  opacity:.7;
+  filter:grayscale(.2);
+  transform:translateY(-4px) scale(.97);
+}
 
 .bento-img-wrap{position: absolute;inset: 0;overflow: hidden}
 .bento-img-fallback{position: absolute;inset: 0;display: grid;place-items: center;background: linear-gradient(135deg, var(--blue-deep) 0%, var(--navy) 100%);z-index: 0}
@@ -217,11 +375,8 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .bento-img-wrap img{position: absolute;inset: 0;width: 100%;height: 100%;object-fit: cover;transition: transform .8s cubic-bezier(.2,.8,.2,1);z-index: 1}
 .bento-cat:hover .bento-img-wrap img{ transform: scale(1.08); }
 
-/* ===== OVERLAY REDISEÑADO (más claro) ===== */
 .bento-overlay{
-  position: absolute;
-  inset: 0;
-  z-index: 2;
+  position: absolute;inset: 0;z-index: 2;
   background: linear-gradient(
     to top,
     rgba(28,35,51,0.75) 0%,
@@ -231,43 +386,20 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
   );
   pointer-events: none;
 }
-.bento-cat.featured .bento-overlay{
-  background: linear-gradient(
-    to top,
-    rgba(28,35,51,0.8) 0%,
-    rgba(28,35,51,0.32) 15%,
-    rgba(28,35,51,0.08) 35%,
-    transparent 50%
-  );
-}
 
 .bento-label{
-  position: absolute;
-  bottom: 14px;
-  left: 14px;
-  right: 14px;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  font-family: Montserrat;
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 1.2;
-  letter-spacing: -0.005em;
+  position: absolute;bottom: 14px;left: 14px;right: 14px;z-index: 3;
+  display: flex;align-items: center;gap: 8px;
+  color: #fff;font-family: Montserrat;font-weight: 700;
+  font-size: 13px;line-height: 1.2;letter-spacing: -0.005em;
   text-shadow: 0 1px 3px rgba(0,0,0,.55), 0 2px 10px rgba(0,0,0,.45);
 }
 .bento-label .ms{ font-size: 20px; color: #B5E5F9; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); }
-.bento-badge{position: absolute;top: 12px;left: 12px;z-index: 3;padding: 5px 10px;border-radius: 999px;background: rgba(255,255,255,.95);color: var(--navy);font-size: 10px;font-weight: 700;text-transform: uppercase;letter-spacing: 0.06em;box-shadow: 0 4px 12px rgba(0,0,0,.2)}
 .bento-arrow{position: absolute;top: 12px;right: 12px;z-index: 3;width: 32px;height: 32px;border-radius: 50%;background: rgba(255,255,255,.95);color: var(--navy);display: grid;place-items: center;opacity: 0;transform: scale(.7) rotate(-45deg);transition: all .3s cubic-bezier(.2,.8,.2,1);box-shadow: 0 4px 12px rgba(0,0,0,.2)}
 .bento-arrow .ms{ font-size: 18px; }
 .bento-cat:hover .bento-arrow{ opacity: 1; transform: scale(1) rotate(0); }
 
-.bento-cat.featured{ grid-column: span 2; grid-row: span 1; }
-.bento-cat.featured .bento-label{ font-size: 17px; }
-.bento-cat.featured .bento-label .ms{ font-size: 24px; }
-
+/* CTA */
 .bento-cta{background: linear-gradient(135deg, var(--blue-deep), var(--navy)) !important;display: flex;flex-direction: column;align-items: center;justify-content: center;gap: 10px;text-align: center;padding: 16px;color: #fff;position: relative;overflow: hidden;border-radius: 18px}
 .bento-cta::before{ content: ""; position: absolute; inset: -50%; background: radial-gradient(circle, rgba(58,175,228,.5), transparent 60%); pointer-events: none; }
 .bento-cta-icon{ width: 52px;height: 52px; border-radius: 14px; background: rgba(255,255,255,.16); display: grid; place-items: center; font-size: 26px; color: #fff; position: relative; z-index: 1; }
@@ -275,12 +407,6 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .bento-cta-arrow{ position: absolute; bottom: 12px; right: 12px; width: 28px;height: 28px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center; transition: all .3s; z-index: 1; }
 .bento-cta-arrow .ms{ font-size: 16px; }
 .bento-cta:hover .bento-cta-arrow{ background: #fff; color: var(--blue-deep); transform: translateX(4px); }
-
-.bento-cats.filtered .bento-cat.featured,
-.bento-cats.filtered .bento-cat.tall{
-  grid-column: span 1 !important;
-  grid-row: span 1 !important;
-}
 
 @keyframes filterIn{
   from { opacity: 0; transform: translateY(8px) scale(.96); }
@@ -296,6 +422,63 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
   transition: opacity .7s ease, transform .7s ease;
 }
 [data-reveal].in-view{ opacity: 1; transform: none; }
+
+/* ============ LIGHTBOX ============ */
+.lightbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.lightbox[hidden]{display:none!important}
+.lightbox-backdrop{position:absolute;inset:0;background:rgba(15,20,30,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:lbFade .25s ease}
+@keyframes lbFade{from{opacity:0}to{opacity:1}}
+.lightbox-content{
+  position:relative;z-index:1;
+  width:100%;max-width:560px;
+  max-height:92vh;
+  background:#fff;
+  border-radius:20px;
+  overflow-y:auto;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.6);
+  animation:lbScale .3s cubic-bezier(.2,.8,.2,1);
+  display:flex;flex-direction:column;
+}
+@keyframes lbScale{from{opacity:0;transform:scale(.94) translateY(20px)}to{opacity:1;transform:none}}
+.lightbox-close{
+  position:absolute;top:12px;right:12px;z-index:2;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.95);color:var(--navy);
+  display:grid;place-items:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+  cursor:pointer;border:0;
+}
+.lightbox-close:hover{background:#fff}
+.lightbox-close svg{width:20px;height:20px}
+.lightbox-img-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio: 1/1;
+  max-height: 55vh;
+  background: var(--ice);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.lightbox-img-wrap img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.lightbox-info{
+  padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+  background:#fff;
+}
+.lightbox-title{
+  font-family:Montserrat;font-weight:800;
+  font-size:20px;line-height:1.2;
+  color:var(--navy);
+}
+.lightbox-info .btn{min-height:52px}
+@media (min-width:640px){
+  .lightbox-content{max-width:640px}
+  .lightbox-img-wrap{aspect-ratio:4/3;max-height:60vh}
+  .lightbox-info{padding:24px}
+  .lightbox-title{font-size:22px}
+}
 
 /* ============ IMPRESIÓN ============ */
 .service-grid{display:grid;gap:0}
@@ -394,14 +577,21 @@ footer .logo{width:140px;height:36px}
 /* ============ TABLET ============ */
 @media (min-width:640px){
   section{padding:64px 0}
+  .envio-section{padding:64px 0 32px}
+  .giros-section{padding:48px 0 64px}
   .hero-ctas{grid-template-columns:1fr 1fr}
   .pay-grid{grid-template-columns:repeat(2,1fr)}
   .steps{grid-template-columns:repeat(3,1fr)}
   .step{flex-direction:column}
   .delivery-banner{ padding: 36px 32px 28px; }
   .bento-cats{ grid-template-columns: repeat(3, minmax(0,1fr)); grid-auto-rows: 200px; gap: 14px; }
-  .bento-cat.featured{ grid-column: span 2; grid-row: span 2; }
-  .bento-cat.tall{ grid-row: span 1; }
+  .giros-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .giro-card{padding:14px}
+  .giro-icon{width:44px;height:44px}
+  .giro-icon svg{width:24px;height:24px}
+  .giro-name{font-size:13.5px}
+  .giro-name small{font-size:11.5px}
+  .giros-sticky{ margin: 0 -20px 20px; padding: 12px 20px; }
 }
 
 /* ============ ESCRITORIO ============ */
@@ -421,9 +611,14 @@ footer .logo{width:140px;height:36px}
   .bar{left:auto;right:24px;bottom:24px;width:420px;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(28,35,51,.18)}
   footer{padding-bottom:22px}
   .bento-cats{ grid-template-columns: repeat(4, minmax(0,1fr)); grid-auto-rows: 230px; gap: 16px; }
-  .bento-cat.tall{ grid-row: span 2; }
   .delivery-track{ height: 120px; }
   .delivery-banner{ padding: 40px 36px 32px; }
+  .giros-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .giro-card{padding:16px}
+  .giro-icon{width:48px;height:48px}
+  .giro-icon svg{width:26px;height:26px}
+  .giro-name{font-size:14px}
+  .giro-name small{font-size:12px}
 }
 
 /* ============ REDUCED MOTION ============ */
@@ -446,6 +641,8 @@ footer .logo{width:140px;height:36px}
   <div class="wrap">
     <img class="logo" src="img/logo.webp" alt="Norttek Supply" width="44" height="44">
     <nav class="nav" aria-label="Principal">
+      <a href="#envio">Envío</a>
+      <a href="#giros">Giros</a>
       <a href="#catalogo">Catálogo</a>
       <a href="#impresion">Impresión de planos</a>
       <a href="#como-funciona">Cómo funciona</a>
@@ -517,18 +714,11 @@ footer .logo{width:140px;height:36px}
       </div>
     </div>
   </div>
+</section>
 
-  </section>
-
-<!-- CATÁLOGO -->
-<section id="catalogo" class="catalog-section">
+<!-- 1. DE LA TIENDA A TU PUERTA (banner de envío) -->
+<section id="envio" class="envio-section">
   <div class="wrap">
-    <div class="cat-header">
-      <p class="eyebrow">Catálogo</p>
-      <h2 class="title">Todo lo que tu oficina necesita</h2>
-      <p class="lead">Compra por categoría y te lo llevamos a tu negocio.</p>
-    </div>
-
     <div class="delivery-banner" data-reveal>
       <span class="delivery-badge">
         <span class="badge-dot" aria-hidden="true"></span>
@@ -554,6 +744,241 @@ footer .logo{width:140px;height:36px}
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 2. GIROS QUE ATENDEMOS -->
+<section id="giros" class="giros-section">
+  <div class="wrap">
+    <div class="giros-header">
+      <p class="eyebrow">Giros</p>
+      <h2 class="title">Giros que atendemos</h2>
+      <p class="lead">Elige tu giro y te mostramos lo que más piden negocios como el tuyo.</p>
+    </div>
+
+    <div class="giros-grid">
+
+      <button type="button" class="giro-card" data-giro="abarrotes" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>
+          </svg>
+        </span>
+        <span class="giro-name">Abarrotes y minisúper<small>Punto de venta y consumibles</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="viajes" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+        </span>
+        <span class="giro-name">Agencias de viajes y turismo<small>Papelería y organización</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="constructoras" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 18v-2a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6v2"/>
+            <path d="M2 18h20v3H2z"/>
+            <path d="M9 10V8a3 3 0 0 1 6 0v2"/>
+          </svg>
+        </span>
+        <span class="giro-name">Constructoras y desarrolladoras<small>Planos, papel, tecnología</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="consultorios" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2v6a4 4 0 0 0 4 4 4 4 0 0 0 4-4V2"/>
+            <path d="M6 2H4M14 2h2"/>
+            <path d="M10 12v5a4 4 0 0 0 4 4h2a4 4 0 0 0 4-4v-2"/>
+            <circle cx="20" cy="13" r="2"/>
+          </svg>
+        </span>
+        <span class="giro-name">Consultorios médicos y dentales<small>Archivo, recetas, organización</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="contables" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <rect x="7" y="5" width="10" height="4" rx="0.5"/>
+            <path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01M16 17h.01"/>
+          </svg>
+        </span>
+        <span class="giro-name">Despachos contables y fiscales<small>Papelería y cálculo</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="juridicos" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20"/>
+            <path d="M5 6h14"/>
+            <path d="M5 6 2 14a3 3 0 0 0 6 0z"/>
+            <path d="M19 6l-3 8a3 3 0 0 0 6 0z"/>
+            <path d="M8 22h8"/>
+          </svg>
+        </span>
+        <span class="giro-name">Despachos jurídicos y notarías<small>Archivo, escritura, papelería</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="escuelas" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 9 12 4 2 9l10 5 10-5z"/>
+            <path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>
+            <path d="M22 9v6"/>
+          </svg>
+        </span>
+        <span class="giro-name">Escuelas y colegios<small>Material escolar y escritura</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="farmacias" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="8" width="20" height="8" rx="4" transform="rotate(-45 12 12)"/>
+            <path d="M9 9l6 6"/>
+          </svg>
+        </span>
+        <span class="giro-name">Farmacias y droguerías<small>Punto de venta y etiquetas</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="ferreterias" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </span>
+        <span class="giro-name">Ferreterías y tlapalerías<small>Punto de venta y control</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="hospitales" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M12 8v8M8 12h8"/>
+          </svg>
+        </span>
+        <span class="giro-name">Hospitales y clínicas<small>Archivo clínico y organización</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="hoteles" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/>
+            <path d="M2 17h20"/>
+            <path d="M6 10V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v4"/>
+          </svg>
+        </span>
+        <span class="giro-name">Hoteles y moteles<small>Recepción y consumibles</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="industrias" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 20V9l6 4V9l6 4V4l8 4v12H2z"/>
+            <path d="M6 20v-4M10 20v-4M14 20v-4M18 20v-4"/>
+          </svg>
+        </span>
+        <span class="giro-name">Industrias y maquiladoras<small>Inventario y producción</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="inmobiliarias" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>
+          </svg>
+        </span>
+        <span class="giro-name">Inmobiliarias y bienes raíces<small>Contratos, planos, papelería</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="laboratorios" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2h6"/>
+            <path d="M10 2v6L4 18a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-6-10V2"/>
+            <path d="M6 16h12"/>
+          </svg>
+        </span>
+        <span class="giro-name">Laboratorios clínicos y médicos<small>Etiquetas, archivo, organización</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="oficinas" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 21V3h10v18M14 9h6v12M2 21h20"/>
+            <path d="M7 7h4M7 11h4M7 15h4M17 13h1M17 17h1"/>
+          </svg>
+        </span>
+        <span class="giro-name">Oficinas y corporativos<small>Papelería y organización</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="restaurantes" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+            <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/>
+            <path d="M6 2v2M10 2v2M14 2v2"/>
+          </svg>
+        </span>
+        <span class="giro-name">Restaurantes y cafeterías<small>Rollos, cajones, comandas</small></span>
+      </button>
+
+      <button type="button" class="giro-card" data-giro="tiendas" aria-pressed="false">
+        <span class="giro-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <path d="M3 6h18"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </span>
+        <span class="giro-name">Tiendas y comercios<small>Punto de venta y exhibición</small></span>
+      </button>
+
+    </div>
+  </div>
+</section>
+
+<!-- 3. CATÁLOGO -->
+<section id="catalogo" class="catalog-section">
+  <div class="wrap">
+    <div class="cat-header">
+      <p class="eyebrow">Catálogo</p>
+      <h2 class="title">Todo lo que tu oficina necesita</h2>
+      <p class="lead">Compra por categoría y te lo llevamos a tu negocio.</p>
+    </div>
+
+    <div class="giros-sticky" id="girosSticky">
+      <div class="giros-sticky-inner">
+        <span class="giros-sticky-label">Giro:</span>
+        <div class="giros-sticky-chips" role="tablist" aria-label="Filtrar por giro">
+          <button class="giro-chip-mini" data-giro="abarrotes">Abarrotes</button>
+          <button class="giro-chip-mini" data-giro="viajes">Viajes</button>
+          <button class="giro-chip-mini" data-giro="constructoras">Constructoras</button>
+          <button class="giro-chip-mini" data-giro="consultorios">Consultorios</button>
+          <button class="giro-chip-mini" data-giro="contables">Contables</button>
+          <button class="giro-chip-mini" data-giro="juridicos">Jurídicos</button>
+          <button class="giro-chip-mini" data-giro="escuelas">Escuelas</button>
+          <button class="giro-chip-mini" data-giro="farmacias">Farmacias</button>
+          <button class="giro-chip-mini" data-giro="ferreterias">Ferreterías</button>
+          <button class="giro-chip-mini" data-giro="hospitales">Hospitales</button>
+          <button class="giro-chip-mini" data-giro="hoteles">Hoteles</button>
+          <button class="giro-chip-mini" data-giro="industrias">Industrias</button>
+          <button class="giro-chip-mini" data-giro="inmobiliarias">Inmobiliarias</button>
+          <button class="giro-chip-mini" data-giro="laboratorios">Laboratorios</button>
+          <button class="giro-chip-mini" data-giro="oficinas">Oficinas</button>
+          <button class="giro-chip-mini" data-giro="restaurantes">Restaurantes</button>
+          <button class="giro-chip-mini" data-giro="tiendas">Tiendas</button>
+        </div>
+        <button class="giros-clear" id="girosClear" hidden aria-label="Quitar filtro de giro">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M6 6l12 12M18 6 6 18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
 
     <nav class="cat-tabs" role="tablist" aria-label="Filtrar categorías">
       <button class="cat-tab" role="tab" aria-selected="true" data-filter="all">Todo <span class="cat-tab-count">26</span></button>
@@ -566,44 +991,37 @@ footer .logo{width:140px;height:36px}
 
     <div class="bento-cats" id="bentoGrid">
 
-      <!-- FEATURED · Papel -->
-      <a class="bento-cat featured" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="papel" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">description</span></span>
           <img src="https://placehold.co/800x600/EEF1F5/0B7CA3?text=Papel&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/papel.webp" alt="Papel" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
         </span>
         <span class="bento-overlay"></span>
-        <span class="bento-badge">Más vendido</span>
         <span class="bento-arrow"><span class="ms">arrow_forward</span></span>
         <span class="bento-label"><span class="ms">description</span><span>Papel</span></span>
       </a>
 
-      <!-- TALL · Rollos térmicos -->
-      <a class="bento-cat tall" data-cat="pos" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="pos" data-key="rollos" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">receipt_long</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Rollos+t%C3%A9rmicos&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-529-Rollo-Papel-Nextep-Termico-80x70mm-C-5_01.jpg" alt="Rollos térmicos" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
         </span>
         <span class="bento-overlay"></span>
-        <span class="bento-badge">POS</span>
         <span class="bento-arrow"><span class="ms">arrow_forward</span></span>
         <span class="bento-label"><span class="ms">receipt_long</span><span>Rollos térmicos</span></span>
       </a>
 
-      <!-- TALL · Mochilas -->
-      <a class="bento-cat tall" data-cat="tech" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="tech" data-key="mochilas" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">backpack</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Mochilas&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-670M-MOCHILA-NEXTEP-PARA-LAPTOP-15.6-MULTI-SECCIONES-NEGRO_01.jpg" alt="Mochilas y maletines" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
         </span>
         <span class="bento-overlay"></span>
-        <span class="bento-badge">Nuevo</span>
         <span class="bento-arrow"><span class="ms">arrow_forward</span></span>
         <span class="bento-label"><span class="ms">backpack</span><span>Mochilas y maletines</span></span>
       </a>
 
-      <!-- OFICINA -->
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="cintas" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">linear_scale</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Cintas&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/nextep-cintas.webp" alt="Cintas adhesivas" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -613,7 +1031,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">linear_scale</span><span>Cintas adhesivas</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="pegamento" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">science</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Pegamento&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/pegamento.webp" alt="Pegamento" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -623,7 +1041,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">science</span><span>Pegamento</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="folders" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">folder_open</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Folders&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/folders.webp" alt="Folders y sobres" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -633,7 +1051,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">folder_open</span><span>Folders y sobres</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="escritura" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">edit</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Bol%C3%ADgrafos&font=montserrat" data-nextep="https://nextep.com.mx/2026/images/NE-065A_BOLIGRAFO%20NEXTEP%20FLICKER%200.7MM,%20AZUL%20C:6_02.jpg" alt="Bolígrafos y lápices" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -643,7 +1061,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">edit</span><span>Bolígrafos y lápices</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="marcadores" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">border_color</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Marcadores&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/marcadores.webp" alt="Marcadores y marcatextos" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -653,7 +1071,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">border_color</span><span>Marcadores</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="notas" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">sticky_note_2</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Notas&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/notas.webp" alt="Notas adhesivas y tableros" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -663,7 +1081,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">sticky_note_2</span><span>Notas adhesivas</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="correctores" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">edit</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Correctores&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-068C-Cinta-Correctora-Nextep-8mx4.2mm-C-6-Pzas_01.jpg" alt="Correctores y sacapuntas" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -673,7 +1091,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">edit</span><span>Correctores</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="grapas" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">attach_file</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Grapas&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-107T-ENGRAPADORA-NEXTEP-DE-GOLPE-TIRA-COMPLETA_01.jpg" alt="Grapas y clips" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -683,7 +1101,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">attach_file</span><span>Grapas y clips</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="tijeras" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">content_cut</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Tijeras&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-138_Tijera-bimaterial-8.5_-multiusos-extra-grande_01-copia-2.png" alt="Tijeras y corte" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -693,7 +1111,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">content_cut</span><span>Tijeras y corte</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="oficina" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="oficina" data-key="perforadoras" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">attach_file</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Perforadoras&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-125-Perforadora-Nextep-Uso-Rudo-2-Orificios-8cm-Hasta-60-Hojas-Color-Negro_02-768x768-1.jpg" alt="Perforadoras y engrapadoras" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -703,19 +1121,17 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">attach_file</span><span>Perforadoras</span></span>
       </a>
 
-      <!-- PUNTO DE VENTA -->
-      <a class="bento-cat" data-cat="pos" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="pos" data-key="cajones" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">payments</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Cajones&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-515-Cajon-de-Dinero-Nextep-5-Billetes-8-Monedas_02-768x768-1.jpg" alt="Cajones de dinero" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
         </span>
         <span class="bento-overlay"></span>
-        <span class="bento-badge">Nuevo</span>
         <span class="bento-arrow"><span class="ms">arrow_forward</span></span>
         <span class="bento-label"><span class="ms">payments</span><span>Cajones de dinero</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="pos" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="pos" data-key="relojes" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">schedule</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Relojes&font=montserrat" data-nextep="https://ftp3.syscom.mx/cdn-cgi/image/format=avif,quality=90/usuarios/fotos/BancoFotografiasSyscom/AI/UPSCALE/183737/portada_0S1000.PNG" alt="Relojes checadores" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -725,28 +1141,27 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">schedule</span><span>Relojes checadores</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="pos" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="pos" data-key="miniprinter" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">sell</span></span>
-          <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Etiquetas&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-511X-MINI-IMPRESORA-TERMICA-NEXTEP-80-MM-USB-RJ11-LAN-CORTADOR-AUTOMATICO_02-768x768-1.jpg" alt="Etiquetas POS" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
+          <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Impresoras+POS&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-511X-MINI-IMPRESORA-TERMICA-NEXTEP-80-MM-USB-RJ11-LAN-CORTADOR-AUTOMATICO_02-768x768-1.jpg" alt="Miniprinter POS" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
         </span>
         <span class="bento-overlay"></span>
         <span class="bento-arrow"><span class="ms">arrow_forward</span></span>
         <span class="bento-label"><span class="ms">sell</span><span>Miniprinter POS</span></span>
       </a>
 
-      <!-- TECNOLOGÍA -->
-      <a class="bento-cat" data-cat="tech" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="tech" data-key="mouse" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">mouse</span></span>
-          <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Mouse&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-720-MONITOR-NEXTEP-HD-19.5-RESOLUCION-1600X900-PANEL-TN_01.jpg" alt="Mouse y teclados" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
+          <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Monitores&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-720-MONITOR-NEXTEP-HD-19.5-RESOLUCION-1600X900-PANEL-TN_01.jpg" alt="Mouse y teclados" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
         </span>
         <span class="bento-overlay"></span>
         <span class="bento-arrow"><span class="ms">arrow_forward</span></span>
         <span class="bento-label"><span class="ms">mouse</span><span>Mouse y teclados</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="tech" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="tech" data-key="cables" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">cable</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Cables&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-450D-CABLE-HDMI-1.4-NEXTEP-ALTA-VELOCIDAD-REFORZADO-2.0-METROS_01.jpg" alt="Cables y adaptadores" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -756,7 +1171,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">cable</span><span>Cables y adaptadores</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="tech" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="tech" data-key="powerbanks" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">battery_charging_full</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Power+banks&font=montserrat" data-nextep="https://ftp3.syscom.mx/cdn-cgi/image/format=avif,quality=90/usuarios/fotos/BancoFotografiasSyscom/AI/UPSCALE/235401/portada_0S1000.PNG" alt="Power banks" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -766,8 +1181,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">battery_charging_full</span><span>Power banks</span></span>
       </a>
 
-      <!-- ORGANIZACIÓN -->
-      <a class="bento-cat" data-cat="org" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="org" data-key="organizadores" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">folder</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Organizadores&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-174-GA.jpg" alt="Organizadores de escritorio" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -777,7 +1191,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">folder</span><span>Organizadores</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="org" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="org" data-key="charolas" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">inventory_2</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Charolas&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/escritorio.webp" alt="Charolas y cajas de archivo" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -787,7 +1201,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">inventory_2</span><span>Charolas y cajas</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="org" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="org" data-key="carpetas" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">folder_open</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Carpetas&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/carpetas.webp" alt="Carpetas y registradores" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -797,7 +1211,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">folder_open</span><span>Carpetas y registradores</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="org" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="org" data-key="calculadoras" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">calculate</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Calculadoras&font=montserrat" data-nextep="https://cmeraz.github.io/papeleria/img/calculadora.webp" alt="Calculadoras" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -807,7 +1221,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">calculate</span><span>Calculadoras</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="org" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="org" data-key="tableros" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">push_pin</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Tableros&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-091C_Pintarro%E2%95%A0un-Tablero-de-Corcho-90cmx60cm.png" alt="Tableros de corcho" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -817,8 +1231,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">push_pin</span><span>Tableros de corcho</span></span>
       </a>
 
-      <!-- ESCOLAR -->
-      <a class="bento-cat" data-cat="escolar" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="escolar" data-key="cuadernos" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">menu_book</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Cuadernos&font=montserrat" data-nextep="https://nextep.com.mx/2025/09/NE-008R-CUADERNO-NEXTEP-PROFESIONAL-RAYA-100-HOJAS-COSIDO_01.jpg" alt="Cuadernos profesionales" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -828,7 +1241,7 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">menu_book</span><span>Cuadernos profesionales</span></span>
       </a>
 
-      <a class="bento-cat" data-cat="escolar" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+      <a class="bento-cat" data-cat="escolar" data-key="kits" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-img-wrap">
           <span class="bento-img-fallback"><span class="ms">school</span></span>
           <img src="https://placehold.co/600x700/EEF1F5/0B7CA3?text=Kits&font=montserrat" data-nextep="https://nextep.com.mx/img/kits-escolares.webp" alt="Kits escolares" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
@@ -838,7 +1251,6 @@ footer .logo{width:140px;height:36px}
         <span class="bento-label"><span class="ms">school</span><span>Kits escolares</span></span>
       </a>
 
-      <!-- CTA -->
       <a class="bento-cat bento-cta" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
         <span class="bento-cta-icon"><span class="ms">add_shopping_cart</span></span>
         <span class="bento-cta-label">Ver tienda<br>completa</span>
@@ -1036,6 +1448,27 @@ footer .logo{width:140px;height:36px}
   </div>
 </div>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
+  <div class="lightbox-backdrop" data-close></div>
+  <div class="lightbox-content">
+    <button type="button" class="lightbox-close" data-close aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6 6 18"/>
+      </svg>
+    </button>
+    <div class="lightbox-img-wrap">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+    <div class="lightbox-info">
+      <h3 class="lightbox-title" id="lightbox-title"></h3>
+      <a id="lightbox-cta" class="btn btn-primary btn-block" href="https://norttek.sicarx.shop" target="_blank" rel="noopener">
+        <span class="ms" aria-hidden="true">storefront</span>Ver en la tienda
+      </a>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
   const WA_NUMBER = "526252690997";
@@ -1066,9 +1499,7 @@ footer .logo{width:140px;height:36px}
   }));
   document.addEventListener("click", () => tips.forEach(x => x.classList.remove("open")));
 
-  // ===== Auto-carga de imágenes reales de Nextep =====
-  // Intenta cargar cada URL del atributo data-nextep.
-  // Si funciona, reemplaza el placeholder. Si no, deja el placeholder intacto.
+  // ===== Auto-carga de imágenes reales =====
   document.querySelectorAll('img[data-nextep]').forEach(img => {
     const nextepUrl = img.dataset.nextep;
     if (!nextepUrl) return;
@@ -1082,7 +1513,104 @@ footer .logo{width:140px;height:36px}
     test.src = nextepUrl;
   });
 
-  // ===== Filtro de catálogo =====
+  // =================================================================
+  // CONFIGURACIÓN DE GIROS (17)
+  // =================================================================
+  const GIROS = {
+    abarrotes:      { nombre: 'Abarrotes y minisúper',              cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'calculadoras', 'organizadores'] },
+    viajes:         { nombre: 'Agencias de viajes y turismo',       cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'calculadoras', 'notas', 'mouse'] },
+    constructoras:  { nombre: 'Constructoras y desarrolladoras',    cats: ['papel', 'carpetas', 'organizadores', 'tableros', 'mouse', 'cables', 'calculadoras', 'mochilas'] },
+    consultorios:   { nombre: 'Consultorios médicos y dentales',    cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'correctores', 'notas', 'rollos', 'miniprinter'] },
+    contables:      { nombre: 'Despachos contables y fiscales',     cats: ['papel', 'escritura', 'carpetas', 'folders', 'organizadores', 'calculadoras', 'correctores', 'notas', 'mouse'] },
+    juridicos:      { nombre: 'Despachos jurídicos y notarías',     cats: ['papel', 'escritura', 'carpetas', 'folders', 'organizadores', 'correctores', 'notas', 'calculadoras'] },
+    escuelas:       { nombre: 'Escuelas y colegios',                cats: ['cuadernos', 'kits', 'escritura', 'marcadores', 'tijeras', 'pegamento', 'notas', 'correctores', 'papel', 'perforadoras', 'grapas'] },
+    farmacias:      { nombre: 'Farmacias y droguerías',             cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'organizadores', 'calculadoras'] },
+    ferreterias:    { nombre: 'Ferreterías y tlapalerías',          cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'calculadoras', 'notas', 'organizadores'] },
+    hospitales:     { nombre: 'Hospitales y clínicas',              cats: ['papel', 'carpetas', 'organizadores', 'escritura', 'correctores', 'rollos', 'miniprinter', 'notas', 'folders'] },
+    hoteles:        { nombre: 'Hoteles y moteles',                  cats: ['rollos', 'cajones', 'miniprinter', 'carpetas', 'organizadores', 'notas', 'calculadoras', 'escritura'] },
+    industrias:     { nombre: 'Industrias y maquiladoras',          cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'organizadores', 'tableros', 'grapas', 'notas', 'calculadoras'] },
+    inmobiliarias:  { nombre: 'Inmobiliarias y bienes raíces',      cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'calculadoras', 'notas', 'mouse'] },
+    laboratorios:   { nombre: 'Laboratorios clínicos y médicos',    cats: ['rollos', 'miniprinter', 'carpetas', 'organizadores', 'escritura', 'notas', 'correctores', 'cintas'] },
+    oficinas:       { nombre: 'Oficinas y corporativos',            cats: ['papel', 'escritura', 'marcadores', 'folders', 'organizadores', 'calculadoras', 'mouse', 'cables', 'notas', 'correctores', 'carpetas'] },
+    restaurantes:   { nombre: 'Restaurantes y cafeterías',          cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'calculadoras'] },
+    tiendas:        { nombre: 'Tiendas y comercios',                cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'folders', 'organizadores', 'calculadoras', 'notas'] }
+  };
+
+  // =================================================================
+  // FILTRADO POR GIRO
+  // =================================================================
+  const giroSticky = document.getElementById('girosSticky');
+  const girosClear = document.getElementById('girosClear');
+  const envioBanner = document.querySelector('.delivery-banner');
+  let activeGiro = null;
+
+  function applyGiro(giroId) {
+    activeGiro = giroId;
+    const config = giroId ? GIROS[giroId] : null;
+
+    document.querySelectorAll('.giro-card').forEach(card => {
+      const isActive = card.dataset.giro === giroId;
+      card.classList.toggle('active', isActive);
+      card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+
+    document.querySelectorAll('.giro-chip-mini').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.giro === giroId);
+    });
+
+    document.querySelectorAll('.bento-cat').forEach(cat => {
+      cat.classList.remove('featured-giro', 'dimmed');
+    });
+
+    if (!config) {
+      girosClear.hidden = true;
+      return;
+    }
+
+    document.querySelectorAll('.bento-cat:not(.bento-cta)').forEach(cat => {
+      const isRelevant = config.cats.includes(cat.dataset.key);
+      cat.classList.toggle('featured-giro', isRelevant);
+      cat.classList.toggle('dimmed', !isRelevant);
+    });
+
+    girosClear.hidden = false;
+  }
+
+  document.querySelectorAll('.giro-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const giroId = card.dataset.giro;
+      if (activeGiro === giroId) {
+        applyGiro(null);
+        return;
+      }
+      applyGiro(giroId);
+      document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  document.querySelectorAll('.giro-chip-mini').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const giroId = chip.dataset.giro;
+      if (activeGiro === giroId) {
+        applyGiro(null);
+        return;
+      }
+      applyGiro(giroId);
+    });
+  });
+
+  girosClear.addEventListener('click', () => applyGiro(null));
+
+  // Sombra del sticky al pegarse
+  if ("IntersectionObserver" in window && giroSticky) {
+    new IntersectionObserver(([e]) => {
+      giroSticky.classList.toggle('is-stuck', !e.isIntersecting);
+    }, { rootMargin: '-70px 0px 0px 0px' }).observe(giroSticky);
+  }
+
+  // =================================================================
+  // FILTRADO POR CATEGORÍA
+  // =================================================================
   const grid = document.getElementById("bentoGrid");
   const tabs = document.querySelectorAll(".cat-tab");
 
@@ -1110,7 +1638,10 @@ footer .logo{width:140px;height:36px}
   }
 
   tabs.forEach(tab => {
-    tab.addEventListener("click", () => applyFilter(tab.dataset.filter));
+    tab.addEventListener("click", () => {
+      if (activeGiro) applyGiro(null);
+      applyFilter(tab.dataset.filter);
+    });
   });
 
   // ===== Reveal al scroll =====
@@ -1131,6 +1662,68 @@ footer .logo{width:140px;height:36px}
   } else {
     revealEls.forEach(el => el.classList.add("in-view"));
   }
+
+  // =================================================================
+  // LIGHTBOX
+  // =================================================================
+  const lightbox      = document.getElementById('lightbox');
+  const lightboxImg   = document.getElementById('lightbox-img');
+  const lightboxTitle = document.getElementById('lightbox-title');
+  const lightboxCta   = document.getElementById('lightbox-cta');
+  let lastFocused = null;
+
+  function openLightbox(cat) {
+    lastFocused = document.activeElement;
+
+    // Extraer imagen actual (ya sea placeholder o nextep cargado)
+    const imgEl = cat.querySelector('img');
+    const imgSrc = imgEl ? imgEl.src : '';
+    const imgAlt = imgEl ? imgEl.alt : '';
+
+    // Extraer nombre del producto (último span del .bento-label)
+    const labelSpans = cat.querySelectorAll('.bento-label span');
+    const nameEl = labelSpans[labelSpans.length - 1];
+    const name = nameEl ? nameEl.textContent.trim() : '';
+
+    // Extraer destino de la tienda
+    const ctaHref = cat.getAttribute('href') || 'https://norttek.sicarx.shop';
+
+    lightboxImg.src = imgSrc;
+    lightboxImg.alt = imgAlt || name;
+    lightboxTitle.textContent = name;
+    lightboxCta.href = ctaHref;
+
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => {
+      lightbox.querySelector('.lightbox-close').focus();
+    }, 60);
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  // Interceptar clics en el catálogo (excepto CTA)
+  document.querySelectorAll('.bento-cat').forEach(cat => {
+    if (cat.classList.contains('bento-cta')) return;
+    cat.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      openLightbox(cat);
+    });
+  });
+
+  // Cerrar lightbox
+  lightbox.querySelectorAll('[data-close]').forEach(el => {
+    el.addEventListener('click', closeLightbox);
+  });
+
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape' && !lightbox.hidden) closeLightbox();
+  });
 
   // ===== Compartir =====
   const SHARE_MSG = "Hola, te comparto Norttek Supply · Papelería, papelería para oficinas y empresas en Cuauhtémoc. Envío a domicilio, catálogo en línea y atención personalizada.\nhttps://cmeraz.github.io/papeleria/";
