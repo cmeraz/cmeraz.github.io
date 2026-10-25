@@ -132,27 +132,60 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 
 /* ============ SECCIÓN ENVÍO (De la tienda a tu puerta) ============ */
 .envio-section{padding:48px 0 24px;background:#fff}
-.delivery-banner{position:relative;background: linear-gradient(135deg, #0B7CA3 0%, #1C2333 100%);border-radius: 24px;padding: 28px 24px 24px;color: #fff;overflow: hidden;box-shadow: 0 24px 48px -24px rgba(11,124,163,.55)}
-.delivery-banner::before{content:"";position: absolute;top: -60%;right: -20%;width: 70%;height: 220%;background: radial-gradient(circle, rgba(58,175,228,.35), transparent 70%);pointer-events: none}
-.delivery-badge{display: inline-flex;align-items: center;gap: 8px;padding: 5px 12px;border-radius: 999px;background: rgba(255,255,255,.12);border: 1px solid rgba(255,255,255,.22);font-size: 11.5px;font-weight: 600;letter-spacing: 0.06em;text-transform: uppercase;color: #B5E5F9;margin-bottom: 12px}
-.badge-dot{width: 6px;height: 6px;border-radius: 50%;background: #25D366;animation: badgePulse 1.6s ease-in-out infinite}
-@keyframes badgePulse{50%{ opacity: 0.35; }}
-.delivery-banner-title{font-family: Montserrat;font-size: clamp(22px, 4.2vw, 30px);font-weight: 800;margin: 0 0 8px;letter-spacing: -0.015em;line-height: 1.15}
-.delivery-banner-sub{font-size: 14.5px;color: #C4D0E0;line-height: 1.5;max-width: 520px}
-.delivery-banner-sub b{ color: #fff; font-weight: 600; }
-.delivery-track{ position: relative; height: 110px; margin-top: 22px; }
-.track-line{position: absolute;top: 50%;left: 55px;right: 55px;height: 2px;background-image: linear-gradient(to right, rgba(143,217,246,0.65) 50%, transparent 50%);background-size: 14px 2px;background-repeat: repeat-x;transform: translateY(-50%);animation: dashMove 1.2s linear infinite}
-@keyframes dashMove{ to{ background-position: 14px 0; } }
-.track-store, .track-home{position: absolute;top: 50%;transform: translateY(-50%);width: 44px;height: 44px;border-radius: 50%;display: grid;place-items: center;z-index: 2}
-.track-store{ left: 30px; background: rgba(58,175,228,.2); border: 2px solid var(--blue); color: #B5E5F9; }
-.track-home{ right: 30px; background: rgba(37,211,102,.2); border: 2px solid #25D366; color: #B6F0CE; }
-.track-store .ms, .track-home .ms{ font-size: 22px; }
-.marker-pulse{position: absolute;inset: 0;border-radius: 50%;border: 2px solid currentColor;animation: markerPulse 2.2s ease-out infinite}
-@keyframes markerPulse{0%{ transform: scale(1); opacity: 0.7; }100%{ transform: scale(1.7); opacity: 0; }}
-.track-label{position: absolute;top: calc(100% + 8px);left: 50%;transform: translateX(-50%);font-size: 10.5px;font-weight: 600;color: #C4D0E0;white-space: nowrap;text-transform: uppercase;letter-spacing: 0.08em}
-.track-truck{position: absolute;top: 50%;left: 28px;width: 48px;height: 48px;border-radius: 50%;background: #fff;color: var(--blue-deep);display: grid;place-items: center;box-shadow: 0 8px 24px rgba(0,0,0,.35), 0 0 0 4px rgba(58,175,228,.3);z-index: 3;transform: translateY(-50%);animation: truckDrive 5s cubic-bezier(.45,0,.55,1) infinite}
-.track-truck .ms{ font-size: 24px; }
-@keyframes truckDrive{0%{ left: 28px; opacity: 0; }8%{ opacity: 1; }50%{ left: calc(50% - 24px); }92%{ opacity: 1; }100%{ left: calc(100% - 76px); opacity: 0; }}
+.delivery-banner{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:24px;background:linear-gradient(135deg,#0B7CA3 0%,#1C2333 100%);border-radius:24px;padding:28px 18px 18px;color:#fff;overflow:hidden;box-shadow:0 28px 56px -24px rgba(11,124,163,.6)}
+.delivery-banner::before{content:"";position:absolute;top:-60%;right:-20%;width:70%;height:220%;background:radial-gradient(circle,rgba(58,175,228,.35),transparent 70%);pointer-events:none}
+.delivery-banner::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:36px 36px;-webkit-mask-image:linear-gradient(120deg,#000,transparent 65%);mask-image:linear-gradient(120deg,#000,transparent 65%)}
+.delivery-copy{position:relative;z-index:1;padding:0 6px}
+.delivery-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#B5E5F9;margin-bottom:14px}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:#25D366;animation:badgePulse 1.6s ease-in-out infinite}
+@keyframes badgePulse{50%{opacity:.35}}
+.delivery-banner-title{font-family:Montserrat,sans-serif;font-size:clamp(27px,6.4vw,40px);font-weight:800;margin:0 0 10px;letter-spacing:-.02em;line-height:1.08}
+.delivery-banner-sub{font-size:15px;color:#C4D0E0;line-height:1.5;max-width:460px}
+.delivery-banner-sub b{color:#fff;font-weight:600}
+
+/* Seguimiento ilustrativo */
+.d-track{position:relative;margin-top:26px;max-width:460px}
+.d-line{position:absolute;left:calc(100% / 6);right:calc(100% / 6);top:18px;height:4px;border-radius:4px;background:rgba(255,255,255,.14);overflow:hidden}
+.d-fill{display:block;width:100%;height:100%;border-radius:4px;transform:scaleX(0);transform-origin:left center;background:linear-gradient(90deg,#3AAFE4,#B5E5F9);box-shadow:0 0 12px rgba(58,175,228,.85)}
+.d-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;padding:0;list-style:none}
+.d-step{display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;font-size:11.5px;font-weight:600;line-height:1.25;color:#8FA3BF;transition:color .4s}
+.d-dot{position:relative;z-index:1;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#1A2A44;border:1.5px solid rgba(255,255,255,.22);color:#8FA3BF;transition:background .4s,color .4s,border-color .4s,transform .4s cubic-bezier(.2,1.4,.4,1),box-shadow .4s}
+.d-dot .ms{font-size:20px}
+.d-step.is-done{color:#C4D0E0}
+.d-step.is-done .d-dot{background:#0B7CA3;border-color:#3AAFE4;color:#fff}
+.d-step.is-active{color:#fff}
+.d-step.is-active .d-dot{background:var(--blue);border-color:#B5E5F9;color:#0E1626;transform:scale(1.12);box-shadow:0 0 0 5px rgba(58,175,228,.2),0 0 22px rgba(58,175,228,.7)}
+.d-step.is-active .d-dot::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid rgba(58,175,228,.65);animation:dRing2 1.5s ease-out infinite}
+.d-step.is-final.is-active .d-dot{background:#25D366;border-color:#B8F5D2;box-shadow:0 0 0 5px rgba(37,211,102,.22),0 0 24px rgba(37,211,102,.75)}
+.d-step.is-final.is-active .d-dot::after{border-color:rgba(37,211,102,.7)}
+@keyframes dRing2{0%{transform:scale(.85);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+
+/* Mapa animado */
+.delivery-map-card{position:relative;z-index:1;min-width:0;aspect-ratio:8/5;overflow:hidden;border:1px solid rgba(255,255,255,.55);border-radius:18px;background:#E6EFE6;box-shadow:0 18px 40px -22px rgba(0,0,0,.55)}
+.delivery-map-head{position:absolute;top:10px;left:10px;z-index:2;display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid rgba(212,224,218,.9);border-radius:999px;background:rgba(255,255,255,.94);color:#40534C;box-shadow:0 2px 8px rgba(28,35,51,.08);font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;}
+.delivery-map-head svg{width:14px;height:14px;display:block;color:var(--blue-deep)}
+.delivery-map-svg{display:block;width:100%;height:100%}
+.d-label-bg{fill:rgba(255,255,255,.97);stroke:#D0DDD5;stroke-width:1.5}
+.d-label{fill:#1C2333;font-family:Inter,sans-serif;font-size:16px;font-weight:800;letter-spacing:.05em}
+.d-blk{transition:none}
+.d-pin{transform-box:fill-box;transform-origin:center}
+.d-ring{fill:none;stroke-width:3;transform-box:fill-box;transform-origin:center;opacity:0;animation:dRing 2.8s ease-out infinite}
+.d-ring.r2{animation-delay:1.4s}
+.d-ring-store{stroke:#3AAFE4}
+.d-ring-home{stroke:#25D366}
+@keyframes dRing{0%{transform:scale(1);opacity:.75}100%{transform:scale(2.7);opacity:0}}
+.d-burst{fill:none;stroke:#25D366;stroke-width:4;opacity:0;transform-box:fill-box;transform-origin:center}
+.d-pin-home.bounce{animation:dBounce .95s cubic-bezier(.3,1.3,.5,1)}
+.d-pin-home.bounce .d-burst{animation:dBurst 1s ease-out}
+@keyframes dBounce{0%{transform:scale(1)}28%{transform:scale(1.4)}52%{transform:scale(.9)}74%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes dBurst{0%{transform:scale(1);opacity:.9}100%{transform:scale(4);opacity:0}}
+.d-badge{opacity:0;transform:translateY(10px) scale(.6);transform-box:fill-box;transform-origin:center;transition:opacity .3s ease,transform .45s cubic-bezier(.2,1.5,.4,1)}
+.d-badge.on{opacity:1;transform:none}
+.d-speed{animation:dSpeed .32s linear infinite}
+@keyframes dSpeed{0%,100%{opacity:.75}50%{opacity:.25}}
+.delivery-banner:not(.is-playing) .d-ring,
+.delivery-banner:not(.is-playing) .d-speed,
+.delivery-banner:not(.is-playing) .d-step.is-active .d-dot::after{animation-play-state:paused}
 
 /* ============ GIROS QUE ATENDEMOS ============ */
 .giros-section{padding:32px 0 48px;background:#fff}
@@ -518,8 +551,8 @@ footer .logo{width:140px;height:36px}
   .bar{left:auto;right:24px;bottom:24px;width:420px;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(28,35,51,.18)}
   footer{padding-bottom:22px}
   .bento-cats{ grid-template-columns: repeat(4, minmax(0,1fr)); grid-auto-rows: 230px; gap: 16px; }
-  .delivery-track{ height: 120px; }
   .delivery-banner{ padding: 40px 36px 32px; }
+  .delivery-banner{grid-template-columns:minmax(280px,.82fr) minmax(0,1.18fr);gap:32px;align-items:center}
   .giros-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
   .giro-card{padding:16px}
   .giro-icon{width:48px;height:48px}
@@ -567,7 +600,7 @@ footer .logo{width:140px;height:36px}
     transition-duration:.001ms!important;
   }
   .hero-copy > *, .hero-visual{ opacity:1!important; transform:none!important; }
-  .track-truck{ left: 50% !important; transform: translate(-50%, -50%) !important; opacity: 1 !important; }
+  .delivery-map-ambient{display:none}
   [data-reveal]{ opacity: 1 !important; transform: none !important; }
 }
 </style>
@@ -651,29 +684,121 @@ footer .logo{width:140px;height:36px}
 <!-- 1. DE LA TIENDA A TU PUERTA (banner de envío) -->
 <section id="envio" class="envio-section">
   <div class="wrap">
-    <div class="delivery-banner" data-reveal>
-      <span class="delivery-badge">
-        <span class="badge-dot" aria-hidden="true"></span>
-        Envío a domicilio
-      </span>
-      <h3 class="delivery-banner-title">De la tienda a tu puerta</h3>
-      <p class="delivery-banner-sub">Entregamos en <b>Cuauhtémoc y alrededores</b>. Pide en línea y recibe sin moverte de tu oficina.</p>
+    <div class="delivery-banner" id="deliveryBanner" data-reveal>
+      <div class="delivery-copy">
+        <span class="delivery-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          Envío a domicilio
+        </span>
+        <h3 class="delivery-banner-title">De la tienda a tu puerta</h3>
+        <p class="delivery-banner-sub">Entregamos en <b>Cuauhtémoc y alrededores</b>. Pide en línea y recibe en tu negocio.</p>
 
-      <div class="delivery-track" aria-hidden="true">
-        <div class="track-line"></div>
-        <div class="track-store">
-          <span class="marker-pulse"></span>
-          <span class="ms">storefront</span>
-          <span class="track-label">Norttek</span>
+        <div class="d-track">
+          <div class="d-line" aria-hidden="true"><i class="d-fill" id="dFill"></i></div>
+          <ol class="d-steps">
+            <li class="d-step is-active"><span class="d-dot" aria-hidden="true"><span class="ms">inventory_2</span></span><span>Pedido confirmado</span></li>
+            <li class="d-step"><span class="d-dot" aria-hidden="true"><span class="ms">local_shipping</span></span><span>En camino</span></li>
+            <li class="d-step is-final"><span class="d-dot" aria-hidden="true"><span class="ms">check</span></span><span>Entregado</span></li>
+          </ol>
         </div>
-        <div class="track-truck">
-          <span class="ms">local_shipping</span>
+      </div>
+
+      <div class="delivery-map-card">
+        <div class="delivery-map-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          Ruta ilustrativa
         </div>
-        <div class="track-home">
-          <span class="marker-pulse"></span>
-          <span class="ms">home</span>
-          <span class="track-label">Tu oficina</span>
-        </div>
+        <svg class="delivery-map-svg" viewBox="0 0 640 400" role="img" aria-labelledby="deliveryMapTitle deliveryMapDescription">
+          <title id="deliveryMapTitle">Ruta de entrega de Norttek a tu negocio</title>
+          <desc id="deliveryMapDescription">Mapa esquemático de calles en Cuauhtémoc. Una camioneta recorre una ruta ilustrativa desde la sucursal Norttek hasta tu negocio y al llegar se marca el pedido como entregado.</desc>
+          <defs>
+            <linearGradient id="dRouteGrad" gradientUnits="userSpaceOnUse" x1="110" y1="340" x2="560" y2="70">
+              <stop offset="0" stop-color="#0B7CA3"/><stop offset="1" stop-color="#3AAFE4"/>
+            </linearGradient>
+            <symbol id="dIconStore" viewBox="0 0 24 24">
+              <path d="M3 10h18v11H3zM3 10l2-7h14l2 7" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M9 21v-6h6v6" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </symbol>
+            <symbol id="dIconHome" viewBox="0 0 24 24">
+              <path d="m3 11 9-8 9 8v10H3zM9 21v-6h6v6" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </symbol>
+          </defs>
+
+          <rect width="640" height="400" fill="#E6EFE6"/>
+
+          <g id="dBlocks"><rect class="d-blk" x="0" y="0" width="93" height="53" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="127" y="0" width="116" height="53" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="277" y="0" width="116" height="53" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="427" y="0" width="116" height="53" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="577" y="0" width="63" height="53" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="0" y="87" width="93" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="127" y="87" width="116" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="277" y="87" width="116" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-park" x="427" y="87" width="116" height="56" rx="7" fill="#CFE5CC" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="577" y="87" width="63" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="0" y="177" width="93" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-park" x="127" y="177" width="116" height="56" rx="7" fill="#CFE5CC" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="277" y="177" width="116" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="427" y="177" width="116" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="577" y="177" width="63" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="0" y="267" width="93" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="127" y="267" width="116" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="277" y="267" width="116" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="427" y="267" width="116" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="577" y="267" width="63" height="56" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="0" y="357" width="93" height="43" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="127" y="357" width="116" height="43" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-park" x="277" y="357" width="116" height="43" rx="7" fill="#CFE5CC" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="427" y="357" width="116" height="43" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/><rect class="d-blk" x="577" y="357" width="63" height="43" rx="7" fill="#F4F2EA" stroke="#D9D6CA" stroke-width="1"/></g>
+
+          <g fill="none" stroke-linecap="round">
+            <path stroke="#CBD9D0" stroke-width="30" d="M-20 70H660M-20 160H660M-20 250H660M-20 340H660M110-20V420M260-20V420M410-20V420M560-20V420"/>
+            <path stroke="#FFFFFF" stroke-width="26" d="M-20 70H660M-20 160H660M-20 250H660M-20 340H660M110-20V420M260-20V420M410-20V420M560-20V420"/>
+            <path stroke="#DCE6DF" stroke-width="1.2" stroke-dasharray="7 9" d="M-20 70H660M-20 160H660M-20 250H660M-20 340H660M110-20V420M260-20V420M410-20V420M560-20V420"/>
+          </g>
+
+          <!-- Tráfico ambiental -->
+          <g class="delivery-map-ambient" fill="#0B7CA3" opacity=".45">
+            <circle r="3.5"><animateMotion path="M-20 250H660" dur="9s" repeatCount="indefinite"/></circle>
+            <circle r="3.5"><animateMotion path="M660 340H-20" dur="12s" begin="-4s" repeatCount="indefinite"/></circle>
+            <circle r="3.5"><animateMotion path="M410 -10V410" dur="8s" begin="-2s" repeatCount="indefinite"/></circle>
+            <circle r="3.5"><animateMotion path="M260 410V-10" dur="11s" begin="-6s" repeatCount="indefinite"/></circle>
+          </g>
+
+          <!-- Ruta -->
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path id="dRoute" stroke="#9FB3AA" stroke-width="4" stroke-dasharray="2 9" d="M110 340V274Q110 250 134 250H236Q260 250 260 226V184Q260 160 284 160H386Q410 160 410 136V94Q410 70 434 70H560"/>
+            <path id="dRouteHalo" stroke="#FFFFFF" stroke-opacity="1" stroke-width="13" d="M110 340V274Q110 250 134 250H236Q260 250 260 226V184Q260 160 284 160H386Q410 160 410 136V94Q410 70 434 70H560"/>
+            <path id="dRouteMid" stroke="#0B7CA3" stroke-opacity=".22" stroke-width="9" d="M110 340V274Q110 250 134 250H236Q260 250 260 226V184Q260 160 284 160H386Q410 160 410 136V94Q410 70 434 70H560"/>
+            <path id="dRouteCore" stroke="url(#dRouteGrad)" stroke-width="5" d="M110 340V274Q110 250 134 250H236Q260 250 260 226V184Q260 160 284 160H386Q410 160 410 136V94Q410 70 434 70H560"/>
+          </g>
+
+          <g id="dTrail"></g>
+
+          <!-- Sucursal -->
+          <g transform="translate(110 340)">
+            <circle class="d-ring d-ring-store" r="20"/>
+            <circle class="d-ring d-ring-store r2" r="20"/>
+            <circle r="20" fill="#0B7CA3" stroke="#fff" stroke-width="3.5"/>
+            <use href="#dIconStore" x="-13" y="-13" width="26" height="26"/>
+          </g>
+          <g transform="translate(110 380)">
+            <rect class="d-label-bg" x="-100" y="-14" width="200" height="28" rx="14"/>
+            <text class="d-label" y="6" text-anchor="middle">SUCURSAL NORTTEK</text>
+          </g>
+
+          <!-- Tu negocio -->
+          <g transform="translate(560 70)">
+            <g class="d-pin d-pin-home" id="dPinHome">
+              <circle class="d-ring d-ring-home" r="20"/>
+              <circle class="d-ring d-ring-home r2" r="20"/>
+              <circle class="d-burst" r="20"/>
+              <circle r="20" fill="#25A366" stroke="#fff" stroke-width="3.5"/>
+              <use href="#dIconHome" x="-13" y="-13" width="26" height="26"/>
+            </g>
+          </g>
+          <g transform="translate(560 112)">
+            <rect class="d-label-bg" x="-68" y="-14" width="136" height="28" rx="14"/>
+            <text class="d-label" y="6" text-anchor="middle">TU NEGOCIO</text>
+          </g>
+          <g transform="translate(556 24)">
+            <g class="d-badge" id="dBadge">
+              <rect x="-76" y="-14" width="152" height="28" rx="14" fill="#25D366"/>
+              <circle cx="-58" cy="0" r="9" fill="#fff"/>
+              <path d="M-62 0l3 3.2 5.5-6" fill="none" stroke="#128A52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="8" y="6" text-anchor="middle" fill="#0B3D2B" font-family="Inter,sans-serif" font-size="15" font-weight="800" letter-spacing=".04em">¡ENTREGADO!</text>
+            </g>
+          </g>
+
+          <!-- Camioneta -->
+          <g id="dTruck" opacity="0">
+            <ellipse cx="2" cy="4" rx="24" ry="12" fill="#1C2333" opacity=".22"/>
+            <path class="d-speed" d="M-22 -6H-42M-25 0H-52M-22 6H-40" stroke="#0B7CA3" stroke-width="2.2" stroke-linecap="round"/>
+            <rect x="-19" y="-10.5" width="27" height="21" rx="4" fill="#fff" stroke="#0B7CA3" stroke-width="1.6"/>
+            <rect x="-15" y="-3.5" width="19" height="7" rx="2" fill="#0B7CA3"/>
+            <rect x="6" y="-9.5" width="15" height="19" rx="4.5" fill="#0B7CA3" stroke="#fff" stroke-width="1.2"/>
+            <rect x="14" y="-7.5" width="5.5" height="15" rx="2" fill="#DFF4FB"/>
+          </g>
+
+          <g id="dFx"></g>
+        </svg>
       </div>
     </div>
   </div>
@@ -1410,6 +1535,246 @@ footer .logo{width:140px;height:36px}
   } else {
     bar.classList.add("show");
   }
+
+  // =================================================================
+  // ENVÍO: animación "De la tienda a tu puerta"
+  // =================================================================
+  (function initDelivery() {
+    const banner = document.getElementById('deliveryBanner');
+    if (!banner) return;
+    const $ = (s) => banner.querySelector(s);
+    const route = $('#dRoute');
+    if (!route || !route.getTotalLength) return;
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const L = route.getTotalLength();
+    const lines = ['#dRouteHalo', '#dRouteMid', '#dRouteCore'].map($);
+    lines.forEach(l => { l.style.strokeDasharray = L + ' ' + L; l.style.strokeDashoffset = L; });
+
+    const truck = $('#dTruck'), trail = $('#dTrail'), fx = $('#dFx');
+    const badge = $('#dBadge'), pin = $('#dPinHome'), fill = $('#dFill');
+    const steps = [...banner.querySelectorAll('.d-step')];
+    const blocks = [...banner.querySelectorAll('.d-blk')].map(el => {
+      const x = +el.getAttribute('x'), y = +el.getAttribute('y');
+      const w = +el.getAttribute('width'), h = +el.getAttribute('height');
+      return { el, cx: x + w / 2, cy: y + h / 2, lvl: 0, shown: -1 };
+    });
+
+    const INTRO = 800, DRIVE = 7400, HOLD = 3300, FADE = 700;
+    const CYCLE = INTRO + DRIVE + HOLD + FADE;
+    const STOP = 0.925;            // la camioneta se detiene antes del pin
+    const TRUCK_SCALE = 1.35;
+    const DEST = { x: 560, y: 70 };
+    const BASE = [244, 242, 234], LIT = [188, 225, 245];
+    const COLORS = ['#3AAFE4', '#0B7CA3', '#25D366', '#F5C542', '#E8590C'];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const mix = (k) => 'rgb(' + BASE.map((b, i) => Math.round(b + (LIT[i] - b) * k)).join(',') + ')';
+    const smooth = (k) => k * k * (3 - 2 * k);
+    const ease = (k) => 0.35 * k + 0.65 * smooth(k);
+    const easeOut = (k) => 1 - Math.pow(1 - k, 3);
+    const backOut = (k) => { const c = 1.9; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
+
+    let stage = -1, arrived = false, trailParts = [], conf = [];
+    let tx = 0, ty = 0, ang = -90, lastSpawn = 0;
+    let running = false, inView = false, raf = 0, base = null, elapsed = 0, lastTs = 0, lastCycle = 0;
+
+    function setStage(s) {
+      if (s === stage) return;
+      stage = s;
+      steps.forEach((el, i) => {
+        el.classList.toggle('is-done', i < s);
+        el.classList.toggle('is-active', i === s);
+      });
+    }
+
+    function place(p, scale) {
+      const d = L * p;
+      const pt = route.getPointAtLength(d);
+      const a = route.getPointAtLength(Math.min(L, d + 3));
+      const b = route.getPointAtLength(Math.max(0, d - 3));
+      tx = pt.x; ty = pt.y;
+      ang = Math.atan2(a.y - b.y, a.x - b.x) * 180 / Math.PI;
+      truck.setAttribute('transform', 'translate(' + tx.toFixed(1) + ' ' + ty.toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(' + scale.toFixed(3) + ')');
+    }
+
+    function drawLine(p, op) {
+      const off = L * (1 - p);
+      lines.forEach(l => { l.style.strokeDashoffset = off; l.style.opacity = op; });
+    }
+
+    function spawnTrail(now) {
+      const r = ang * Math.PI / 180;
+      const el = document.createElementNS(NS, 'circle');
+      el.setAttribute('fill', '#3AAFE4');
+      el.setAttribute('r', '2.8');
+      trail.appendChild(el);
+      trailParts.push({
+        el, born: now,
+        x: tx - Math.cos(r) * 24 + (Math.random() - 0.5) * 8,
+        y: ty - Math.sin(r) * 24 + (Math.random() - 0.5) * 8
+      });
+    }
+
+    function updateTrail(now) {
+      for (let i = trailParts.length - 1; i >= 0; i--) {
+        const p = trailParts[i];
+        const k = (now - p.born) / 700;
+        if (k >= 1) { p.el.remove(); trailParts.splice(i, 1); continue; }
+        p.el.setAttribute('cx', p.x.toFixed(1));
+        p.el.setAttribute('cy', p.y.toFixed(1));
+        p.el.setAttribute('r', (2.8 * (1 - k * 0.7)).toFixed(2));
+        p.el.setAttribute('opacity', ((1 - k) * 0.75).toFixed(2));
+      }
+    }
+
+    function celebrate(now) {
+      badge.classList.add('on');
+      pin.classList.remove('bounce');
+      void pin.getBoundingClientRect();
+      pin.classList.add('bounce');
+      for (let i = 0; i < 42; i++) {
+        const round = Math.random() > 0.5;
+        const el = document.createElementNS(NS, round ? 'circle' : 'rect');
+        if (round) { el.setAttribute('r', '2.6'); }
+        else { el.setAttribute('x', '-3.5'); el.setAttribute('y', '-2'); el.setAttribute('width', '7'); el.setAttribute('height', '4'); el.setAttribute('rx', '1'); }
+        el.setAttribute('fill', COLORS[i % COLORS.length]);
+        fx.appendChild(el);
+        const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.25;
+        const sp = 140 + Math.random() * 260;
+        conf.push({
+          el, born: now, life: 1300 + Math.random() * 700,
+          x: DEST.x, y: DEST.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+          rot: Math.random() * 360, vr: (Math.random() - 0.5) * 900
+        });
+      }
+    }
+
+    function updateConfetti(now, dt) {
+      const s = dt / 1000;
+      for (let i = conf.length - 1; i >= 0; i--) {
+        const c = conf[i];
+        const k = (now - c.born) / c.life;
+        if (k >= 1) { c.el.remove(); conf.splice(i, 1); continue; }
+        c.vy += 560 * s; c.vx *= 0.992;
+        c.x += c.vx * s; c.y += c.vy * s; c.rot += c.vr * s;
+        c.el.setAttribute('transform', 'translate(' + c.x.toFixed(1) + ' ' + c.y.toFixed(1) + ') rotate(' + c.rot.toFixed(0) + ')');
+        c.el.setAttribute('opacity', (1 - k * k).toFixed(2));
+      }
+    }
+
+    function lightBlocks(dt, visible) {
+      for (const b of blocks) {
+        const target = visible ? clamp(1 - Math.hypot(tx - b.cx, ty - b.cy) / 115, 0, 1) : 0;
+        b.lvl = Math.max(target, b.lvl - dt * 0.0007);
+        if (Math.abs(b.lvl - b.shown) > 0.03 || (b.lvl === 0 && b.shown !== 0)) {
+          b.el.style.fill = mix(b.lvl);
+          b.shown = b.lvl;
+        }
+      }
+    }
+
+    function reset() {
+      arrived = false;
+      badge.classList.remove('on');
+      pin.classList.remove('bounce');
+      conf.forEach(c => c.el.remove()); conf = [];
+      trailParts.forEach(p => p.el.remove()); trailParts = [];
+      drawLine(0, 1);
+      fill.style.transform = 'scaleX(0)';
+      truck.setAttribute('opacity', '0');
+      setStage(0);
+    }
+
+    function render(t, now, dt) {
+      let p = 0, scale = TRUCK_SCALE, op = 1, fillV = 0, lineP = 0;
+      const arriveT = INTRO + DRIVE;
+      if (t < INTRO) {
+        const k = t / INTRO;
+        setStage(0);
+        fillV = 0.5 * k;
+        op = Math.min(1, k * 3);
+        scale = TRUCK_SCALE * (0.4 + 0.6 * backOut(Math.min(1, k * 1.4)));
+        lineP = 0;
+      } else if (t < arriveT) {
+        const k = (t - INTRO) / DRIVE;
+        p = ease(k) * STOP;
+        setStage(1);
+        fillV = 0.5 + 0.5 * (p / STOP);
+        lineP = p;
+        if (now - lastSpawn > 45) { spawnTrail(now); lastSpawn = now; }
+      } else {
+        p = STOP;
+        setStage(2);
+        fillV = 1;
+        lineP = STOP + (1 - STOP) * easeOut(clamp((t - arriveT) / 350, 0, 1));
+        if (!arrived) { arrived = true; celebrate(now); }
+        if (t >= CYCLE - FADE) {
+          op = 1 - (t - (CYCLE - FADE)) / FADE;
+          badge.classList.remove('on');
+        }
+      }
+      drawLine(lineP, t >= CYCLE - FADE ? op : 1);
+      fill.style.transform = 'scaleX(' + fillV.toFixed(3) + ')';
+      place(p, scale);
+      truck.setAttribute('opacity', op.toFixed(2));
+      updateTrail(now);
+      updateConfetti(now, dt);
+      lightBlocks(dt, op > 0.05);
+    }
+
+    function frame(ts) {
+      if (!running) return;
+      if (base === null) base = ts - elapsed;
+      elapsed = ts - base;
+      const cyc = Math.floor(elapsed / CYCLE);
+      if (cyc !== lastCycle) { lastCycle = cyc; reset(); }
+      const dt = Math.min(64, ts - (lastTs || ts));
+      lastTs = ts;
+      render(elapsed % CYCLE, ts, dt);
+      raf = requestAnimationFrame(frame);
+    }
+
+    function play() {
+      if (running || reduce) return;
+      running = true; base = null; lastTs = 0;
+      banner.classList.add('is-playing');
+      raf = requestAnimationFrame(frame);
+    }
+    function pause() {
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(raf);
+      banner.classList.remove('is-playing');
+    }
+
+    reset();
+
+    if (reduce) {
+      // Escena estática: ruta completa, camioneta estacionada y pedido entregado.
+      setStage(2);
+      drawLine(1, 1);
+      fill.style.transform = 'scaleX(1)';
+      place(STOP, TRUCK_SCALE);
+      truck.setAttribute('opacity', '1');
+      badge.classList.add('on');
+      return;
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => {
+        inView = e.isIntersecting;
+        if (inView && !document.hidden) play(); else pause();
+      }, { threshold: 0.3 }).observe(banner);
+    } else {
+      inView = true; play();
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) pause();
+      else if (inView) play();
+    });
+  })();
 
   // ===== Auto-carga de imágenes reales =====
   document.querySelectorAll('img[data-nextep]').forEach(img => {
