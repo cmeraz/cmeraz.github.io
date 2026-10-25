@@ -1,0 +1,2593 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05070a">
+<title>Control de asistencia y registro de jornada | Norttek</title>
+<meta name="description" content="Administra horarios e incidencias, consulta los registros de tus sucursales y organiza la información de tu equipo en sitio o en campo. Reportes personalizados con firma de conformidad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   0. TOKENS — idénticos a CCTV
+   ============================================================ */
+:root{
+  --bg:#05070a;
+  --surface:#0b1119;
+  --surface-2:#101822;
+  --line:rgba(255,255,255,.07);
+  --line-2:rgba(255,255,255,.15);
+  --text:#e9f1f7;
+  --dim:#93a4b3;
+  --mute:#5f6e7c;
+  --accent:#2fe3ff;
+  --accent-soft:rgba(47,227,255,.13);
+  --accent-ink:#02131a;
+  --glow:rgba(47,227,255,.30);
+  --warn:#ffb020;
+  --warn-soft:rgba(255,176,32,.10);
+  --warn-line:rgba(255,176,32,.35);
+  --ok:#63ff9a;
+  --ok-soft:rgba(99,255,154,.13);
+  --brand-red:#e60012;
+  --r-sm:10px; --r:16px; --r-lg:22px;
+  --pad-inline:1.15rem;
+  --ease:cubic-bezier(.22,.9,.24,1);
+  --fd:"Space Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --safe-b:env(safe-area-inset-bottom, 0px);
+  --safe-t:env(safe-area-inset-top, 0px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:72px}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--fd);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+  padding-bottom:calc(76px + var(--safe-b));
+}
+img,svg{display:block;max-width:100%}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+::selection{background:var(--accent);color:var(--accent-ink)}
+
+/* ============================================================
+   1. PRIMITIVES + ICONS
+   ============================================================ */
+.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-inline:var(--pad-inline)}
+.ico{display:inline-block;width:1em;height:1em;flex:0 0 auto;vertical-align:middle}
+
+.eyebrow{
+  font-family:var(--fm);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:.6rem;margin:0 0 1rem;
+}
+.eyebrow::before{content:"";width:20px;height:1px;background:currentColor;opacity:.7;flex:0 0 auto}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.025em;line-height:1.08}
+h1{font-size:clamp(2.1rem,8.5vw,2.9rem);font-weight:700;letter-spacing:-.035em;line-height:1.05}
+h2{font-size:clamp(1.65rem,6.5vw,2.2rem);line-height:1.1}
+h3{font-size:1.08rem;letter-spacing:-.015em;line-height:1.22}
+p{margin:0}
+.lede{color:var(--dim);font-size:1rem;max-width:60ch;line-height:1.6}
+.sec{padding-block:56px;position:relative}
+.sec-head{max-width:820px;margin-bottom:1.8rem}
+.sec-head .lede{margin-top:.9rem}
+
+.btn{
+  --pad:.95rem 1.35rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  padding:var(--pad);min-height:52px;border-radius:999px;
+  font-weight:600;font-size:.95rem;letter-spacing:-.01em;
+  transition:transform .3s var(--ease),background .3s var(--ease),color .3s var(--ease),box-shadow .3s var(--ease);
+  -webkit-user-select:none;user-select:none;
+}
+.btn:active{transform:scale(.97)}
+.btn--primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 30px -14px var(--glow)}
+.btn--primary:hover{box-shadow:0 10px 40px -8px var(--glow);transform:translateY(-2px)}
+.btn--ghost{border:1px solid var(--line-2);color:var(--text);background:rgba(255,255,255,.02)}
+.btn--ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.btn .arw{transition:transform .35s var(--ease);flex:0 0 auto}
+.btn:hover .arw{transform:translateX(4px)}
+.btn--block{width:100%}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0ms)}
+.reveal.is-in{opacity:1;transform:none}
+
+/* ============================================================
+   2. TOPBAR
+   ============================================================ */
+.scrollbar{position:fixed;inset:0 0 auto 0;height:2px;background:rgba(255,255,255,.05);z-index:120}
+.scrollbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#fff);box-shadow:0 0 12px var(--glow);transition:width .1s linear}
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:110;
+  padding-top:var(--safe-t);
+  height:calc(60px + var(--safe-t));
+  display:flex;align-items:center;
+  background:linear-gradient(180deg,rgba(5,7,10,.9),rgba(5,7,10,.4) 70%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:700;letter-spacing:.16em;font-size:.72rem}
+.brand i{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);animation:blink 2.2s steps(1) infinite;flex:0 0 auto}
+@keyframes blink{0%,68%{opacity:1}69%,100%{opacity:.25}}
+.topbar .btn{--pad:.55rem 1rem;min-height:40px;font-size:.78rem}
+
+/* ============================================================
+   3. HERO — checador interactivo
+   ============================================================ */
+.hero{
+  position:relative;overflow:hidden;
+  padding-top:calc(84px + var(--safe-t));
+  padding-bottom:32px;
+  min-height:100dvh;
+  display:flex;align-items:center;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(60% 55% at 78% 18%, var(--accent-soft), transparent 62%),
+    radial-gradient(80% 60% at 12% 88%, rgba(255,255,255,.035), transparent 60%);
+}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.28;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 78%);
+  -webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 78%);
+}
+.hero .wrap{position:relative;z-index:2;width:100%}
+.hero__copy{display:flex;flex-direction:column;gap:1.1rem}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero__actions{display:flex;flex-direction:column;gap:.65rem;margin-top:.6rem}
+.hero__note{
+  font-size:.82rem;color:var(--mute);max-width:44ch;line-height:1.5;
+  padding-left:.85rem;border-left:1px solid var(--line-2);
+}
+
+/* Demo container — switch en sitio / en campo */
+.demo{margin-top:.6rem}
+.demo__switch{
+  position:relative;display:inline-flex;padding:4px;border-radius:999px;
+  border:1px solid var(--line-2);background:rgba(255,255,255,.03);
+  margin-bottom:.9rem;align-self:flex-start;
+}
+.demo__thumb{
+  position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;
+  background:var(--accent);transition:transform .45s var(--ease),background .45s var(--ease);
+}
+.demo__switch[data-mode="field"] .demo__thumb{transform:translateX(100%)}
+.demo__btn{
+  position:relative;z-index:1;padding:.55rem 1.1rem;min-height:42px;border-radius:999px;
+  font-family:var(--fm);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);transition:color .3s var(--ease);white-space:nowrap;
+}
+.demo__switch[data-mode="onsite"] .demo__btn[data-mode="onsite"],
+.demo__switch[data-mode="field"] .demo__btn[data-mode="field"]{color:var(--accent-ink)}
+
+.demo__stage{position:relative;min-height:420px}
+.demo__view{
+  position:absolute;inset:0;
+  opacity:0;transform:translateY(10px);pointer-events:none;
+  transition:opacity .5s var(--ease),transform .5s var(--ease);
+}
+.demo__view.is-active{position:relative;opacity:1;transform:none;pointer-events:auto}
+
+/* Checador terminal */
+.checador{
+  position:relative;border-radius:var(--r);overflow:hidden;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface) 70%);
+  border:1px solid var(--line-2);
+  padding:1.1rem;
+  display:flex;flex-direction:column;gap:1rem;
+  box-shadow:0 24px 60px -30px #000, 0 0 0 1px rgba(255,255,255,.03);
+}
+.checador__head{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.checador__kicker{
+  font-family:var(--fm);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+}
+.checador__status{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ok);
+  padding:.25rem .5rem;border-radius:999px;border:1px solid rgba(99,255,154,.25);
+  background:var(--ok-soft);
+}
+.checador__status i{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.6s steps(1) infinite}
+
+.checador__clock{
+  font-family:var(--fm);font-size:clamp(2.6rem,12vw,3.6rem);
+  font-weight:500;letter-spacing:-.04em;line-height:1;
+  text-align:center;color:var(--text);
+  text-shadow:0 0 30px rgba(47,227,255,.15);
+  padding:.4rem 0;
+}
+.checador__date{
+  font-family:var(--fm);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mute);text-align:center;margin-top:-.5rem;
+}
+.checador__divider{height:1px;background:var(--line);margin:.2rem 0}
+
+.checador__recent-head{
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem;
+}
+.checador__recent-head span:first-child{
+  font-family:var(--fm);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+}
+.checador__recent-head span:last-child{
+  font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);
+}
+.checador__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;max-height:180px;overflow:hidden}
+.checador__item{
+  display:grid;grid-template-columns:32px 1fr auto;gap:.6rem;align-items:center;
+  padding:.5rem .4rem;border-radius:8px;
+  animation:itemIn .4s var(--ease);
+}
+.checador__item + .checador__item{border-top:1px solid rgba(255,255,255,.04)}
+@keyframes itemIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.checador__av{
+  width:32px;height:32px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);
+  font-family:var(--fm);font-weight:700;font-size:.72rem;
+}
+.checador__item[data-state="pending"] .checador__av{background:rgba(255,176,32,.15);color:var(--warn)}
+.checador__item[data-state="pending"] .checador__time{color:var(--warn)}
+.checador__name{font-size:.82rem;font-weight:500;color:var(--text);line-height:1.2}
+.checador__tag{font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-top:.1rem;display:block}
+.checador__time{
+  font-family:var(--fm);font-size:.72rem;color:var(--accent);
+  display:flex;align-items:center;gap:.25rem;
+}
+.checador__time .ico{width:11px;height:11px}
+
+.checador__btn{
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  width:100%;padding:1rem;min-height:56px;border-radius:12px;
+  background:var(--accent);color:var(--accent-ink);
+  font-weight:600;font-size:.95rem;letter-spacing:-.01em;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease);
+  box-shadow:0 10px 30px -10px var(--glow);
+}
+.checador__btn:hover{transform:translateY(-1px);box-shadow:0 14px 40px -10px var(--glow)}
+.checador__btn:active{transform:scale(.98)}
+.checador__btn .ico{width:20px;height:20px}
+
+/* Phone mockup (modo campo) */
+.fieldphone{
+  position:relative;width:min(280px,80%);margin-inline:auto;aspect-ratio:9/17;
+  border-radius:34px;border:6px solid #1b2430;background:#080c11;
+  box-shadow:0 30px 60px -25px #000, 0 0 0 1px rgba(255,255,255,.06);
+  overflow:hidden;
+}
+.fieldphone__notch{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  width:32%;height:6px;border-radius:99px;background:#1b2430;z-index:5;
+}
+.fieldphone__screen{
+  position:absolute;inset:0;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.fieldphone__header{
+  padding:2rem .9rem .6rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(47,227,255,.12),transparent);
+}
+.fieldphone__header span{
+  font-family:var(--fm);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+}
+.fieldphone__map{
+  position:relative;height:120px;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(47,227,255,.15), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(47,227,255,.10), transparent 50%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 1px, transparent 1px 22px),
+    #0a1119;
+  border-block:1px solid var(--line);
+}
+.fieldphone__pin{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:26px;height:26px;border-radius:50%;
+  background:var(--accent);color:var(--accent-ink);
+  display:grid;place-items:center;
+  box-shadow:0 0 0 6px rgba(47,227,255,.18), 0 0 24px var(--glow);
+  animation:pinPulse 2s ease-in-out infinite;
+}
+.fieldphone__pin .ico{width:14px;height:14px}
+@keyframes pinPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+.fieldphone__pinlabel{
+  position:absolute;left:50%;top:calc(50% + 22px);transform:translateX(-50%);
+  font-family:var(--fm);font-size:.44rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);white-space:nowrap;
+  background:rgba(0,0,0,.6);padding:.15rem .35rem;border-radius:3px;
+}
+.fieldphone__body{padding:.9rem .9rem .6rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.fieldphone__name{font-size:.85rem;font-weight:600;color:var(--text);line-height:1.2}
+.fieldphone__meta{font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.fieldphone__btn{
+  margin-top:auto;padding:.85rem;min-height:48px;border-radius:10px;
+  background:var(--accent);color:var(--accent-ink);
+  font-weight:600;font-size:.82rem;
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  transition:transform .2s var(--ease);
+}
+.fieldphone__btn:active{transform:scale(.97)}
+.fieldphone__btn .ico{width:15px;height:15px}
+.fieldphone__foot{
+  padding:.5rem .9rem .9rem;
+  font-family:var(--fm);font-size:.44rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mute);text-align:center;
+}
+
+/* toast check-in */
+.checkin-toast{
+  position:fixed;left:50%;bottom:calc(100px + var(--safe-b));transform:translateX(-50%) translateY(20px);
+  background:var(--accent);color:var(--accent-ink);
+  padding:.75rem 1.1rem;border-radius:12px;
+  font-weight:600;font-size:.88rem;
+  display:flex;align-items:center;gap:.55rem;
+  box-shadow:0 16px 40px -10px var(--glow);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+  z-index:200;white-space:nowrap;
+}
+.checkin-toast.is-visible{opacity:1;transform:translateX(-50%) translateY(0)}
+.checkin-toast .ico{width:18px;height:18px}
+
+/* ============================================================
+   4. HIKVISION TRUST BAND
+   ============================================================ */
+.brand-trust{
+  position:relative;overflow:hidden;
+  padding-block:clamp(26px,4.5vw,44px);
+  border-block:1px solid var(--line);
+  background:
+    radial-gradient(70% 180% at 0% 50%, rgba(230,0,18,.08), transparent 55%),
+    linear-gradient(180deg,rgba(255,255,255,.02),transparent);
+}
+.brand-trust::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.4;
+  background-image:linear-gradient(90deg,rgba(230,0,18,.15) 1px,transparent 1px);
+  background-size:180px 100%;
+  mask-image:linear-gradient(90deg,#000,transparent 60%);
+  -webkit-mask-image:linear-gradient(90deg,#000,transparent 60%);
+}
+.brand-trust__inner{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;gap:1.15rem;
+}
+.brand-trust__label{flex:0 0 auto}
+.brand-trust__kicker{
+  display:block;
+  font-family:var(--fm);font-size:.56rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);margin-bottom:.4rem;
+}
+.brand-trust__logo{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-weight:800;font-size:1.5rem;letter-spacing:.02em;line-height:1;
+  color:#fff;
+}
+.brand-trust__mark{
+  width:15px;height:15px;border-radius:3px;flex:0 0 auto;
+  background:var(--brand-red);
+  box-shadow:0 0 16px rgba(230,0,18,.55), inset 0 0 0 1px rgba(255,255,255,.15);
+}
+.brand-trust__word{letter-spacing:.03em}
+.brand-trust__pitch{
+  flex:1;min-width:0;
+  font-size:.88rem;color:var(--dim);line-height:1.55;max-width:60ch;
+}
+.brand-trust__pitch strong{color:var(--text);font-weight:600}
+.brand-trust__badges{
+  display:flex;flex-wrap:wrap;gap:.4rem .5rem;
+  list-style:none;margin:0;padding:0;flex:0 0 auto;
+}
+.brand-trust__badges li{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-family:var(--fm);font-size:.54rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--dim);
+  padding:.35rem .65rem;border:1px solid var(--line-2);border-radius:999px;
+  background:rgba(255,255,255,.02);
+}
+.brand-trust__badges .ico{width:12px;height:12px;color:var(--accent)}
+
+/* ============================================================
+   5. CARRUSEL — funciones
+   ============================================================ */
+.carousel{
+  display:flex;gap:12px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline:var(--pad-inline);
+  padding:0 var(--pad-inline) 1rem;
+  margin-inline:calc(var(--pad-inline) * -1);
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+}
+.carousel::-webkit-scrollbar{display:none}
+.carousel > *{
+  flex:0 0 min(82vw, 340px);
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+.carousel-hint{
+  display:flex;align-items:center;gap:.5rem;margin-top:-.25rem;
+  font-family:var(--fm);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
+}
+
+.card{
+  position:relative;overflow:hidden;border-radius:var(--r-lg);
+  background:linear-gradient(165deg,var(--surface-2),var(--surface) 62%);
+  border:1px solid var(--line);padding:1.15rem;
+  display:flex;flex-direction:column;gap:.6rem;
+  transition:border-color .4s var(--ease),transform .4s var(--ease);
+}
+.card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:radial-gradient(90% 80% at 50% 0%,var(--accent-soft),transparent 68%);
+  transition:opacity .4s var(--ease);
+}
+.card:hover{border-color:var(--line-2)}
+.card:hover::before{opacity:1}
+.card__head{
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;margin-bottom:.2rem;
+}
+.card__ico{
+  width:42px;height:42px;border-radius:11px;
+  display:grid;place-items:center;flex:0 0 auto;
+  background:var(--accent-soft);color:var(--accent);
+  border:1px solid rgba(47,227,255,.22);
+  transition:background .3s var(--ease),color .3s var(--ease),transform .3s var(--ease);
+}
+.card__ico .ico{width:21px;height:21px}
+.card:hover .card__ico{background:var(--accent);color:var(--accent-ink);transform:scale(1.05)}
+.card h3{position:relative;z-index:1;font-size:1.02rem}
+.card p{position:relative;z-index:1;font-size:.85rem;color:var(--dim);line-height:1.5}
+.card .idx{
+  font-family:var(--fm);font-size:.6rem;letter-spacing:.16em;color:var(--mute);
+  position:relative;z-index:1;
+}
+.card__viz{position:relative;z-index:1;margin-top:.6rem;min-height:70px;display:flex;align-items:flex-end}
+.card__badge{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.28rem .55rem;border-radius:6px;
+  border:1px solid var(--line-2);color:var(--dim);
+  background:rgba(255,255,255,.02);
+}
+.card__badge .ico{width:10px;height:10px;color:var(--accent)}
+.card__badge--warn{border-color:var(--warn-line);color:var(--warn);background:var(--warn-soft)}
+.card__badge--warn .ico{color:var(--warn)}
+
+/* mini viz compartidos */
+.viz-shift{display:flex;align-items:center;gap:.35rem;width:100%}
+.viz-shift__bar{
+  flex:1;height:22px;border-radius:6px;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);
+  position:relative;overflow:hidden;
+}
+.viz-shift__fill{
+  position:absolute;top:0;bottom:0;left:0;width:70%;
+  background:linear-gradient(90deg,var(--accent),rgba(47,227,255,.4));
+}
+.viz-shift__label{
+  font-family:var(--fm);font-size:.5rem;letter-spacing:.08em;color:var(--mute);
+  min-width:34px;text-align:right;
+}
+
+.viz-branches{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;width:100%}
+.viz-branches span{
+  height:24px;border-radius:6px;background:rgba(255,255,255,.06);
+  border:1px solid var(--line);display:grid;place-items:center;
+  font-family:var(--fm);font-size:.5rem;color:var(--mute);
+}
+.viz-branches span:nth-child(1){background:var(--accent-soft);border-color:rgba(47,227,255,.35);color:var(--accent)}
+.viz-branches span:nth-child(2){background:rgba(255,176,32,.10);border-color:rgba(255,176,32,.28);color:var(--warn)}
+
+.viz-gear{
+  display:flex;gap:.4rem;flex-wrap:wrap;
+}
+.viz-gear span{
+  width:36px;height:36px;border-radius:9px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.04);border:1px solid var(--line-2);
+  color:var(--accent);
+}
+.viz-gear span .ico{width:16px;height:16px}
+.viz-gear span:nth-child(2){color:var(--warn)}
+
+/* ============================================================
+   6. VENTAJA COMPETITIVA — Reportes personalizados
+   ============================================================ */
+.diff{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  border:1px solid var(--line-2);
+  background:var(--surface);
+}
+
+/* Lado base */
+.diff__base{
+  padding:1.4rem;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface));
+  display:flex;
+  flex-direction:column;
+  gap:.8rem;
+}
+.diff__badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  font-family:var(--fm);
+  font-size:.54rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--dim);
+  padding:.3rem .6rem;
+  border-radius:999px;
+  border:1px solid var(--line-2);
+  background:rgba(255,255,255,.02);
+  align-self:flex-start;
+}
+.diff__badge-mark{
+  width:8px;height:8px;border-radius:2px;
+  background:var(--brand-red);
+  box-shadow:0 0 10px rgba(230,0,18,.4);
+}
+.diff__base h3{font-size:1.2rem;margin:0;}
+.diff__base p{color:var(--dim);font-size:.88rem;line-height:1.55;}
+.diff__feats{
+  list-style:none;
+  margin:.4rem 0 0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+}
+.diff__feats li{
+  display:flex;
+  align-items:flex-start;
+  gap:.5rem;
+  font-size:.82rem;
+  color:var(--text);
+  line-height:1.4;
+}
+.diff__feats li .ico{
+  width:14px;height:14px;
+  color:var(--accent);
+  margin-top:.1rem;
+  flex:0 0 auto;
+}
+.diff__note{
+  font-size:.76rem !important;
+  color:var(--mute) !important;
+  padding-top:.6rem;
+  border-top:1px solid var(--line);
+  margin-top:.4rem;
+  font-style:italic;
+}
+
+/* Flecha conectora */
+.diff__arrow{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+  padding:.9rem 1rem;
+  background:linear-gradient(180deg, rgba(47,227,255,.06), transparent);
+  border-block:1px solid var(--line);
+  color:var(--accent);
+}
+.diff__arrow svg{width:32px;height:32px;}
+.diff__arrow span{
+  font-family:var(--fm);
+  font-size:.54rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  white-space:nowrap;
+}
+
+/* Lado herramienta */
+.diff__tool{
+  padding:1.4rem;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface) 62%);
+  display:flex;
+  flex-direction:column;
+  gap:.8rem;
+  position:relative;
+  overflow:hidden;
+}
+.diff__tool::before{
+  content:"";
+  position:absolute;
+  inset:auto -20% -40% auto;
+  width:70%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--accent-soft),transparent 66%);
+  pointer-events:none;
+}
+.diff__badge--accent{
+  color:var(--accent);
+  border-color:rgba(47,227,255,.35);
+  background:var(--accent-soft);
+}
+.diff__tool h3{font-size:1.2rem;margin:0;position:relative;z-index:1;}
+.diff__tool > p{position:relative;z-index:1;}
+
+/* Flujo visual */
+.diff__flow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.4rem;
+  padding:.9rem .8rem;
+  border-radius:var(--r-sm);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.02);
+  position:relative;
+  z-index:1;
+}
+.diff__flow-step{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.35rem;
+  font-family:var(--fm);
+  font-size:.52rem;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--dim);
+  text-align:center;
+  line-height:1.3;
+}
+.diff__flow-ico{
+  width:34px;height:34px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  background:var(--accent-soft);
+  color:var(--accent);
+  border:1px solid rgba(47,227,255,.25);
+}
+.diff__flow-ico .ico{width:16px;height:16px;}
+.diff__flow-sep{
+  color:var(--mute);
+  font-family:var(--fm);
+  font-size:.8rem;
+  opacity:.6;
+}
+
+/* Preview del reporte */
+.diff__preview{
+  position:relative;
+  z-index:1;
+  padding:.6rem;
+  border-radius:var(--r-sm);
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--line-2);
+}
+.diff__paper{
+  background:#f4f6f8;
+  color:#1a1f24;
+  border-radius:6px;
+  padding:.75rem .7rem;
+  font-family:var(--fd);
+  box-shadow:0 8px 20px -10px rgba(0,0,0,.5);
+}
+.diff__paper-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-bottom:.5rem;
+  border-bottom:1px solid rgba(0,0,0,.08);
+  margin-bottom:.55rem;
+}
+.diff__paper-logo{
+  font-weight:800;
+  font-size:.58rem;
+  letter-spacing:.12em;
+  color:#0b1119;
+}
+.diff__paper-date{
+  font-family:var(--fm);
+  font-size:.48rem;
+  letter-spacing:.06em;
+  color:#6b7a87;
+}
+.diff__paper-name{
+  display:flex;
+  align-items:center;
+  gap:.55rem;
+  margin-bottom:.55rem;
+}
+.diff__paper-avatar{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:#0b1119;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-family:var(--fm);
+  font-size:.56rem;
+  font-weight:700;
+  flex:0 0 auto;
+}
+.diff__paper-name strong{
+  display:block;
+  font-size:.68rem;
+  color:#0b1119;
+  line-height:1.2;
+}
+.diff__paper-name span{
+  font-family:var(--fm);
+  font-size:.48rem;
+  letter-spacing:.04em;
+  color:#6b7a87;
+}
+.diff__paper-table{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  background:rgba(0,0,0,.05);
+  border-radius:4px;
+  overflow:hidden;
+  margin-bottom:.5rem;
+}
+.diff__paper-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1.4fr;
+  gap:.3rem;
+  padding:.32rem .45rem;
+  background:#fff;
+  font-size:.54rem;
+  color:#1a1f24;
+  font-family:var(--fm);
+  letter-spacing:.02em;
+}
+.diff__paper-row:nth-child(even){background:#fafbfc;}
+.diff__paper-row .ok{color:#0f7b3c;font-weight:600;}
+.diff__paper-row .warn{color:#b56a00;font-weight:600;}
+.diff__paper-total{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:.4rem .45rem;
+  background:#e9eef2;
+  border-radius:4px;
+  font-size:.56rem;
+  margin-bottom:.55rem;
+}
+.diff__paper-total strong{
+  font-family:var(--fm);
+  font-size:.62rem;
+  color:#0b1119;
+}
+.diff__paper-sign{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.2rem;
+  padding-top:.35rem;
+}
+.diff__paper-sign-line{
+  width:70%;
+  height:1px;
+  background:#1a1f24;
+  opacity:.4;
+}
+.diff__paper-sign span{
+  font-family:var(--fm);
+  font-size:.44rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#6b7a87;
+}
+
+/* Tablet y desktop */
+@media (min-width:720px){
+  .diff{flex-direction:row;align-items:stretch;}
+  .diff__base{flex:1 1 42%;padding:2rem;}
+  .diff__arrow{
+    flex:0 0 auto;
+    border-block:0;
+    border-inline:1px solid var(--line);
+    padding:1rem .8rem;
+  }
+  .diff__arrow svg{transform:rotate(-90deg);width:28px;height:28px;}
+  .diff__arrow span{display:none;}
+  .diff__tool{flex:1 1 58%;padding:2rem;}
+  .diff__preview{max-width:320px;}
+}
+@media (min-width:1040px){
+  .diff__base{padding:2.5rem;}
+  .diff__tool{padding:2.5rem;}
+  .diff__paper{padding:1rem .9rem;}
+  .diff__paper-row{font-size:.58rem;padding:.38rem .5rem;}
+}
+
+/* ============================================================
+   7. CÓMO FUNCIONA (steps)
+   ============================================================ */
+.steps{display:flex;flex-direction:column}
+.step{
+  display:grid;grid-template-columns:54px 1fr;gap:1.1rem;
+  padding-block:1.1rem;position:relative;
+}
+.step::before{
+  content:"";position:absolute;left:26px;top:0;bottom:0;width:1px;background:var(--line-2);
+}
+.step:first-child::before{top:27px}
+.step:last-child::before{bottom:50%}
+.step__n{
+  width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--bg);border:1px solid var(--line-2);color:var(--accent);
+  position:relative;z-index:1;align-self:start;
+  transition:border-color .4s var(--ease),box-shadow .4s var(--ease);
+}
+.step__n .ico{width:22px;height:22px}
+.step.is-in .step__n{border-color:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
+.step__num{
+  display:block;font-family:var(--fm);font-size:.54rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mute);margin-bottom:.3rem;
+}
+.step__body h4{font-size:.98rem;margin-bottom:.3rem;font-weight:600;line-height:1.3}
+.step__body p{font-size:.84rem;color:var(--dim);line-height:1.5}
+
+/* ============================================================
+   8. ROLES (tabs interactivos)
+   ============================================================ */
+.rol{display:flex;flex-direction:column;gap:1.2rem}
+.rol__tabs{
+  display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.35rem;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+  margin-inline:calc(var(--pad-inline) * -1);padding-inline:var(--pad-inline);
+}
+.rol__tabs::-webkit-scrollbar{display:none}
+.rol__tab{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.65rem .95rem;min-height:44px;
+  border:1px solid var(--line-2);border-radius:999px;
+  background:rgba(255,255,255,.02);color:var(--dim);
+  font-size:.82rem;white-space:nowrap;flex:0 0 auto;
+  transition:all .3s var(--ease);
+}
+.rol__tab .ico{width:15px;height:15px;flex:0 0 auto;opacity:.75;transition:opacity .3s var(--ease)}
+.rol__tab[aria-selected="true"]{
+  background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600;
+}
+.rol__tab[aria-selected="true"] .ico{opacity:1}
+
+.rol__panel{
+  position:relative;border-radius:var(--r-lg);border:1px solid var(--line);
+  background:linear-gradient(170deg,var(--surface-2),var(--surface));
+  padding:1.4rem;overflow:hidden;
+}
+.rol__panel::before{
+  content:"";position:absolute;inset:-40% -20% auto auto;width:70%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,var(--accent-soft),transparent 66%);pointer-events:none;
+}
+.rol__panel-body{position:relative;z-index:1;animation:panelIn .5s var(--ease)}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rol__hero{display:flex;align-items:center;gap:.85rem;margin-bottom:.85rem}
+.rol__ico{
+  width:54px;height:54px;border-radius:15px;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);
+  border:1px solid rgba(47,227,255,.25);
+}
+.rol__ico .ico{width:27px;height:27px}
+.rol__hero h3{font-size:1.25rem;margin:0}
+.rol__lead{color:var(--dim);font-size:.9rem;line-height:1.55;margin-bottom:1rem}
+.rol__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.rol__list li{
+  display:flex;align-items:flex-start;gap:.6rem;
+  font-size:.86rem;color:var(--text);line-height:1.4;
+}
+.rol__list li .ico{width:15px;height:15px;color:var(--accent);margin-top:.15rem;flex:0 0 auto}
+
+/* ============================================================
+   9. MODALIDADES (tabs + panel)
+   ============================================================ */
+.mod{display:flex;flex-direction:column;gap:1.2rem}
+.mod__tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.mod__tab{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;
+  padding:.85rem .5rem;min-height:82px;
+  border:1px solid var(--line-2);border-radius:12px;
+  background:rgba(255,255,255,.02);color:var(--dim);
+  font-size:.72rem;font-weight:500;text-align:center;line-height:1.2;
+  transition:all .3s var(--ease);
+}
+.mod__tab .ico{width:22px;height:22px;color:var(--dim);transition:color .3s var(--ease)}
+.mod__tab[aria-selected="true"]{
+  background:var(--accent-soft);border-color:var(--accent);color:var(--text);
+  font-weight:600;
+}
+.mod__tab[aria-selected="true"] .ico{color:var(--accent)}
+
+.mod__panel{
+  position:relative;border-radius:var(--r-lg);border:1px solid var(--line);
+  background:linear-gradient(170deg,var(--surface-2),var(--surface));
+  padding:1.4rem;overflow:hidden;
+}
+.mod__panel-body{position:relative;z-index:1;animation:panelIn .5s var(--ease)}
+.mod__hero{display:flex;align-items:center;gap:.85rem;margin-bottom:.85rem}
+.mod__ico{
+  width:54px;height:54px;border-radius:15px;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);
+  border:1px solid rgba(47,227,255,.25);
+}
+.mod__ico .ico{width:27px;height:27px}
+.mod__hero h3{font-size:1.2rem;margin:0}
+.mod__lead{color:var(--dim);font-size:.9rem;line-height:1.55;margin-bottom:1rem}
+.mod__feats{display:flex;flex-wrap:wrap;gap:.4rem}
+.mod__feats .tag{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-family:var(--fm);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:.4rem .65rem;border-radius:7px;border:1px solid var(--line-2);
+  color:var(--text);background:rgba(255,255,255,.03);
+  animation:tagIn .45s var(--ease) backwards;
+}
+.mod__feats .tag .ico{width:11px;height:11px;color:var(--accent)}
+@keyframes tagIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Privacy note (biometría) */
+.privacy-note{
+  margin-top:1.4rem;padding:.9rem 1rem;border-radius:var(--r-sm);
+  border:1px dashed var(--line-2);
+  display:flex;gap:.75rem;align-items:flex-start;
+  font-size:.76rem;color:var(--dim);line-height:1.55;
+  background:rgba(255,255,255,.015);
+}
+.privacy-note .ico{width:18px;height:18px;color:var(--warn);flex:0 0 auto;margin-top:.1rem}
+.privacy-note strong{color:var(--text);font-weight:600}
+
+/* ============================================================
+   10. CALLOUT (reportes / nómina)
+   ============================================================ */
+.callout{
+  position:relative;overflow:hidden;
+  border-radius:var(--r-lg);
+  border:1px solid var(--warn-line);
+  background:
+    radial-gradient(80% 120% at 0% 0%, var(--warn-soft), transparent 60%),
+    linear-gradient(170deg,var(--surface-2),var(--surface));
+  padding:1.4rem;
+  display:flex;flex-direction:column;gap:.8rem;
+}
+.callout__head{display:flex;align-items:center;gap:.75rem}
+.callout__ico{
+  width:44px;height:44px;border-radius:11px;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:var(--warn-soft);color:var(--warn);
+  border:1px solid var(--warn-line);
+}
+.callout__ico .ico{width:22px;height:22px}
+.callout h3{font-size:1.05rem;margin:0;line-height:1.25}
+.callout p{color:var(--dim);font-size:.88rem;line-height:1.55}
+.callout__strong{
+  display:block;font-size:.88rem;color:var(--text);font-weight:600;
+  padding-top:.6rem;border-top:1px solid rgba(255,176,32,.2);
+}
+
+/* ============================================================
+   11. LEGAL BLOCK
+   ============================================================ */
+.legal{position:relative;display:flex;flex-direction:column;gap:1.5rem}
+.legal__summary{
+  padding:1.2rem 1.2rem;border-radius:var(--r);
+  border:1px solid var(--line-2);
+  background:linear-gradient(170deg,var(--surface-2),var(--surface));
+  font-size:.94rem;color:var(--text);line-height:1.65;
+}
+.legal__summary strong{color:var(--accent);font-weight:600}
+
+.legal__timeline{
+  position:relative;
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;
+  padding:1.4rem 1.2rem;
+  border-radius:var(--r);border:1px solid var(--line);
+  background:rgba(255,255,255,.015);
+}
+.legal__timeline::before{
+  content:"";position:absolute;left:12px;right:12px;top:calc(1.4rem + 27px);
+  height:1px;background:linear-gradient(90deg,var(--accent),var(--line-2));
+}
+.legal__milestone{display:flex;flex-direction:column;gap:.4rem;position:relative;z-index:1}
+.legal__milestone .dot{
+  width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--bg);border:1px solid var(--accent);color:var(--accent);
+  box-shadow:0 0 0 4px var(--accent-soft);
+}
+.legal__milestone .dot .ico{width:22px;height:22px}
+.legal__milestone:nth-child(2) .dot{border-color:var(--warn);color:var(--warn);box-shadow:0 0 0 4px var(--warn-soft)}
+.legal__date{
+  font-family:var(--fm);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  margin-top:.4rem;
+}
+.legal__milestone:nth-child(2) .legal__date{color:var(--warn)}
+.legal__milestone strong{font-size:.86rem;color:var(--text);font-weight:600;line-height:1.3}
+.legal__milestone span{font-size:.78rem;color:var(--dim);line-height:1.45}
+
+.legal__grid{display:grid;grid-template-columns:1fr;gap:1rem;}
+.legal__col{
+  padding:1.1rem 1.1rem;border-radius:var(--r);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.02);
+}
+.legal__col h4{
+  font-size:.72rem;font-family:var(--fm);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:.65rem;
+  display:flex;align-items:center;gap:.4rem;
+}
+.legal__col h4 .ico{width:14px;height:14px}
+.legal__col p{font-size:.86rem;color:var(--text);line-height:1.55}
+.legal__col p + p{margin-top:.5rem}
+.legal__col p strong{color:var(--text);font-weight:600}
+.legal__col--warn h4{color:var(--warn)}
+.legal__col--warn h4 .ico{color:var(--warn)}
+
+/* Jornada chart */
+.jornada{
+  padding:1.2rem;border-radius:var(--r);
+  border:1px solid var(--line);background:rgba(255,255,255,.02);
+}
+.jornada__head{
+  display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;
+}
+.jornada__head .ico{width:18px;height:18px;color:var(--accent)}
+.jornada__head h4{
+  font-size:.72rem;font-family:var(--fm);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text);margin:0;flex:1;font-weight:500;
+}
+.jornada__head span{
+  font-family:var(--fm);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);
+}
+.jornada__chart{display:flex;flex-direction:column;gap:.55rem}
+.jornada__row{
+  display:grid;grid-template-columns:44px 1fr 40px;gap:.6rem;align-items:center;
+}
+.jornada__year{
+  font-family:var(--fm);font-size:.66rem;color:var(--mute);letter-spacing:.05em;
+}
+.jornada__row.is-current .jornada__year{color:var(--accent);font-weight:600}
+.jornada__row.is-final .jornada__year{color:var(--text);font-weight:600}
+.jornada__bar{
+  height:16px;border-radius:5px;background:rgba(255,255,255,.05);
+  position:relative;overflow:hidden;border:1px solid var(--line);
+}
+.jornada__fill{
+  position:absolute;top:0;bottom:0;left:0;
+  background:linear-gradient(90deg,rgba(47,227,255,.5),var(--accent));
+  width:0;transition:width 1.2s var(--ease);border-radius:4px;
+}
+.jornada__row.is-current .jornada__fill{background:linear-gradient(90deg,rgba(47,227,255,.7),var(--accent))}
+.jornada__row.is-final .jornada__fill{background:linear-gradient(90deg,var(--ok),rgba(99,255,154,.5))}
+.jornada__val{
+  font-family:var(--fm);font-size:.7rem;color:var(--text);text-align:right;letter-spacing:.02em;
+}
+.jornada__row.is-current .jornada__val{color:var(--accent)}
+.jornada__row.is-final .jornada__val{color:var(--ok)}
+.jornada__note{
+  margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--line);
+  font-size:.74rem;color:var(--mute);line-height:1.5;
+}
+
+/* Disclaimers */
+.disclaimers{
+  display:flex;flex-direction:column;gap:.5rem;
+  padding:1.1rem 1.15rem;border-radius:var(--r);
+  border:1px dashed var(--warn-line);
+  background:rgba(255,176,32,.03);
+}
+.disclaimers h4{
+  font-size:.66rem;font-family:var(--fm);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--warn);display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;
+}
+.disclaimers h4 .ico{width:14px;height:14px}
+.disclaimers ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.disclaimers li{
+  display:flex;align-items:flex-start;gap:.5rem;
+  font-size:.78rem;color:var(--dim);line-height:1.45;
+}
+.disclaimers li::before{
+  content:"×";color:var(--warn);font-weight:700;font-family:var(--fm);flex:0 0 auto;line-height:1.2;
+}
+
+/* ============================================================
+   12. ACCORDION (condiciones + FAQ)
+   ============================================================ */
+.spec{border-top:1px solid var(--line)}
+.spec details{border-bottom:1px solid var(--line)}
+.spec summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;gap:.85rem;
+  padding:1.1rem .2rem;min-height:56px;
+  font-weight:500;font-size:.95rem;line-height:1.3;
+}
+.spec summary::-webkit-details-marker{display:none}
+.spec__ico{width:18px;height:18px;color:var(--accent);flex:0 0 auto}
+.spec summary .n{font-family:var(--fm);font-size:.55rem;letter-spacing:.12em;color:var(--mute);flex:0 0 auto}
+.spec__title{flex:1;min-width:0}
+.spec summary .plus{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2);
+  display:grid;place-items:center;flex:0 0 auto;position:relative;
+  transition:background .3s var(--ease),border-color .3s var(--ease),transform .35s var(--ease);
+}
+.spec summary .plus::before,.spec summary .plus::after{
+  content:"";position:absolute;background:currentColor;transition:opacity .3s var(--ease);
+}
+.spec summary .plus::before{width:10px;height:1.5px}
+.spec summary .plus::after{width:1.5px;height:10px}
+.spec details[open] summary .plus{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:rotate(90deg)}
+.spec details[open] summary .plus::after{opacity:0}
+.spec__body{
+  padding:0 .2rem 1.2rem 3.2rem;color:var(--dim);font-size:.86rem;line-height:1.65;
+  animation:panelIn .4s var(--ease);
+}
+.spec-note{
+  margin-top:1.4rem;padding:.9rem 1rem;border-radius:var(--r-sm);
+  border:1px dashed var(--line-2);font-size:.74rem;color:var(--mute);line-height:1.6;
+}
+
+.faq{max-width:900px;margin-inline:auto}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  list-style:none;cursor:pointer;
+  padding:1.1rem .2rem;min-height:56px;
+  display:flex;gap:.9rem;align-items:flex-start;
+  font-weight:500;font-size:.95rem;line-height:1.4;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .q{font-family:var(--fm);font-size:.58rem;color:var(--mute);letter-spacing:.1em;padding-top:.28rem;flex:0 0 auto}
+.faq summary .plus{
+  margin-left:auto;flex:0 0 auto;width:26px;height:26px;position:relative;border-radius:50%;
+  border:1px solid var(--line-2);display:grid;place-items:center;margin-top:.15rem;
+  transition:background .3s var(--ease),transform .35s var(--ease),border-color .3s var(--ease);
+}
+.faq summary .plus::before,.faq summary .plus::after{content:"";position:absolute;background:currentColor}
+.faq summary .plus::before{width:9px;height:1.5px}
+.faq summary .plus::after{width:1.5px;height:9px;transition:opacity .3s}
+.faq details[open] summary .plus{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:rotate(90deg)}
+.faq details[open] summary .plus::after{opacity:0}
+.faq__a{padding:0 .2rem 1.2rem 2rem;color:var(--dim);font-size:.86rem;line-height:1.65;animation:panelIn .35s var(--ease)}
+.faq__a strong{color:var(--text);font-weight:600}
+
+/* ============================================================
+   13. CTA FINAL
+   ============================================================ */
+.cta{
+  position:relative;overflow:hidden;border-radius:var(--r-lg);border:1px solid var(--line-2);
+  background:linear-gradient(160deg,var(--surface-2),var(--surface) 70%);
+  padding:1.5rem;display:flex;flex-direction:column;gap:1.4rem;
+}
+.cta::before{
+  content:"";position:absolute;inset:auto -10% -60% auto;width:80%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,var(--accent-soft),transparent 65%);pointer-events:none;
+}
+.cta > *{position:relative;z-index:1}
+.cta__form{display:flex;flex-direction:column;gap:.7rem}
+.field{display:flex;flex-direction:column;gap:.3rem}
+.field label{font-family:var(--fm);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.field input,.field select{
+  width:100%;padding:.85rem .95rem;min-height:48px;border-radius:10px;
+  background:rgba(255,255,255,.04);border:1px solid var(--line-2);
+  color:var(--text);font-family:var(--fd);font-size:.92rem;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color .3s var(--ease),background .3s var(--ease);
+}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2393a4b3' d='M6 8L0 2l1.4-1.4L6 5.2 10.6.6 12 2z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);background:rgba(255,255,255,.06)}
+.field input::placeholder{color:var(--mute)}
+.cta__brief{
+  font-size:.76rem;color:var(--dim);background:rgba(255,255,255,.03);border:1px solid var(--line);
+  border-radius:10px;padding:.7rem .85rem;line-height:1.5;margin-top:.6rem;
+}
+.cta__brief b{color:var(--accent);font-weight:600}
+
+/* ============================================================
+   14. MOBILE CTA
+   ============================================================ */
+.mobile-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:100;
+  padding:.7rem var(--pad-inline) calc(.7rem + var(--safe-b));
+  background:rgba(5,7,10,.94);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--line-2);
+  display:flex;align-items:center;gap:.7rem;
+  transform:translateY(120%);
+  transition:transform .45s var(--ease);
+  box-shadow:0 -8px 30px -10px rgba(0,0,0,.6);
+}
+.mobile-cta.is-visible{transform:none}
+.mobile-cta__txt{flex:1;min-width:0;font-size:.78rem;line-height:1.25;color:var(--dim)}
+.mobile-cta__txt b{display:block;color:var(--text);font-size:.82rem;font-weight:600;margin-bottom:.1rem}
+.mobile-cta .btn{--pad:.7rem 1rem;min-height:46px;font-size:.82rem;flex:0 0 auto}
+@media (min-width:720px){
+  .mobile-cta{display:none}
+  body{padding-bottom:0}
+}
+
+/* ============================================================
+   15. FOOTER
+   ============================================================ */
+.foot{padding-block:2.5rem 3rem;border-top:1px solid var(--line);margin-top:56px}
+.foot__grid{display:flex;flex-direction:column;gap:1.4rem}
+.foot p{font-size:.74rem;color:var(--mute);max-width:60ch;line-height:1.6}
+.foot .brand{font-size:.7rem;margin-bottom:.6rem}
+.foot__legal{
+  font-size:.7rem;color:var(--mute);line-height:1.5;
+  padding-top:1rem;border-top:1px solid var(--line);
+}
+
+/* ============================================================
+   16. TABLET
+   ============================================================ */
+@media (min-width:720px){
+  :root{--pad-inline:2rem}
+  html{scroll-padding-top:76px}
+  .topbar{height:calc(64px + var(--safe-t))}
+  .topbar .btn{--pad:.65rem 1.15rem;min-height:44px;font-size:.82rem}
+  .sec{padding-block:80px}
+  h1{font-size:clamp(2.6rem,5.5vw,3.6rem)}
+  h2{font-size:clamp(1.9rem,4vw,2.5rem)}
+
+  .hero{padding-top:calc(100px + var(--safe-t));padding-bottom:60px;min-height:auto}
+  .hero__actions{flex-direction:row;flex-wrap:wrap}
+  .hero__actions .btn{min-height:52px}
+  .demo__stage{min-height:480px}
+
+  .brand-trust__inner{flex-direction:row;align-items:center;gap:2.5rem}
+  .brand-trust__badges{margin-left:auto}
+
+  .carousel{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;overflow:visible;padding:0;margin:0}
+  .carousel > *{flex:none}
+  .carousel-hint{display:none}
+  .card{padding:1.4rem}
+  .card__viz{min-height:88px}
+
+  .step{grid-template-columns:58px 1fr;gap:1.4rem;padding-block:1.3rem}
+  .step::before{left:28px}
+  .step__n{width:58px;height:58px}
+  .step__body h4{font-size:1.05rem}
+
+  .rol{flex-direction:row;gap:2rem;align-items:flex-start}
+  .rol__tabs{
+    flex-direction:column;gap:2px;overflow:visible;flex:0 0 34%;
+    margin:0;padding:0;
+  }
+  .rol__tab{
+    border:0;border-bottom:1px solid var(--line);border-radius:0;
+    padding:.85rem .3rem;min-height:52px;white-space:normal;text-align:left;
+    font-size:.92rem;flex:none;width:100%;
+  }
+  .rol__tab[aria-selected="true"]{
+    background:transparent;color:var(--text);font-weight:500;
+    border-color:var(--accent);padding-left:.75rem;
+  }
+  .rol__panel{flex:1;padding:2rem;min-height:320px}
+
+  .mod__tabs{gap:.75rem}
+  .mod__tab{min-height:96px;font-size:.82rem;padding:1rem .75rem}
+  .mod__tab .ico{width:26px;height:26px}
+  .mod__panel{padding:2rem;min-height:280px}
+
+  .legal__summary{padding:1.5rem;font-size:1rem}
+  .legal__grid{grid-template-columns:1fr 1fr}
+  .legal__timeline{padding:2rem 1.5rem}
+  .legal__timeline::before{top:calc(2rem + 27px)}
+  .legal__milestone .dot{width:62px;height:62px}
+  .legal__milestone .dot .ico{width:26px;height:26px}
+
+  .callout{padding:1.8rem}
+
+  .cta{padding:2.2rem;flex-direction:row;gap:2.5rem;align-items:center}
+  .cta__form{flex:1 1 320px}
+
+  .foot{padding-block:3rem 3.5rem;margin-top:80px}
+  .foot__grid{flex-direction:row;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+}
+
+/* ============================================================
+   17. DESKTOP
+   ============================================================ */
+@media (min-width:1040px){
+  :root{--pad-inline:2.5rem}
+  .sec{padding-block:100px}
+
+  .hero{padding-top:clamp(112px,15vh,150px);padding-bottom:100px}
+  .hero__grid{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:clamp(2rem,5vw,4.5rem);align-items:center;
+  }
+  .hero__copy{gap:1.2rem}
+  .demo{margin-top:0}
+  .demo__stage{min-height:520px}
+
+  .carousel{grid-template-columns:repeat(3,1fr);gap:14px}
+
+  .rol{gap:3rem}
+  .rol__tabs{flex:0 0 30%}
+
+  .legal{gap:2rem}
+
+  .cta{padding:3rem}
+}
+
+/* ============================================================
+   18. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+  .jornada__fill{transition:none}
+}
+
+/* ============================================================
+   19. SMALL-PHONE
+   ============================================================ */
+@media (max-width:359px){
+  h1{font-size:1.85rem}
+  .topbar .btn{--pad:.5rem .8rem;font-size:.72rem}
+  .card{padding:1rem}
+  .brand-trust__logo{font-size:1.3rem}
+  .checador__clock{font-size:2.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     SVG SPRITE
+     ══════════════════════════════════════════════════════════ -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+<defs>
+
+<!-- Reutilizados de CCTV -->
+<symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 3v6c0 5-4 9-9 11-5-2-9-6-9-11V5z"/><path d="M8.5 12l2.5 2.5 5-5"/></symbol>
+<symbol id="i-certificate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8 14l-2 7 6-3 6 3-2-7"/></symbol>
+<symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l3.5-1L20 6.5a2.1 2.1 0 0 0-3-3L3.5 17z"/><path d="M14 5.5l3 3"/></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 13l3 3 5-6"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18l3-2 2 2 2-2 2 2 2-2 3 2V3z"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 19a2 2 0 0 0 4 0"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></symbol>
+<symbol id="i-wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5 12a10 10 0 0 1 14 0"/><path d="M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 1 0-5.6l3-3a4 4 0 0 1 5.6 5.6l-1.6 1.6"/><path d="M14 10a4 4 0 0 1 0 5.6l-3 3a4 4 0 0 1-5.6-5.6l1.6-1.6"/></symbol>
+<symbol id="i-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3a5 5 0 0 0-4.6 7L3 17.4V21h3.6l7.4-7.4A5 5 0 0 0 21 9l-3 3-3-3 3-3a5 5 0 0 0-3-3z"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></symbol>
+<symbol id="i-devices" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="13" height="10" rx="1.5"/><path d="M2 17h13"/><rect x="17" y="9" width="5" height="11" rx="1"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M3 17l5-5 4 4 3-3 6 6"/></symbol>
+<symbol id="i-audio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l5 4V6L7 10z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></symbol>
+<symbol id="i-storage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><circle cx="7" cy="7" r=".8" fill="currentColor" stroke="none"/><circle cx="7" cy="17" r=".8" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-detect" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V6a3 3 0 0 1 3-3h2"/><path d="M16 3h2a3 3 0 0 1 3 3v2"/><path d="M21 16v2a3 3 0 0 1-3 3h-2"/><path d="M8 21H6a3 3 0 0 1-3-3v-2"/><circle cx="12" cy="10" r="2"/><path d="M8.5 16a3.5 3.5 0 0 1 7 0"/></symbol>
+<symbol id="i-sunmoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="3"/><path d="M7 1.5v2M7 10.5v2M1.5 7h2M10.5 7h2M3 3l1.4 1.4M9.6 9.6L11 11"/><path d="M16 15a4.5 4.5 0 0 0 4.5 4.5A5.5 5.5 0 0 1 14 13.5 5 5 0 0 0 16 15z"/></symbol>
+
+<!-- NUEVOS para asistencia -->
+<symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/><circle cx="8" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 21v-1.5a5.5 5.5 0 0 1 5.5-5.5h2a5.5 5.5 0 0 1 5.5 5.5V21"/><path d="M17 5a3 3 0 0 1 0 6"/><path d="M19 21v-1.5a5 5 0 0 0-3-4.6"/></symbol>
+<symbol id="i-fingerprint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12a6 6 0 0 1 12 0c0 3-1 5-1 7"/><path d="M9 12a3 3 0 0 1 6 0c0 4-1 6-1 8"/><path d="M12 12v8"/><path d="M4 14c0-1.5-.5-3-.5-4"/><path d="M20.5 10c0 1-.5 2.5-.5 4"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7 7-13a7 7 0 1 0-14 0c0 6 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="5" y="13" width="3" height="6"/><rect x="10.5" y="9" width="3" height="10"/><rect x="16" y="5" width="3" height="14"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></symbol>
+<symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></symbol>
+<symbol id="i-mobile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+<symbol id="i-login" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></symbol>
+<symbol id="i-timer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="8"/><path d="M12 10v4l2 2"/><path d="M9 2h6"/><path d="M12 2v4"/></symbol>
+<symbol id="i-badge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M5.5 17a3.5 3.5 0 0 1 7 0"/><path d="M15 9h3M15 13h3M15 17h2"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.8L2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/><path d="M10 21v-3h4v3"/></symbol>
+
+<!-- NUEVOS para la ventaja competitiva -->
+<symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5"/><path d="M5 3h14"/></symbol>
+</defs>
+</svg>
+
+<div class="scrollbar"><span id="scrollFill"></span></div>
+
+<!-- ══════════ TOPBAR ══════════ -->
+<header class="topbar">
+  <div class="wrap">
+    <a href="#inicio" class="brand"><i></i>NORTTEK</a>
+    <a href="#contacto" class="btn btn--primary">Cotizar</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ══════════ 1. HERO ══════════ -->
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <div class="hero__grid">
+
+      <div class="hero__copy">
+        <p class="eyebrow reveal">Asistencia · Registro de jornada</p>
+        <h1 class="reveal" style="--d:60ms">
+          Controla la asistencia de tu personal <em>desde un solo lugar.</em>
+        </h1>
+        <p class="lede reveal" style="--d:140ms">
+          Administra horarios e incidencias, consulta los registros de tus sucursales
+          y organiza la información de tu equipo en sitio o en campo.
+        </p>
+
+        <div class="hero__actions reveal" style="--d:220ms">
+          <a href="#contacto" class="btn btn--primary btn--block">
+            Solicitar una cotización
+            <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#como-funciona" class="btn btn--ghost btn--block">Ver cómo funciona</a>
+        </div>
+
+        <!-- Demo interactiva -->
+        <div class="demo reveal" style="--d:280ms">
+          <div class="demo__switch" id="demoSwitch" data-mode="onsite" role="group" aria-label="Modo de registro">
+            <span class="demo__thumb" aria-hidden="true"></span>
+            <button class="demo__btn" data-mode="onsite" aria-pressed="true">En sitio</button>
+            <button class="demo__btn" data-mode="field" aria-pressed="false">En campo</button>
+          </div>
+
+          <div class="demo__stage">
+
+            <!-- Vista: checador en sitio -->
+            <div class="demo__view is-active" data-view="onsite">
+              <div class="checador">
+                <header class="checador__head">
+                  <span class="checador__kicker">Terminal · Recepción</span>
+                  <span class="checador__status"><i></i>Operando</span>
+                </header>
+
+                <div>
+                  <div class="checador__clock" id="clockOnsite">00:00:00</div>
+                  <div class="checador__date" id="dateOnsite">LUNES · 25 OCT 2026</div>
+                </div>
+
+                <button class="checador__btn" type="button" data-action="checkin-onsite">
+                  <svg class="ico"><use href="#i-login"/></svg>
+                  Registrar entrada
+                </button>
+
+                <div class="checador__divider"></div>
+
+                <div>
+                  <div class="checador__recent-head">
+                    <span>Recientes hoy</span>
+                    <span id="counterOnsite">12 ingresos · 2 pendientes</span>
+                  </div>
+                  <ul class="checador__list" id="listOnsite">
+                    <li class="checador__item">
+                      <span class="checador__av">CR</span>
+                      <span>
+                        <span class="checador__name">Carlos Ramírez</span>
+                        <span class="checador__tag">Entrada</span>
+                      </span>
+                      <span class="checador__time"><svg class="ico"><use href="#i-check"/></svg>09:38</span>
+                    </li>
+                    <li class="checador__item">
+                      <span class="checador__av">AL</span>
+                      <span>
+                        <span class="checador__name">Ana López</span>
+                        <span class="checador__tag">Entrada</span>
+                      </span>
+                      <span class="checador__time"><svg class="ico"><use href="#i-check"/></svg>09:35</span>
+                    </li>
+                    <li class="checador__item" data-state="pending">
+                      <span class="checador__av">PS</span>
+                      <span>
+                        <span class="checador__name">Pedro Sánchez</span>
+                        <span class="checador__tag">Turno matutino</span>
+                      </span>
+                      <span class="checador__time">Pendiente</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vista: registro en campo -->
+            <div class="demo__view" data-view="field">
+              <div class="fieldphone">
+                <div class="fieldphone__notch"></div>
+                <div class="fieldphone__screen">
+                  <div class="fieldphone__header">
+                    <span>Registro en campo</span>
+                    <span id="clockField">00:00</span>
+                  </div>
+                  <div class="fieldphone__map">
+                    <div class="fieldphone__pin">
+                      <svg class="ico"><use href="#i-pin"/></svg>
+                    </div>
+                    <span class="fieldphone__pinlabel">Ubicación verificada</span>
+                  </div>
+                  <div class="fieldphone__body">
+                    <span class="fieldphone__meta">Trabajador activo</span>
+                    <span class="fieldphone__name">Laura Torres</span>
+                    <span class="fieldphone__meta" id="fieldDate">LUN · 25 OCT</span>
+                    <button class="fieldphone__btn" type="button" data-action="checkin-field">
+                      <svg class="ico"><use href="#i-login"/></svg>
+                      Registrar entrada
+                    </button>
+                  </div>
+                  <div class="fieldphone__foot">La ubicación depende de la configuración</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <p class="hero__note reveal" style="--d:340ms">
+          La configuración, los métodos de registro y las capacidades de cada opción
+          se confirman según el equipo y el plan cotizados.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 2. HIKVISION TRUST BAND ══════════ -->
+<section class="brand-trust" aria-label="Partner de tecnología Hikvision">
+  <div class="wrap">
+    <div class="brand-trust__inner">
+      <div class="brand-trust__label">
+        <span class="brand-trust__kicker">Partner de tecnología</span>
+        <div class="brand-trust__logo">
+          <span class="brand-trust__mark" aria-hidden="true"></span>
+          <span class="brand-trust__word">HIKVISION</span>
+        </div>
+      </div>
+      <p class="brand-trust__pitch">
+        <strong>Terminales de asistencia y control de acceso Hikvision.</strong>
+        Equipos originales, garantía del fabricante y soporte técnico certificado
+        para tu operación.
+      </p>
+      <ul class="brand-trust__badges" aria-label="Beneficios de trabajar con Hikvision">
+        <li><svg class="ico"><use href="#i-check"/></svg>Equipos originales</li>
+        <li><svg class="ico"><use href="#i-shield"/></svg>Garantía</li>
+        <li><svg class="ico"><use href="#i-certificate"/></svg>Soporte</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 3. SEIS FUNCIONES ══════════ -->
+<section class="sec" id="funciones">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">01 — Lo que puedes hacer</p>
+      <h2 class="reveal" style="--d:60ms">Seis afirmaciones que cambian tu operación diaria.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        Sin tecnicismos. Lo que un sistema de asistencia bien configurado pone en manos
+        del dueño y de Recursos Humanos.
+      </p>
+    </header>
+
+    <div class="carousel reveal" style="--d:0ms">
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-clipboard"/></svg></span>
+          <span class="idx">01</span>
+        </div>
+        <h3>Simplifica el control diario de asistencia</h3>
+        <p>Administra personal, horarios e incidencias desde una plataforma clara, con acompañamiento para ponerla en marcha.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-building"/></svg></span>
+          <span class="idx">02</span>
+        </div>
+        <h3>Centraliza todas tus sucursales</h3>
+        <p>Consulta la asistencia de cada ubicación desde un solo panel y asigna permisos a gerentes y responsables.</p>
+        <div class="card__viz">
+          <div class="viz-branches">
+            <span>S1</span><span>S2</span><span>S3</span><span>S4</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-calendar"/></svg></span>
+          <span class="idx">03</span>
+        </div>
+        <h3>Automatiza turnos e incidencias</h3>
+        <p>Organiza horarios fijos y rotativos, y calcula retardos, faltas y horas extra con reglas configurables.</p>
+        <div class="card__viz">
+          <div class="viz-shift">
+            <div class="viz-shift__bar"><div class="viz-shift__fill"></div></div>
+            <span class="viz-shift__label">09:00</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-pin"/></svg></span>
+          <span class="idx">04</span>
+        </div>
+        <h3>Registra al personal en sitio y en campo</h3>
+        <p>Combina checadores y registro móvil para mantener el control del equipo, incluso cuando trabaja fuera de la oficina.</p>
+        <div class="card__viz">
+          <div class="viz-gear">
+            <span><svg class="ico"><use href="#i-mobile"/></svg></span>
+            <span><svg class="ico"><use href="#i-pin"/></svg></span>
+            <span><svg class="ico"><use href="#i-badge"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-file"/></svg></span>
+          <span class="idx">05</span>
+        </div>
+        <h3>Prepara reportes para tu proceso de nómina</h3>
+        <p>Exporta registros e incidencias para reducir la captura manual.</p>
+        <div class="card__viz">
+          <span class="card__badge card__badge--warn">
+            <svg class="ico"><use href="#i-alert"/></svg>No se integra con nómina
+          </span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-wrench"/></svg></span>
+          <span class="idx">06</span>
+        </div>
+        <h3>Implementa una solución adecuada a tu operación</h3>
+        <p>Revisa los equipos actuales y aprovecha los que sean compatibles, o configura una solución nueva sin sobredimensionar el proyecto.</p>
+      </article>
+
+    </div>
+
+    <div class="carousel-hint reveal" aria-hidden="true" style="--d:120ms">
+      <span>←</span><span>Desliza</span><span>→</span>
+    </div>
+
+    <p class="reveal" style="margin-top:1.8rem;font-size:.74rem;color:var(--mute);max-width:64ch;line-height:1.55">
+      Funciones, métodos de registro, exportaciones, acompañamiento y compatibilidad
+      se confirman según la oferta de Norttek para el equipo y el plan cotizados.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 3.5. VENTAJA COMPETITIVA: REPORTES PERSONALIZADOS ══════════ -->
+<section class="sec" id="reportes-personalizados" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">02 — El diferenciador</p>
+      <h2 class="reveal" style="--d:60ms">El reporte que sí se entiende.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        Hik-Connect for Teams es nuestra plataforma principal de asistencia. Sobre ella,
+        construimos una herramienta que convierte los registros en reportes individuales,
+        claros y con firma de conformidad.
+      </p>
+    </header>
+
+    <!-- Tarjeta doble: plataforma + herramienta -->
+    <div class="diff reveal" style="--d:0ms">
+
+      <!-- Lado izquierdo: Hik-Connect como base -->
+      <div class="diff__base">
+        <div class="diff__badge">
+          <span class="diff__badge-mark" aria-hidden="true"></span>
+          <span>Plataforma principal</span>
+        </div>
+        <h3>Hik-Connect for Teams</h3>
+        <p>
+          Gestión multi-sitio, registro GPS desde la app y aprobaciones de permisos
+          en una sola nube. La base operativa de tu asistencia diaria.
+        </p>
+        <ul class="diff__feats">
+          <li><svg class="ico"><use href="#i-check"/></svg>Registro en sitio y móvil con GPS</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Aprobación de permisos e incidencias</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Vista unificada de sucursales</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Exportación de registros en PDF/Excel</li>
+        </ul>
+        <p class="diff__note">
+          Exporta los datos. Pero el reporte final, listo para el empleado y para RH,
+          no viene incluido.
+        </p>
+      </div>
+
+      <!-- Flecha / conector -->
+      <div class="diff__arrow" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 24h28M28 16l10 8-10 8"/>
+        </svg>
+        <span>Tu herramienta Norttek</span>
+      </div>
+
+      <!-- Lado derecho: tu herramienta -->
+      <div class="diff__tool">
+        <div class="diff__badge diff__badge--accent">
+          <svg class="ico"><use href="#i-star"/></svg>
+          <span>Exclusivo Norttek</span>
+        </div>
+        <h3>Reportes personalizados con firma</h3>
+        <p>
+          Importa la información de Hik-Connect y genera un reporte por persona,
+          tamaño carta, con el detalle semanal de su asistencia y espacio para
+          firma de conformidad.
+        </p>
+
+        <!-- Mini flujo visual -->
+        <div class="diff__flow" aria-hidden="true">
+          <div class="diff__flow-step">
+            <span class="diff__flow-ico"><svg class="ico"><use href="#i-download"/></svg></span>
+            <span>Exporta de<br>Hik-Connect</span>
+          </div>
+          <span class="diff__flow-sep">→</span>
+          <div class="diff__flow-step">
+            <span class="diff__flow-ico"><svg class="ico"><use href="#i-upload"/></svg></span>
+            <span>Importa en<br>la herramienta</span>
+          </div>
+          <span class="diff__flow-sep">→</span>
+          <div class="diff__flow-step">
+            <span class="diff__flow-ico"><svg class="ico"><use href="#i-file"/></svg></span>
+            <span>Genera reporte<br>con firma</span>
+          </div>
+        </div>
+
+        <!-- Muestra del reporte -->
+        <div class="diff__preview" aria-hidden="true">
+          <div class="diff__paper">
+            <div class="diff__paper-head">
+              <span class="diff__paper-logo">NORTTEK</span>
+              <span class="diff__paper-date">SEMANA 43 · 2026</span>
+            </div>
+            <div class="diff__paper-name">
+              <span class="diff__paper-avatar">MG</span>
+              <div>
+                <strong>María García</strong>
+                <span>Departamento de Operaciones</span>
+              </div>
+            </div>
+            <div class="diff__paper-table">
+              <div class="diff__paper-row">
+                <span>Lun</span><span>09:02</span><span>18:05</span><span class="ok">8h 03m</span>
+              </div>
+              <div class="diff__paper-row">
+                <span>Mar</span><span>08:58</span><span>18:10</span><span class="ok">8h 12m</span>
+              </div>
+              <div class="diff__paper-row">
+                <span>Mié</span><span>09:15</span><span>18:00</span><span class="warn">Retardo 15m</span>
+              </div>
+              <div class="diff__paper-row">
+                <span>Jue</span><span>09:00</span><span>18:00</span><span class="ok">8h 00m</span>
+              </div>
+              <div class="diff__paper-row">
+                <span>Vie</span><span>08:55</span><span>18:02</span><span class="ok">8h 07m</span>
+              </div>
+            </div>
+            <div class="diff__paper-total">
+              <span>Total semanal</span>
+              <strong>40h 22m</strong>
+            </div>
+            <div class="diff__paper-sign">
+              <span class="diff__paper-sign-line"></span>
+              <span>Firma de conformidad</span>
+            </div>
+          </div>
+        </div>
+
+        <ul class="diff__feats">
+          <li><svg class="ico"><use href="#i-check"/></svg>Un reporte por persona, tamaño carta</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Detalle semanal fácil de leer</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Espacio para firma del empleado</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Reduce la captura manual en RH</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="reveal" style="margin-top:1.6rem;font-size:.74rem;color:var(--mute);max-width:72ch;line-height:1.6">
+      La herramienta de reportes personalizados es un desarrollo de Norttek que
+      complementa la información exportada desde Hik-Connect for Teams.
+      No modifica la plataforma ni la sustituye.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 4. CÓMO FUNCIONA ══════════ -->
+<section class="sec" id="como-funciona" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">03 — Cómo funciona</p>
+      <h2 class="reveal" style="--d:60ms">Tres pasos en el día a día.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        El flujo que ya reconoce Recursos Humanos, sin pasos innecesarios.
+      </p>
+    </header>
+
+    <div class="steps" id="steps">
+      <article class="step reveal" style="--d:0ms">
+        <span class="step__n"><svg class="ico"><use href="#i-users"/></svg></span>
+        <div class="step__body">
+          <span class="step__num">Paso 01</span>
+          <h4>Configura al personal y sus horarios</h4>
+          <p>Altas del equipo, turnos fijos o rotativos y reglas de incidencias, con acompañamiento para poner el sistema en marcha.</p>
+        </div>
+      </article>
+      <article class="step reveal" style="--d:100ms">
+        <span class="step__n"><svg class="ico"><use href="#i-login"/></svg></span>
+        <div class="step__body">
+          <span class="step__num">Paso 02</span>
+          <h4>Registra entradas y salidas</h4>
+          <p>En sitio con checadores o mediante las opciones móviles disponibles para el personal en campo.</p>
+        </div>
+      </article>
+      <article class="step reveal" style="--d:200ms">
+        <span class="step__n"><svg class="ico"><use href="#i-chart"/></svg></span>
+        <div class="step__body">
+          <span class="step__num">Paso 03</span>
+          <h4>Consulta incidencias y exporta reportes</h4>
+          <p>Revisa retardos, faltas y horas extra, y exporta la información para tu gestión interna y el proceso de nómina.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5. VALOR POR ROL ══════════ -->
+<section class="sec" id="roles" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">04 — Por responsable</p>
+      <h2 class="reveal" style="--d:60ms">Cada rol ve lo que necesita.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        El dueño, Recursos Humanos y los gerentes acceden a la misma plataforma
+        con distintas vistas y permisos.
+      </p>
+    </header>
+
+    <div class="rol reveal" style="--d:0ms">
+      <div class="rol__tabs" role="tablist" aria-label="Roles" id="rolTabs">
+        <button class="rol__tab" role="tab" aria-selected="true" data-rol="dueno">
+          <svg class="ico"><use href="#i-briefcase"/></svg>Dueño de negocio
+        </button>
+        <button class="rol__tab" role="tab" aria-selected="false" data-rol="rh">
+          <svg class="ico"><use href="#i-users"/></svg>Recursos Humanos
+        </button>
+        <button class="rol__tab" role="tab" aria-selected="false" data-rol="gerente">
+          <svg class="ico"><use href="#i-pin"/></svg>Gerentes y responsables
+        </button>
+      </div>
+      <div class="rol__panel">
+        <div class="rol__panel-body" id="rolPanel" role="tabpanel" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <p class="reveal" style="margin-top:1.6rem;font-size:.74rem;color:var(--mute);max-width:64ch;line-height:1.55">
+      Los registros no garantizan por sí solos un resultado legal: la configuración,
+      el acuerdo entre las partes y las condiciones fuera del sistema también influyen.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 6. MODALIDADES ══════════ -->
+<section class="sec" id="modalidades" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">05 — Modalidades de registro</p>
+      <h2 class="reveal" style="--d:60ms">Una forma para cada tipo de equipo.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        Muéstranos cómo trabaja tu gente y definimos la combinación adecuada.
+      </p>
+    </header>
+
+    <div class="mod reveal" style="--d:0ms">
+      <div class="mod__tabs" role="tablist" aria-label="Modalidades de registro" id="modTabs">
+        <button class="mod__tab" role="tab" aria-selected="true" data-mod="onsite">
+          <svg class="ico"><use href="#i-badge"/></svg>
+          Checador en sitio
+        </button>
+        <button class="mod__tab" role="tab" aria-selected="false" data-mod="field">
+          <svg class="ico"><use href="#i-mobile"/></svg>
+          Registro móvil
+        </button>
+        <button class="mod__tab" role="tab" aria-selected="false" data-mod="mixed">
+          <svg class="ico"><use href="#i-link"/></svg>
+          Solución mixta
+        </button>
+      </div>
+      <div class="mod__panel">
+        <div class="mod__panel-body" id="modPanel" role="tabpanel" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="privacy-note reveal" style="--d:120ms">
+      <svg class="ico"><use href="#i-shield"/></svg>
+      <div>
+        <strong>Uso de biometría.</strong> Si se usan rostro o huella como método de identificación,
+        se presentan como opciones del equipo, no como requisito legal. Su tratamiento se revisa
+        conforme a la LFPDPPP, el aviso de privacidad y la asesoría correspondiente.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 7. REPORTES Y NÓMINA ══════════ -->
+<section class="sec" id="reportes" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">06 — Reportes</p>
+      <h2 class="reveal" style="--d:60ms">Reportes claros, sin promesas de integración.</h2>
+    </header>
+
+    <div class="callout reveal" style="--d:0ms">
+      <div class="callout__head">
+        <div class="callout__ico"><svg class="ico"><use href="#i-file"/></svg></div>
+        <h3>Consulta y exporta registros e incidencias para preparar la nómina.</h3>
+      </div>
+      <p>
+        La plataforma organiza la información y genera reportes para que tu equipo de
+        Recursos Humanos o tu contador la procesen en su sistema habitual.
+      </p>
+      <p class="callout__strong">
+        La plataforma entrega reportes, pero no se integra directamente con sistemas de nómina.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 8. MARCO LEGAL ══════════ -->
+<section class="sec" id="legal" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">07 — Marco legal</p>
+      <h2 class="reveal" style="--d:60ms">Con precisión, no con promesas.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        Separamos lo que dice la ley, lo que hace la plataforma y lo que conviene revisar
+        caso por caso antes de publicar o cotizar.
+      </p>
+    </header>
+
+    <div class="legal reveal" style="--d:0ms">
+
+      <div class="legal__summary">
+        <strong>La Ley Federal del Trabajo incorpora el registro electrónico de la jornada</strong>,
+        con la hora de inicio y finalización, y prevé que la información se proporcione
+        a la autoridad cuando la solicite. La STPS debe definir el ámbito de aplicación y
+        las excepciones mediante disposiciones que entran en vigor el <strong>1 de enero de 2027</strong>.
+        <br><br>
+        El registro electrónico hará prueba plena si se acredita que fue acordado entre la
+        persona trabajadora y el empleador. <strong>La LFT no exige biometría para este registro.</strong>
+      </div>
+
+      <div class="legal__timeline" aria-label="Fechas clave del marco legal">
+        <div class="legal__milestone">
+          <div class="dot"><svg class="ico"><use href="#i-calendar"/></svg></div>
+          <span class="legal__date">1 mayo 2026</span>
+          <strong>Decreto publicado en el DOF</strong>
+          <span>Entrada en vigor de la reforma a la LFT.</span>
+        </div>
+        <div class="legal__milestone">
+          <div class="dot"><svg class="ico"><use href="#i-clock"/></svg></div>
+          <span class="legal__date">1 enero 2027</span>
+          <strong>Disposiciones STPS</strong>
+          <span>Ámbito de aplicación y excepciones a definir por la autoridad.</span>
+        </div>
+      </div>
+
+      <div class="legal__grid">
+        <div class="legal__col">
+          <h4><svg class="ico"><use href="#i-file"/></svg>Lo que dice la ley</h4>
+          <p>Registro electrónico de inicio y fin de jornada.</p>
+          <p>La información se proporciona a la autoridad cuando la solicite.</p>
+          <p>Hace prueba plena si se acredita el acuerdo entre las partes.</p>
+        </div>
+        <div class="legal__col legal__col--warn">
+          <h4><svg class="ico"><use href="#i-alert"/></svg>Lo que hay que revisar</h4>
+          <p>La configuración conforme a las disposiciones aplicables.</p>
+          <p>Las características particulares de cada empresa.</p>
+          <p>La forma de acreditar el acuerdo entre las partes.</p>
+          <p>El tratamiento de datos personales si se usa biometría.</p>
+        </div>
+      </div>
+
+      <div class="jornada">
+        <div class="jornada__head">
+          <svg class="ico"><use href="#i-timer"/></svg>
+          <h4>Reducción gradual de la jornada máxima</h4>
+          <span>Tema relacionado · separado del registro</span>
+        </div>
+        <div class="jornada__chart" id="jornadaChart">
+          <div class="jornada__row is-current" data-hours="48">
+            <span class="jornada__year">2026</span>
+            <div class="jornada__bar"><div class="jornada__fill"></div></div>
+            <span class="jornada__val">48 h</span>
+          </div>
+          <div class="jornada__row" data-hours="46">
+            <span class="jornada__year">2027</span>
+            <div class="jornada__bar"><div class="jornada__fill"></div></div>
+            <span class="jornada__val">46 h</span>
+          </div>
+          <div class="jornada__row" data-hours="44">
+            <span class="jornada__year">2028</span>
+            <div class="jornada__bar"><div class="jornada__fill"></div></div>
+            <span class="jornada__val">44 h</span>
+          </div>
+          <div class="jornada__row" data-hours="42">
+            <span class="jornada__year">2029</span>
+            <div class="jornada__bar"><div class="jornada__fill"></div></div>
+            <span class="jornada__val">42 h</span>
+          </div>
+          <div class="jornada__row is-final" data-hours="40">
+            <span class="jornada__year">2030</span>
+            <div class="jornada__bar"><div class="jornada__fill"></div></div>
+            <span class="jornada__val">40 h</span>
+          </div>
+        </div>
+        <p class="jornada__note">
+          Esta reducción es un tema relacionado, pero independiente del registro electrónico.
+          Aplica conforme a las disposiciones que regulan la jornada máxima semanal.
+        </p>
+      </div>
+
+      <div class="disclaimers">
+        <h4><svg class="ico"><use href="#i-alert"/></svg>Lo que no afirmamos</h4>
+        <ul>
+          <li>No decimos que la plataforma "cumple con la reforma 2027" sin explicar condiciones y alcance.</li>
+          <li>No afirmamos que la obligación aplica por igual a todas las empresas.</li>
+          <li>No presentamos biometría como requisito legal ni como método infalible.</li>
+          <li>No afirmamos que la plataforma se integra directamente con sistemas de nómina.</li>
+          <li>No atribuimos horas extra, descansos o festivos como campos exigidos por la fracción XXXIV.</li>
+          <li>No presentamos formatos firmados como garantía de validez legal.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 9. CONDICIONES DE IMPLEMENTACIÓN ══════════ -->
+<section class="sec" id="condiciones" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">08 — Antes de cotizar</p>
+      <h2 class="reveal" style="--d:60ms">Lo que revisamos contigo.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        Antes de cualquier propuesta, aclaramos estos puntos para que la solución
+        encaje con tu operación y no con un paquete genérico.
+      </p>
+    </header>
+
+    <div class="spec reveal" style="--d:0ms">
+      <details>
+        <summary>
+          <svg class="ico spec__ico"><use href="#i-wrench"/></svg>
+          <span class="n">01</span>
+          <span class="spec__title">Compatibilidad con equipos existentes</span>
+          <span class="plus"></span>
+        </summary>
+        <div class="spec__body">Revisamos qué checadores y terminales tienes actualmente y si son compatibles con la solución propuesta, antes de recomendar equipos nuevos.</div>
+      </details>
+      <details>
+        <summary>
+          <svg class="ico spec__ico"><use href="#i-clipboard"/></svg>
+          <span class="n">02</span>
+          <span class="spec__title">Instalación y capacitación</span>
+          <span class="plus"></span>
+        </summary>
+        <div class="spec__body">Alcance de la instalación y del acompañamiento para poner el sistema en marcha. Las condiciones concretas se confirman en la propuesta.</div>
+      </details>
+      <details>
+        <summary>
+          <svg class="ico spec__ico"><use href="#i-bell"/></svg>
+          <span class="n">03</span>
+          <span class="spec__title">Soporte y tiempos de respuesta</span>
+          <span class="plus"></span>
+        </summary>
+        <div class="spec__body">Canales, horarios y tiempos de respuesta del soporte se detallan por plan y se confirman antes de la cotización.</div>
+      </details>
+      <details>
+        <summary>
+          <svg class="ico spec__ico"><use href="#i-receipt"/></svg>
+          <span class="n">04</span>
+          <span class="spec__title">Costos únicos y recurrentes</span>
+          <span class="plus"></span>
+        </summary>
+        <div class="spec__body">Distinguimos qué conceptos son de pago único y cuáles pueden tener costo recurrente (licencias, servicios, monitoreo), según la configuración.</div>
+      </details>
+      <details>
+        <summary>
+          <svg class="ico spec__ico"><use href="#i-users"/></svg>
+          <span class="n">05</span>
+          <span class="spec__title">Límites y licencias</span>
+          <span class="plus"></span>
+        </summary>
+        <div class="spec__body">Usuarios, checadores y licencias tienen condiciones específicas por plan. Aclaramos los límites antes de cotizar para evitar sorpresas.</div>
+      </details>
+      <details>
+        <summary>
+          <svg class="ico spec__ico"><use href="#i-shield"/></svg>
+          <span class="n">06</span>
+          <span class="spec__title">Garantía</span>
+          <span class="plus"></span>
+        </summary>
+        <div class="spec__body">La garantía aplica según el equipo y el fabricante. Su alcance y condiciones se confirman antes de la propuesta.</div>
+      </details>
+      <details>
+        <summary>
+          <svg class="ico spec__ico"><use href="#i-pin"/></svg>
+          <span class="n">07</span>
+          <span class="spec__title">Personal en campo</span>
+          <span class="plus"></span>
+        </summary>
+        <div class="spec__body">Las opciones para personal en campo y los datos que recaba cada una (ubicación, identificación, otros) se revisan según la operación y la privacidad aplicable.</div>
+      </details>
+    </div>
+
+    <p class="spec-note reveal">
+      Estos puntos se aclaran y confirman antes de cotizar. No los presentamos como
+      beneficios incluidos mientras no estén validados para tu caso.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 10. FAQ ══════════ -->
+<section class="sec" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head" style="text-align:center;margin-inline:auto">
+      <p class="eyebrow reveal" style="justify-content:center">09 — Preguntas frecuentes</p>
+      <h2 class="reveal" style="--d:60ms">Dudas frecuentes, respuestas claras.</h2>
+    </header>
+
+    <div class="faq reveal" style="--d:0ms">
+      <details>
+        <summary><span class="q">01</span>¿La plataforma cumple con la reforma de 2027?<span class="plus"></span></summary>
+        <div class="faq__a">La plataforma permite registrar el inicio y fin de la jornada de manera electrónica, pero el cumplimiento depende de la configuración, del acuerdo entre las partes y de las disposiciones aplicables. No publicamos una promesa de cumplimiento sin revisar cada caso.</div>
+      </details>
+      <details>
+        <summary><span class="q">02</span>¿La ley exige biometría?<span class="plus"></span></summary>
+        <div class="faq__a">No. La fracción XXXIV del artículo 132 de la LFT no exige biometría. Si se usan rostro o huella, se presentan como métodos opcionales de identificación del equipo, no como requisito legal.</div>
+      </details>
+      <details>
+        <summary><span class="q">03</span>¿Se integra con mi sistema de nómina?<span class="plus"></span></summary>
+        <div class="faq__a">No directamente. La plataforma <strong>entrega reportes</strong> para que tu equipo de Recursos Humanos o tu contador los procesen en el sistema de nómina que utilices. Además, con la herramienta de reportes personalizados, puedes generar documentos individuales con firma de conformidad.</div>
+      </details>
+      <details>
+        <summary><span class="q">04</span>¿Qué pasa si el personal trabaja en campo?<span class="plus"></span></summary>
+        <div class="faq__a">Existen opciones de registro móvil, con o sin verificación de ubicación según la configuración. Los datos que recaba cada opción se revisan conforme a la LFPDPPP y el aviso de privacidad.</div>
+      </details>
+      <details>
+        <summary><span class="q">05</span>¿Puedo usar mis checadores actuales?<span class="plus"></span></summary>
+        <div class="faq__a">Puede ser posible si son compatibles con la solución propuesta. Requiere revisión técnica previa; no todos los equipos se integran entre sí.</div>
+      </details>
+      <details>
+        <summary><span class="q">06</span>¿Qué pasa si se va el internet?<span class="plus"></span></summary>
+        <div class="faq__a">Algunos equipos pueden seguir registrando localmente ante ciertas interrupciones, según su diseño y configuración. No es una característica universal: se confirma equipo por equipo.</div>
+      </details>
+      <details>
+        <summary><span class="q">07</span>¿Cómo se tratan los datos personales?<span class="plus"></span></summary>
+        <div class="faq__a">El tratamiento debe seguir la LFPDPPP vigente y el aviso de privacidad correspondiente. Si se usan datos biométricos, requieren revisión adicional conforme a la normativa aplicable y la asesoría correspondiente.</div>
+      </details>
+      <details>
+        <summary><span class="q">08</span>¿Cómo se cotiza?<span class="plus"></span></summary>
+        <div class="faq__a">Después de conocer el tamaño de tu equipo, tus sucursales y tus formas de trabajo. La cotización incluye equipos, funciones y alcance confirmados, y distingue costos únicos de recurrentes.</div>
+      </details>
+      <details>
+        <summary><span class="q">09</span>¿Ofrecen capacitación, soporte y mantenimiento?<span class="plus"></span></summary>
+        <div class="faq__a">Sí, aunque su alcance, canales, horarios y tiempos de respuesta se confirman en la propuesta. No los presentamos como incluidos sin validarlos.</div>
+      </details>
+      <details>
+        <summary><span class="q">10</span>¿Qué pasa con la reducción de la jornada máxima?<span class="plus"></span></summary>
+        <div class="faq__a">Es un tema relacionado pero independiente del registro electrónico. La jornada máxima semanal se reduce gradualmente entre 2026 y 2030 conforme a las disposiciones aplicables. Aconsejamos revisar tu caso con la asesoría correspondiente.</div>
+      </details>
+    </div>
+
+    <div class="reveal" style="text-align:center;margin-top:2.2rem">
+      <a href="#contacto" class="btn btn--primary btn--block" style="max-width:360px;margin-inline:auto">Solicitar una cotización</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 11. CTA FINAL ══════════ -->
+<section class="sec" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <p class="eyebrow">10 — Siguiente paso</p>
+        <h2>Organiza la asistencia de tu equipo.</h2>
+        <p class="lede" style="margin-top:.9rem">
+          Solicita una cotización y revisamos tus equipos, sucursales y formas de trabajo
+          para configurar una solución a tu medida.
+        </p>
+        <p class="cta__brief" id="ctaBrief">
+          <b>Tu selección:</b> aún no has configurado tu solicitud. Puedes describirla en el mensaje.
+        </p>
+      </div>
+
+      <form class="cta__form" id="leadForm" novalidate>
+        <div class="field">
+          <label for="fName">Nombre</label>
+          <input id="fName" name="nombre" type="text" placeholder="¿Cómo te llamas?" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="fContact">Teléfono o correo</label>
+          <input id="fContact" name="contacto" type="text" placeholder="Para responderte" autocomplete="tel" inputmode="email" required>
+        </div>
+        <div class="field">
+          <label for="fSize">Tamaño del equipo</label>
+          <select id="fSize" name="tamano">
+            <option value="">Selecciona una opción</option>
+            <option>1 – 10 personas</option>
+            <option>11 – 50 personas</option>
+            <option>51 – 200 personas</option>
+            <option>Más de 200 personas</option>
+          </select>
+        </div>
+        <button class="btn btn--primary btn--block" type="submit" style="margin-top:.3rem">
+          Enviar solicitud
+          <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </button>
+        <p style="font-size:.68rem;color:var(--mute);line-height:1.5">
+          Al enviar se abrirá tu cliente de correo con el resumen de tu solicitud.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <div>
+      <div class="brand"><i></i>NORTTEK</div>
+      <p>
+        Control de asistencia y registro de jornada con tecnología Hikvision.
+        La información de esta página es orientativa; las capacidades, especificaciones
+        y servicios se confirman en la propuesta según los equipos y la configuración elegidos.
+      </p>
+    </div>
+    <p style="max-width:38ch">
+      El uso de biometría (rostro o huella) es opcional y requiere revisión conforme a la
+      LFPDPPP, el aviso de privacidad y la asesoría correspondiente. La LFT no exige
+      biometría para el registro electrónico de la jornada.
+    </p>
+  </div>
+  <div class="wrap">
+    <p class="foot__legal">
+      Fuentes oficiales: Decreto de reforma a la LFT publicado en el DOF el 1 de mayo de 2026;
+      Ley Federal de Protección de Datos Personales en Posesión de los Particulares vigente.
+      La configuración debe revisarse conforme a las disposiciones aplicables y a las
+      características de cada empresa.
+    </p>
+  </div>
+</footer>
+
+<!-- ══════════ MOBILE CTA ══════════ -->
+<div class="mobile-cta" id="mobileCta" aria-hidden="true">
+  <div class="mobile-cta__txt">
+    <b>¿Listo para ordenar tu asistencia?</b>
+    <span>Solicita una cotización</span>
+  </div>
+  <a href="#contacto" class="btn btn--primary">Cotizar</a>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div class="checkin-toast" id="checkinToast" role="status" aria-live="polite">
+  <svg class="ico"><use href="#i-check"/></svg>
+  <span id="checkinToastLabel">Entrada registrada</span>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pad = n => String(n).padStart(2, '0');
+  const MONTHS = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const DAYS = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+
+  /* ---------- 1. Live clocks ---------- */
+  const clockOnsite = document.getElementById('clockOnsite');
+  const clockField  = document.getElementById('clockField');
+  const dateOnsite  = document.getElementById('dateOnsite');
+  const fieldDate   = document.getElementById('fieldDate');
+
+  function tick() {
+    const d = new Date();
+    const hms = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    const hm  = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    if (clockOnsite) clockOnsite.textContent = hms;
+    if (clockField)  clockField.textContent  = hm;
+    if (dateOnsite)  dateOnsite.textContent  = `${DAYS[d.getDay()]} · ${pad(d.getDate())} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    if (fieldDate)   fieldDate.textContent   = `${DAYS[d.getDay()]} · ${pad(d.getDate())} ${MONTHS[d.getMonth()]}`;
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ---------- 2. Scroll progress ---------- */
+  const fill = document.getElementById('scrollFill');
+  function onScroll() {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    fill.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- 3. Reveal on scroll ---------- */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ---------- 4. Demo switch: En sitio / En campo ---------- */
+  const demoSwitch = document.getElementById('demoSwitch');
+  const demoBtns = demoSwitch.querySelectorAll('.demo__btn');
+  const demoViews = document.querySelectorAll('.demo__view');
+
+  function setDemoMode(mode) {
+    demoSwitch.dataset.mode = mode;
+    demoBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+    demoViews.forEach(v => v.classList.toggle('is-active', v.dataset.view === mode));
+  }
+  demoBtns.forEach(btn => btn.addEventListener('click', () => setDemoMode(btn.dataset.mode)));
+
+  /* ---------- 5. Check-in demo ---------- */
+  const NAMES = [
+    { name: 'María García',    initials: 'MG' },
+    { name: 'Carlos Ramírez',  initials: 'CR' },
+    { name: 'Ana López',       initials: 'AL' },
+    { name: 'Pedro Sánchez',   initials: 'PS' },
+    { name: 'Laura Torres',    initials: 'LT' },
+    { name: 'Jorge Méndez',    initials: 'JM' }
+  ];
+  const listOnsite = document.getElementById('listOnsite');
+  const counterOnsite = document.getElementById('counterOnsite');
+  const toast = document.getElementById('checkinToast');
+  const toastLabel = document.getElementById('checkinToastLabel');
+  let totalCheckins = 12;
+
+  function showToast(msg) {
+    if (!toast) return;
+    toastLabel.textContent = msg;
+    toast.classList.add('is-visible');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('is-visible'), 2400);
+  }
+
+  function addCheckin(target) {
+    const pick = NAMES[Math.floor(Math.random() * NAMES.length)];
+    const now = new Date();
+    const time = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    totalCheckins++;
+    if (counterOnsite) counterOnsite.textContent = `${totalCheckins} ingresos · 2 pendientes`;
+
+    if (target === 'onsite' && listOnsite) {
+      const li = document.createElement('li');
+      li.className = 'checador__item';
+      li.innerHTML = `
+        <span class="checador__av">${pick.initials}</span>
+        <span>
+          <span class="checador__name">${pick.name}</span>
+          <span class="checador__tag">Entrada</span>
+        </span>
+        <span class="checador__time"><svg class="ico"><use href="#i-check"/></svg>${time}</span>`;
+      listOnsite.insertBefore(li, listOnsite.firstChild);
+      while (listOnsite.children.length > 5) listOnsite.removeChild(listOnsite.lastChild);
+    }
+
+    showToast(`✓ ${pick.name.split(' ')[0]} · Entrada ${time}`);
+  }
+
+  document.querySelectorAll('[data-action^="checkin-"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.action === 'checkin-onsite' ? 'onsite' : 'field';
+      addCheckin(target);
+    });
+  });
+
+  /* ---------- 6. Roles ---------- */
+  const ROLES = {
+    dueno: {
+      icon: 'i-briefcase',
+      title: 'Dueño de negocio',
+      lead: 'Visibilidad de la asistencia en todas tus sucursales, sin depender de reportes armados a mano.',
+      items: [
+        'Consulta los registros y la asistencia de cada sucursal desde un solo panel.',
+        'Ve retardos, faltas e incidencias del día sin pedir reportes a RH.',
+        'Exporta información para tu contador o tu proceso interno.',
+        'Revisa la operación completa desde el celular cuando estás fuera.'
+      ]
+    },
+    rh: {
+      icon: 'i-users',
+      title: 'Recursos Humanos',
+      lead: 'Administra horarios, incidencias y reportes desde una sola plataforma pensada para la operación diaria.',
+      items: [
+        'Configura turnos fijos y rotativos, y reglas de retardos y faltas.',
+        'Registra altas, bajas y cambios de horario sin hojas de cálculo paralelas.',
+        'Consulta y exporta reportes para preparar la nómina.',
+        'Genera reportes individuales con firma de conformidad para cada empleado.'
+      ]
+    },
+    gerente: {
+      icon: 'i-pin',
+      title: 'Gerentes y responsables',
+      lead: 'Acceso a la información de las ubicaciones que tienen asignadas, sin ver lo que no les corresponde.',
+      items: [
+        'Consulta la asistencia del equipo de su sucursal o área.',
+        'Ve incidencias del turno y del personal a su cargo.',
+        'Reporta novedades a RH desde la misma plataforma.',
+        'Permisos configurables por ubicación y por rol.'
+      ]
+    }
+  };
+  const rolTabs = document.querySelectorAll('.rol__tab');
+  const rolPanel = document.getElementById('rolPanel');
+
+  function renderRol(key) {
+    const r = ROLES[key];
+    if (!r) return;
+    rolTabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.rol === key)));
+    rolPanel.innerHTML = `
+      <div class="rol__hero">
+        <span class="rol__ico"><svg class="ico"><use href="#${r.icon}"/></svg></span>
+        <h3>${r.title}</h3>
+      </div>
+      <p class="rol__lead">${r.lead}</p>
+      <ul class="rol__list">
+        ${r.items.map(i => `<li><svg class="ico"><use href="#i-check"/></svg><span>${i}</span></li>`).join('')}
+      </ul>`;
+  }
+  rolTabs.forEach(t => t.addEventListener('click', () => renderRol(t.dataset.rol)));
+  renderRol('dueno');
+
+  /* ---------- 7. Modalidades ---------- */
+  const MODS = {
+    onsite: {
+      icon: 'i-badge',
+      title: 'Checador en sitio',
+      lead: 'Terminal fija en tu oficina o sucursal para que el equipo registre entrada y salida al llegar.',
+      feats: ['Terminal fija', 'Método de identificación según equipo', 'Registro de inicio y fin', 'Reportes por sucursal']
+    },
+    field: {
+      icon: 'i-mobile',
+      title: 'Registro móvil',
+      lead: 'App para el personal en campo, con verificación de ubicación según la configuración elegida.',
+      feats: ['Registro desde el celular', 'Ubicación opcional', 'Personal en campo', 'Sincronización con la nube']
+    },
+    mixed: {
+      icon: 'i-link',
+      title: 'Solución mixta',
+      lead: 'Combina checadores en sitio con registro móvil y una plataforma en la nube para una vista unificada.',
+      feats: ['Vista unificada', 'Sitio + campo', 'Permisos por rol', 'Reportes consolidados']
+    }
+  };
+  const modTabs = document.querySelectorAll('.mod__tab');
+  const modPanel = document.getElementById('modPanel');
+
+  function renderMod(key) {
+    const m = MODS[key];
+    if (!m) return;
+    modTabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.mod === key)));
+    modPanel.innerHTML = `
+      <div class="mod__hero">
+        <span class="mod__ico"><svg class="ico"><use href="#${m.icon}"/></svg></span>
+        <h3>${m.title}</h3>
+      </div>
+      <p class="mod__lead">${m.lead}</p>
+      <div class="mod__feats">
+        ${m.feats.map((f, i) => `<span class="tag" style="animation-delay:${i * 50}ms"><svg class="ico"><use href="#i-check"/></svg>${f}</span>`).join('')}
+      </div>`;
+  }
+  modTabs.forEach(t => t.addEventListener('click', () => renderMod(t.dataset.mod)));
+  renderMod('onsite');
+
+  /* ---------- 8. Stepper reveal ---------- */
+  const steps = document.getElementById('steps');
+  if (steps) {
+    const stepEls = [...steps.querySelectorAll('.step')];
+    const sio = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-in'); });
+    }, { threshold: 0.3 });
+    stepEls.forEach(s => sio.observe(s));
+  }
+
+  /* ---------- 9. Jornada chart ---------- */
+  const jornadaChart = document.getElementById('jornadaChart');
+  if (jornadaChart) {
+    const rows = jornadaChart.querySelectorAll('.jornada__row');
+    const MAX = 48;
+    const setBars = () => {
+      rows.forEach(row => {
+        const h = Number(row.dataset.hours);
+        const pct = (h / MAX) * 100;
+        const bar = row.querySelector('.jornada__fill');
+        if (bar) bar.style.width = pct + '%';
+      });
+    };
+    const jio = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { setBars(); jio.disconnect(); }
+      });
+    }, { threshold: 0.3 });
+    jio.observe(jornadaChart);
+  }
+
+  /* ---------- 10. Mobile CTA bar ---------- */
+  const mobileCta = document.getElementById('mobileCta');
+  const hero = document.getElementById('inicio');
+  const contacto = document.getElementById('contacto');
+  if (mobileCta && hero && contacto) {
+    const showIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.target === hero) {
+          mobileCta.classList.toggle('is-visible', !e.isIntersecting);
+        }
+      });
+    }, { threshold: 0.1 });
+    showIO.observe(hero);
+
+    const hideIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) mobileCta.classList.remove('is-visible');
+      });
+    }, { threshold: 0.35 });
+    hideIO.observe(contacto);
+  }
+
+  /* ---------- 11. Form → mailto ---------- */
+  const form = document.getElementById('leadForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = form.nombre.value.trim();
+    const contacto = form.contacto.value.trim();
+    const tamano = form.tamano.value;
+
+    if (!nombre) { form.querySelector('#fName').focus(); return; }
+    if (!contacto) { form.querySelector('#fContact').focus(); return; }
+
+    const body = [
+      'Solicitud de cotización — Control de asistencia',
+      '',
+      'Nombre: ' + nombre,
+      'Contacto: ' + contacto,
+      'Tamaño del equipo: ' + (tamano || 'No especificado'),
+      '',
+      'Descripción del sitio / operación:',
+      ''
+    ].join('\n');
+
+    window.location.href = 'mailto:contacto@norttek.com?subject=' +
+      encodeURIComponent('Cotización asistencia — ' + nombre) +
+      '&body=' + encodeURIComponent(body);
+  });
+
+})();
+</script>
+</body>
+</html>
