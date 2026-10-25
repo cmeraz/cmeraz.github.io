@@ -162,28 +162,27 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .giro-card{
   display:flex;align-items:center;gap:10px;
   padding:12px;background:#fff;
-  border:2px solid var(--line);border-radius:14px;
+  border:1px solid var(--line);border-radius:14px;
   cursor:pointer;text-align:left;
-  transition:all .25s ease;font:inherit;color:inherit;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;font:inherit;color:inherit;
   min-width:0;
 }
 .giro-card:hover{
-  border-color:var(--blue);
-  box-shadow:0 8px 20px -8px rgba(58,175,228,.35);
-  transform:translateY(-2px);
+  border-color:rgba(58,175,228,.55);
+  background:#FBFDFE;
 }
-.giro-card:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(58,175,228,.4)}
+.giro-card:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(58,175,228,.35)}
 .giro-card.active{
-  background:var(--navy);border-color:var(--navy);color:#fff;
-  box-shadow:0 12px 24px -10px rgba(28,35,51,.5);
+  background:#F1F8FB;border-color:rgba(58,175,228,.65);color:var(--navy);
+  box-shadow:inset 0 1px 2px rgba(28,35,51,.06),inset 0 -1px 1px rgba(255,255,255,.9);
 }
-.giro-card.active .giro-icon{background:rgba(58,175,228,.25);color:#B5E5F9}
-.giro-card.active .giro-name small{color:#C4D0E0}
+.giro-card.active .giro-icon{background:#DCEFF7;color:var(--blue-deep)}
+.giro-card.active .giro-name small{color:var(--muted)}
 .giro-icon{
   width:40px;height:40px;border-radius:11px;
   background:rgba(58,175,228,.12);color:var(--blue-deep);
   display:grid;place-items:center;flex-shrink:0;
-  transition:all .25s;
+  transition:background .18s ease,color .18s ease;
 }
 .giro-icon svg{width:22px;height:22px;display:block}
 .giro-name{
@@ -201,93 +200,35 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .catalog-section{background:#fff;padding:48px 0 72px;position:relative}
 .cat-header{margin-bottom:24px}
 .cat-header .lead{margin-top:6px}
-
-/* Sticky giros bar */
-.giros-sticky{
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(255,255,255,.98);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--line);
-  margin: 0 -20px 18px;
-  padding: 10px 20px;
-  transition: box-shadow .3s ease;
-}
-.giros-sticky.is-stuck{
-  box-shadow: 0 6px 20px -8px rgba(28,35,51,.2);
-}
-.giros-sticky-inner{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  max-width: 1120px;
-  margin: 0 auto;
-}
-.giros-sticky-label{
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  flex-shrink: 0;
-  display: none;
-}
-@media (min-width: 900px){
-  .giros-sticky-label{ display: inline-block; }
-}
-.giros-sticky-chips{
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  flex: 1;
-  min-width: 0;
-  padding: 2px 0;
-  -webkit-mask-image: linear-gradient(90deg, #000 95%, transparent 100%);
-  mask-image: linear-gradient(90deg, #000 95%, transparent 100%);
-}
-.giros-sticky-chips::-webkit-scrollbar{ display: none; }
-
-.giro-chip-mini{
-  flex-shrink: 0;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: var(--ice);
-  color: var(--text);
-  font-size: 12.5px;
-  font-weight: 600;
-  font-family: Inter, sans-serif;
-  border: 1.5px solid transparent;
-  white-space: nowrap;
-  transition: all .2s ease;
-  cursor: pointer;
-}
-.giro-chip-mini:hover{ background: #dde3eb; }
-.giro-chip-mini:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(58,175,228,.4); }
-.giro-chip-mini.active{
-  background: var(--navy);
-  color: #fff;
-  border-color: var(--navy);
-  font-weight: 700;
-  box-shadow: 0 4px 12px -4px rgba(28,35,51,.4);
-}
-.giros-clear{
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--ice);
-  color: var(--navy);
-  display: grid;
-  place-items: center;
-  transition: background .2s;
-  cursor: pointer;
-}
-.giros-clear:hover{ background: #dde3eb; }
-.giros-clear svg{ width: 14px; height: 14px; }
+.giro-message{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:16px;margin:0 0 20px;padding:16px 18px;border:1px solid #DDEAF0;border-radius:14px;background:#F8FBFC;box-shadow:inset 0 1px 2px rgba(28,35,51,.04),inset 0 -1px 1px rgba(255,255,255,.9)}
+.giro-message-icon{width:48px;height:48px;border:1px solid #D9EAF1;border-radius:13px;background:#EDF6FA;color:var(--blue-deep);display:grid;place-items:center;box-shadow:inset 0 1px 2px rgba(28,35,51,.05),inset 0 -1px 1px rgba(255,255,255,.9)}
+.giro-message-icon svg{width:26px;height:26px;display:block}
+.giro-message-copy{min-width:0}
+.giro-message .eyebrow{margin-bottom:4px}
+.giro-message h3{margin-bottom:6px;font-size:19px}
+.giro-message p:not(.eyebrow){max-width:700px;color:var(--muted);line-height:1.5}
+.giro-message-actions{display:flex;align-items:center;gap:12px}
+.giro-message .btn{flex-shrink:0;min-height:46px;font-size:14px}
+.giro-message-clear{flex-shrink:0;padding:10px 2px;background:transparent;color:var(--muted);font:600 13px Inter,sans-serif;cursor:pointer}
+.giro-message-clear:hover{color:var(--navy);text-decoration:underline}
+.giro-message-clear:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+.giro-products{grid-column:1/-1;border-top:1px solid #DDEAF0;padding-top:12px}
+.giro-products summary{display:flex;align-items:center;gap:8px;width:100%;padding:10px 12px;border:1px solid #D6E7EF;border-radius:10px;background:#EFF7FA;cursor:pointer;list-style:none;color:var(--navy);font-size:13px;font-weight:700;transition:background .18s ease,border-color .18s ease}
+.giro-products summary::-webkit-details-marker{display:none}
+.giro-products summary:hover{border-color:#B9D9E6;background:#E8F3F8}
+.giro-products summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.giro-products-icon{flex-shrink:0;color:var(--blue-deep);font-size:18px}
+.giro-products-label{white-space:nowrap}
+.giro-products-chevron{flex-shrink:0;color:var(--blue-deep);font-size:19px;transition:transform .18s ease}
+.giro-products:not([open]) .giro-products-chevron{animation:giroProductsNudge 1.6s ease-in-out infinite}
+.giro-products[open] .giro-products-chevron{transform:rotate(180deg);animation:none}
+.giro-products-count{margin-left:auto;color:var(--muted);font-size:12px;font-weight:500}
+@keyframes giroProductsNudge{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+.giro-products-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px;margin:14px 0 0;padding:0;list-style:none}
+.giro-products-list li{min-width:0}
+.giro-products-list strong{display:block;margin-bottom:3px;color:var(--navy);font-size:12.5px}
+.giro-products-list li span{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+.giro-products-note{margin:14px 0 0;padding:10px 12px;border-radius:8px;background:#EDF6FA;color:var(--muted);font-size:12px;line-height:1.5}
 
 /* Tabs */
 .cat-tabs{display: flex;gap: 8px;overflow-x: auto;-webkit-overflow-scrolling: touch;scrollbar-width: none;margin: 0 -20px 22px;padding: 4px 20px;-webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent)}
@@ -325,19 +266,8 @@ img.logo{display:block;object-fit:contain;width:auto;height:44px}
 .bento-cat.is-hidden{ display: none !important; }
 
 .bento-cat.featured-giro{
-  box-shadow:0 0 0 3px rgba(58,175,228,.65),0 20px 40px -14px rgba(58,175,228,.5);
-  transform:translateY(-2px);
-  z-index:2;
-}
-.bento-cat.dimmed{
-  opacity:.28;
-  filter:grayscale(.7);
-  transform:scale(.97);
-}
-.bento-cat.dimmed:hover{
-  opacity:.7;
-  filter:grayscale(.2);
-  transform:translateY(-4px) scale(.97);
+  box-shadow:inset 0 0 0 1px rgba(58,175,228,.42);
+  transform:none;
 }
 
 .bento-img-wrap{position: absolute;inset: 0;overflow: hidden}
@@ -567,7 +497,6 @@ footer .logo{width:140px;height:36px}
   .giro-icon svg{width:24px;height:24px}
   .giro-name{font-size:13.5px}
   .giro-name small{font-size:11.5px}
-  .giros-sticky{ margin: 0 -20px 20px; padding: 12px 20px; }
 }
 
 /* ============ ESCRITORIO ============ */
@@ -597,6 +526,36 @@ footer .logo{width:140px;height:36px}
   .giro-icon svg{width:26px;height:26px}
   .giro-name{font-size:14px}
   .giro-name small{font-size:12px}
+}
+
+/* ============ CATÁLOGO COMPACTO EN MÓVIL ============ */
+@media (max-width:639px){
+  .bento-cats{grid-template-columns:minmax(0,1fr);grid-auto-rows:76px;gap:8px}
+  .bento-cat:not(.bento-cta){display:flex;align-items:center;gap:12px;padding:8px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:none;will-change:auto}
+  .bento-cat:not(.bento-cta):hover{transform:none;box-shadow:0 6px 16px rgba(28,35,51,.08)}
+  .bento-img-wrap{position:relative;inset:auto;display:block;width:56px;height:56px;flex:0 0 56px;border-radius:10px;order:0}
+  .bento-img-fallback .ms{font-size:26px}
+  .bento-cat:hover .bento-img-wrap img{transform:none}
+  .bento-overlay{display:none}
+  .bento-label{position:static;inset:auto;z-index:auto;flex:1;min-width:0;order:1;color:var(--text);font-size:14px;text-shadow:none}
+  .bento-label .ms{display:none}
+  .bento-arrow{position:static;flex:0 0 28px;order:2;width:28px;height:28px;opacity:1;transform:none;background:transparent;color:var(--muted);box-shadow:none}
+  .bento-cat:hover .bento-arrow{transform:none}
+  .bento-cat.featured-giro{transform:none}
+  .bento-cat.bento-cta{min-height:76px;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;padding:10px 12px;border-radius:14px;text-align:left}
+  .bento-cta-icon{width:40px;height:40px;flex:0 0 40px;font-size:20px}
+  .bento-cta-label{font-size:14px;text-align:left}
+  .bento-cta-arrow{position:static;flex:0 0 28px;margin-left:auto}
+  .giro-message{grid-template-columns:40px minmax(0,1fr);align-items:start;gap:12px;padding:14px}
+  .giro-message-icon{width:40px;height:40px;border-radius:11px}
+  .giro-message-icon svg{width:22px;height:22px}
+  .giro-message h3{font-size:17px}
+  .giro-message-actions{grid-column:1/-1;gap:10px}
+  .giro-message .btn{flex:1;min-width:0}
+  .giro-message-clear{padding:10px}
+  .giro-products-list{grid-template-columns:1fr;gap:12px}
+  .giro-products-count{display:none}
+  .giro-products summary{gap:7px;padding:9px 10px;font-size:12px}
 }
 
 /* ============ REDUCED MOTION ============ */
@@ -726,7 +685,7 @@ footer .logo{width:140px;height:36px}
     <div class="giros-header">
       <p class="eyebrow">Giros</p>
       <h2 class="title">Giros que atendemos</h2>
-      <p class="lead">Elige tu giro y te mostramos lo que más piden negocios como el tuyo.</p>
+      <p class="lead">Elige tu giro para ver recomendaciones relacionadas; el catálogo completo sigue disponible.</p>
     </div>
 
     <div class="giros-grid">
@@ -923,35 +882,29 @@ footer .logo{width:140px;height:36px}
       <p class="lead">Compra por categoría y te lo llevamos a tu negocio.</p>
     </div>
 
-    <div class="giros-sticky" id="girosSticky">
-      <div class="giros-sticky-inner">
-        <span class="giros-sticky-label">Giro:</span>
-        <div class="giros-sticky-chips" role="tablist" aria-label="Filtrar por giro">
-          <button class="giro-chip-mini" data-giro="abarrotes">Abarrotes</button>
-          <button class="giro-chip-mini" data-giro="viajes">Viajes</button>
-          <button class="giro-chip-mini" data-giro="constructoras">Constructoras</button>
-          <button class="giro-chip-mini" data-giro="consultorios">Consultorios</button>
-          <button class="giro-chip-mini" data-giro="contables">Contables</button>
-          <button class="giro-chip-mini" data-giro="juridicos">Jurídicos</button>
-          <button class="giro-chip-mini" data-giro="escuelas">Escuelas</button>
-          <button class="giro-chip-mini" data-giro="farmacias">Farmacias</button>
-          <button class="giro-chip-mini" data-giro="ferreterias">Ferreterías</button>
-          <button class="giro-chip-mini" data-giro="hospitales">Hospitales</button>
-          <button class="giro-chip-mini" data-giro="hoteles">Hoteles</button>
-          <button class="giro-chip-mini" data-giro="industrias">Industrias</button>
-          <button class="giro-chip-mini" data-giro="inmobiliarias">Inmobiliarias</button>
-          <button class="giro-chip-mini" data-giro="laboratorios">Laboratorios</button>
-          <button class="giro-chip-mini" data-giro="oficinas">Oficinas</button>
-          <button class="giro-chip-mini" data-giro="restaurantes">Restaurantes</button>
-          <button class="giro-chip-mini" data-giro="tiendas">Tiendas</button>
-        </div>
-        <button class="giros-clear" id="girosClear" hidden aria-label="Quitar filtro de giro">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <path d="M6 6l12 12M18 6 6 18"/>
-          </svg>
-        </button>
+    <aside class="giro-message" id="giroMessage" hidden>
+      <span class="giro-message-icon" id="giroMessageIcon" aria-hidden="true"></span>
+      <div class="giro-message-copy">
+        <p class="eyebrow">Giro seleccionado</p>
+        <h3 id="giroMessageTitle" aria-live="polite"></h3>
       </div>
-    </div>
+      <div class="giro-message-actions">
+        <a class="btn btn-primary" id="giroQuoteLink" href="#contacto" target="_blank" rel="noopener">
+          <span class="ms" aria-hidden="true">chat</span>Cotizar por WhatsApp
+        </a>
+        <button type="button" class="giro-message-clear" id="girosClear" hidden>Quitar giro</button>
+      </div>
+      <details class="giro-products" id="giroProducts">
+        <summary>
+          <span class="ms giro-products-icon" aria-hidden="true">inventory_2</span>
+          <span class="giro-products-label">Ver productos relacionados</span>
+          <span class="giro-products-count" id="giroProductsCount"></span>
+          <span class="ms giro-products-chevron" aria-hidden="true">expand_more</span>
+        </summary>
+        <ul class="giro-products-list" id="giroProductsList"></ul>
+        <p class="giro-products-note" id="giroProductsNote" hidden></p>
+      </details>
+    </aside>
 
     <nav class="cat-tabs" role="tablist" aria-label="Filtrar categorías">
       <button class="cat-tab" role="tab" aria-selected="true" data-filter="all">Todo <span class="cat-tab-count">26</span></button>
@@ -1476,30 +1429,266 @@ footer .logo{width:140px;height:36px}
   // CONFIGURACIÓN DE GIROS (17)
   // =================================================================
   const GIROS = {
-    abarrotes:      { nombre: 'Abarrotes y minisúper',              cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'calculadoras', 'organizadores'] },
-    viajes:         { nombre: 'Agencias de viajes y turismo',       cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'calculadoras', 'notas', 'mouse'] },
-    constructoras:  { nombre: 'Constructoras y desarrolladoras',    cats: ['papel', 'carpetas', 'organizadores', 'tableros', 'mouse', 'cables', 'calculadoras', 'mochilas'] },
-    consultorios:   { nombre: 'Consultorios médicos y dentales',    cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'correctores', 'notas', 'rollos', 'miniprinter'] },
-    contables:      { nombre: 'Despachos contables y fiscales',     cats: ['papel', 'escritura', 'carpetas', 'folders', 'organizadores', 'calculadoras', 'correctores', 'notas', 'mouse'] },
-    juridicos:      { nombre: 'Despachos jurídicos y notarías',     cats: ['papel', 'escritura', 'carpetas', 'folders', 'organizadores', 'correctores', 'notas', 'calculadoras'] },
-    escuelas:       { nombre: 'Escuelas y colegios',                cats: ['cuadernos', 'kits', 'escritura', 'marcadores', 'tijeras', 'pegamento', 'notas', 'correctores', 'papel', 'perforadoras', 'grapas'] },
-    farmacias:      { nombre: 'Farmacias y droguerías',             cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'organizadores', 'calculadoras'] },
-    ferreterias:    { nombre: 'Ferreterías y tlapalerías',          cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'calculadoras', 'notas', 'organizadores'] },
-    hospitales:     { nombre: 'Hospitales y clínicas',              cats: ['papel', 'carpetas', 'organizadores', 'escritura', 'correctores', 'rollos', 'miniprinter', 'notas', 'folders'] },
-    hoteles:        { nombre: 'Hoteles y moteles',                  cats: ['rollos', 'cajones', 'miniprinter', 'carpetas', 'organizadores', 'notas', 'calculadoras', 'escritura'] },
-    industrias:     { nombre: 'Industrias y maquiladoras',          cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'organizadores', 'tableros', 'grapas', 'notas', 'calculadoras'] },
-    inmobiliarias:  { nombre: 'Inmobiliarias y bienes raíces',      cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'calculadoras', 'notas', 'mouse'] },
-    laboratorios:   { nombre: 'Laboratorios clínicos y médicos',    cats: ['rollos', 'miniprinter', 'carpetas', 'organizadores', 'escritura', 'notas', 'correctores', 'cintas'] },
-    oficinas:       { nombre: 'Oficinas y corporativos',            cats: ['papel', 'escritura', 'marcadores', 'folders', 'organizadores', 'calculadoras', 'mouse', 'cables', 'notas', 'correctores', 'carpetas'] },
-    restaurantes:   { nombre: 'Restaurantes y cafeterías',          cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'calculadoras'] },
-    tiendas:        { nombre: 'Tiendas y comercios',                cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'folders', 'organizadores', 'calculadoras', 'notas'] }
+    abarrotes: {
+      nombre: 'Abarrotes y minisúper',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta, papel bond oficio, papel reciclado, papel autocopiante y papel para impresoras.'],
+        ['Punto de venta', 'Rollos de papel térmico de diferentes medidas, rollos para calculadoras y papel para equipos compatibles.'],
+        ['Escritura', 'Bolígrafos azules, negros y rojos; lápices; marcadores permanentes; marcatextos y correctores.'],
+        ['Organización', 'Libretas profesionales, cuadernos de notas, blocks de notas, notas adhesivas y agendas.'],
+        ['Identificación', 'Etiquetas adhesivas blancas, etiquetas de colores, etiquetas para precios y etiquetas para clasificación.'],
+        ['Archivo', 'Folders tamaño carta y oficio, carpetas de argollas, separadores, sobres y cajas para archivo.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, grapas, clips, ligas y cinta adhesiva.']
+      ],
+      cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'calculadoras', 'organizadores']
+    },
+    viajes: {
+      nombre: 'Agencias de viajes y turismo',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel de mayor gramaje para documentos de presentación y papel fotográfico compatible.'],
+        ['Escritura', 'Bolígrafos de tinta azul y negra, lápices, portaminas, correctores y marcatextos.'],
+        ['Presentación comercial', 'Carpetas de presentación, folders con pestaña, carpetas de argollas y portadocumentos.'],
+        ['Documentación', 'Sobres blancos, sobres manila, sobres para correspondencia y etiquetas para destinatarios.'],
+        ['Organización', 'Agendas ejecutivas, planners, libretas profesionales, blocks de notas y notas adhesivas.'],
+        ['Identificación', 'Etiquetas adhesivas para expedientes, separadores de colores y pestañas clasificadoras.'],
+        ['Impresión y acabado', 'Tóner, cartuchos de tinta, clips, grapas, perforadoras, engrapadoras y sacagrapas.'],
+        ['Escritorio', 'Organizadores, portaplumas, tijeras, reglas, cinta adhesiva y dispensadores de cinta.']
+      ],
+      cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'calculadoras', 'notas', 'mouse']
+    },
+    constructoras: {
+      nombre: 'Constructoras y desarrolladoras',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta, oficio y doble carta; papel para impresión de planos en equipos compatibles; papel autocopiante para formatos.'],
+        ['Archivo documental', 'Carpetas de argollas, carpetas de alta capacidad, folders carta y oficio, separadores y cajas de archivo.'],
+        ['Control de obra', 'Libretas profesionales, cuadernos de campo, blocks de notas, portapapeles con clip y tablas para escritura.'],
+        ['Escritura técnica', 'Bolígrafos, lápices, portaminas, marcadores permanentes, marcadores de punta fina y marcatextos.'],
+        ['Identificación', 'Etiquetas adhesivas, etiquetas para expedientes, etiquetas de colores y pestañas clasificadoras.'],
+        ['Presentación de documentos', 'Protectores de hojas, micas, fundas transparentes, sobres manila y carpetas de presentación.'],
+        ['Consumibles de oficina', 'Tóner, cartuchos de tinta, grapas, clips, sujetadocumentos y ligas.'],
+        ['Herramientas de escritorio', 'Engrapadoras de uso rudo, perforadoras, reglas, tijeras, cintas adhesivas y dispensadores.']
+      ],
+      cats: ['papel', 'carpetas', 'organizadores', 'tableros', 'mouse', 'cables', 'calculadoras', 'mochilas']
+    },
+    consultorios: {
+      nombre: 'Consultorios médicos y dentales',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras láser y de inyección de tinta, y papel de mayor gramaje para documentos especiales.'],
+        ['Archivo de pacientes', 'Folders individuales, carpetas, separadores, sobres, protectores de hojas y fundas transparentes.'],
+        ['Organización de citas', 'Agendas, planners, calendarios de escritorio, blocks de notas y notas adhesivas.'],
+        ['Escritura', 'Bolígrafos azules, negros y rojos, lápices, marcatextos, correctores y marcadores permanentes.'],
+        ['Identificación', 'Etiquetas adhesivas para expedientes, etiquetas blancas, etiquetas de colores y pestañas clasificadoras.'],
+        ['Recepción y administración', 'Portapapeles, sujetadocumentos, clips, grapas, engrapadoras y perforadoras.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta y papel para impresoras de acuerdo con el modelo del equipo.'],
+        ['Escritorio', 'Organizadores de documentos, portaplumas, tijeras, reglas, cinta adhesiva y dispensadores.']
+      ],
+      cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'correctores', 'notas', 'rollos', 'miniprinter']
+    },
+    contables: {
+      nombre: 'Despachos contables y fiscales',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresión dúplex, papel de mayor gramaje y papel autocopiante.'],
+        ['Archivo', 'Carpetas de argollas, folders carta y oficio, carpetas expandibles, separadores, cajas de archivo y protectores de hojas.'],
+        ['Organización por cliente', 'Etiquetas adhesivas, etiquetas para lomos de carpetas, pestañas clasificadoras y separadores de colores.'],
+        ['Escritura', 'Bolígrafos azules, negros y rojos, lápices, portaminas, marcatextos y correctores.'],
+        ['Administración', 'Agendas, planners, libretas profesionales, blocks de notas y notas adhesivas.'],
+        ['Sujeción documental', 'Clips estándar, clips mariposa, sujetadocumentos, grapas, engrapadoras y perforadoras.'],
+        ['Correspondencia', 'Sobres blancos, sobres manila, sobres tamaño oficio y etiquetas para destinatarios.'],
+        ['Consumibles de impresión', 'Tóner, cartuchos de tinta y papel compatible con las impresoras del despacho.'],
+        ['Equipo de escritorio', 'Calculadoras de escritorio, organizadores de documentos, portaplumas y dispensadores de cinta.']
+      ],
+      cats: ['papel', 'escritura', 'carpetas', 'folders', 'organizadores', 'calculadoras', 'correctores', 'notas', 'mouse']
+    },
+    juridicos: {
+      nombre: 'Despachos jurídicos y notarías',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel de mayor gramaje para presentaciones y papel para impresión de documentos extensos.'],
+        ['Archivo profesional', 'Carpetas de argollas, folders carta y oficio, carpetas expandibles, separadores y cajas para archivo.'],
+        ['Protección documental', 'Protectores de hojas, micas, fundas transparentes, carpetas de presentación y portadocumentos.'],
+        ['Correspondencia', 'Sobres blancos, sobres manila, sobres tamaño oficio, sobres para documentos y etiquetas de destinatarios.'],
+        ['Escritura', 'Bolígrafos de tinta azul y negra, lápices, portaminas, marcatextos y correctores.'],
+        ['Sujeción', 'Clips, clips mariposa, sujetadocumentos, grapas, engrapadoras y perforadoras.'],
+        ['Organización de expedientes', 'Etiquetas adhesivas, pestañas clasificadoras, separadores de colores y etiquetas para lomos.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta y papel adecuado para los equipos de impresión.'],
+        ['Escritorio', 'Agendas, libretas, blocks de notas, organizadores y dispensadores de cinta adhesiva.']
+      ],
+      cats: ['papel', 'escritura', 'carpetas', 'folders', 'organizadores', 'correctores', 'notas', 'calculadoras']
+    },
+    escuelas: {
+      nombre: 'Escuelas y colegios',
+      productos: [
+        ['Papel y hojas', 'Papel bond carta y oficio, hojas de colores, papel milimétrico, papel vegetal, papel crepé y papel construcción.'],
+        ['Cartulinas y presentaciones', 'Cartulinas blancas y de colores, cartoncillo, papel cascarón y materiales para exposiciones.'],
+        ['Escritura', 'Lápices, bolígrafos, portaminas, borradores, sacapuntas, marcadores, plumones y marcatextos.'],
+        ['Cuadernos y notas', 'Libretas profesionales, cuadernos escolares, blocks de dibujo, blocks de notas y agendas.'],
+        ['Dibujo y geometría', 'Reglas, escuadras, transportadores, compases y juegos de geometría.'],
+        ['Manualidades', 'Tijeras escolares, pegamento en barra, pegamento líquido, barras de silicón, cinta adhesiva y materiales decorativos.'],
+        ['Organización', 'Folders, carpetas, separadores, protectores de hojas, etiquetas adhesivas y cajas de archivo.'],
+        ['Material didáctico', 'Rotafolios, papel para rotafolio, marcadores para pizarrón blanco, borradores y materiales para exposiciones.'],
+        ['Administración escolar', 'Papel bond, tóner, cartuchos de tinta, engrapadoras, perforadoras, clips y sujetadocumentos.'],
+        ['Escritorio docente', 'Organizadores, notas adhesivas, portaplumas, calendarios y planificadores.']
+      ],
+      cats: ['cuadernos', 'kits', 'escritura', 'marcadores', 'tijeras', 'pegamento', 'notas', 'correctores', 'papel', 'perforadoras', 'grapas']
+    },
+    farmacias: {
+      nombre: 'Farmacias y droguerías',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras láser y papel para impresión de documentos administrativos.'],
+        ['Punto de venta', 'Rollos térmicos para terminales, impresoras de tickets y otros equipos compatibles con las medidas requeridas.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta y papel compatible con las impresoras instaladas.'],
+        ['Etiquetado', 'Etiquetas adhesivas blancas, etiquetas de colores, etiquetas para anaqueles y etiquetas para organización de inventarios.'],
+        ['Escritura', 'Bolígrafos azules, negros y rojos, marcadores permanentes, marcatextos y correctores.'],
+        ['Organización', 'Libretas de inventario, blocks de notas, agendas, notas adhesivas y calendarios.'],
+        ['Archivo', 'Folders carta y oficio, carpetas de argollas, separadores, sobres y cajas de archivo.'],
+        ['Recepción y administración', 'Clips, grapas, sujetadocumentos, engrapadoras, perforadoras y portapapeles.'],
+        ['Escritorio', 'Organizadores de documentos, portaplumas, tijeras, reglas y dispensadores de cinta.']
+      ],
+      cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'organizadores', 'calculadoras']
+    },
+    ferreterias: {
+      nombre: 'Ferreterías y tlapalerías',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras láser y papel autocopiante para formatos compatibles.'],
+        ['Punto de venta', 'Rollos térmicos para impresoras de tickets y terminales compatibles.'],
+        ['Escritura', 'Bolígrafos, lápices, marcadores permanentes, marcatextos y marcadores de punta gruesa.'],
+        ['Inventarios', 'Libretas de control, blocks de notas, etiquetas adhesivas, etiquetas de colores y etiquetas para anaqueles.'],
+        ['Organización', 'Folders, carpetas, separadores, sobres y cajas de archivo.'],
+        ['Cotizaciones y pedidos', 'Portapapeles, blocks de notas, libretas profesionales, clips y sujetadocumentos.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, grapas, cinta adhesiva y correctores.'],
+        ['Herramientas de oficina', 'Engrapadoras, perforadoras, tijeras, reglas, calculadoras y organizadores de escritorio.']
+      ],
+      cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'calculadoras', 'notas', 'organizadores']
+    },
+    hospitales: {
+      nombre: 'Hospitales y clínicas',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras láser y papel para impresión de reportes administrativos.'],
+        ['Archivo documental', 'Carpetas de argollas, folders, carpetas expandibles, separadores, protectores de hojas y cajas de archivo.'],
+        ['Identificación', 'Etiquetas adhesivas, etiquetas de colores, pestañas clasificadoras y etiquetas para expedientes.'],
+        ['Escritura', 'Bolígrafos azules, negros y rojos, lápices, marcadores permanentes y marcatextos.'],
+        ['Recepción', 'Libretas, agendas, blocks de notas, notas adhesivas y portapapeles.'],
+        ['Administración', 'Clips, sujetadocumentos, grapas, engrapadoras, perforadoras y sobres.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta y papel compatible con los equipos de impresión.'],
+        ['Organización', 'Organizadores de documentos, separadores, carpetas de presentación y portadocumentos.']
+      ],
+      cats: ['papel', 'carpetas', 'organizadores', 'escritura', 'correctores', 'rollos', 'miniprinter', 'notas', 'folders']
+    },
+    hoteles: {
+      nombre: 'Hoteles y moteles',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras láser y papel para documentos administrativos.'],
+        ['Punto de venta', 'Rollos térmicos para impresoras de tickets y terminales compatibles.'],
+        ['Recepción', 'Agendas, libretas, bolígrafos, blocks de notas, notas adhesivas y portapapeles.'],
+        ['Administración', 'Carpetas, folders, separadores, sobres, clips y sujetadocumentos.'],
+        ['Control interno', 'Etiquetas adhesivas, etiquetas para archivo, marcadores permanentes y libretas de registro.'],
+        ['Organización', 'Cajas de archivo, protectores de hojas, carpetas expandibles y organizadores de escritorio.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, grapas, cinta adhesiva y papel compatible.'],
+        ['Escritorio', 'Engrapadoras, perforadoras, tijeras, reglas, dispensadores de cinta y calendarios.']
+      ],
+      cats: ['rollos', 'cajones', 'miniprinter', 'carpetas', 'organizadores', 'notas', 'calculadoras', 'escritura']
+    },
+    industrias: {
+      nombre: 'Industrias y maquiladoras',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresión dúplex, papel autocopiante y papel de mayor gramaje.'],
+        ['Archivo', 'Carpetas de argollas, folders, carpetas expandibles, separadores, cajas de archivo y protectores de hojas.'],
+        ['Control administrativo', 'Libretas profesionales, blocks de notas, portapapeles y sujetadocumentos.'],
+        ['Identificación', 'Etiquetas adhesivas, etiquetas de colores, etiquetas para expedientes y pestañas clasificadoras.'],
+        ['Escritura', 'Bolígrafos, lápices, marcadores permanentes, marcadores de punta gruesa y marcatextos.'],
+        ['Organización de almacén', 'Etiquetas para clasificación, marcadores permanentes, cinta adhesiva y libretas de registro.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, grapas, clips, sujetadocumentos y cinta adhesiva.'],
+        ['Equipo de escritorio', 'Engrapadoras de uso rudo, perforadoras, tijeras, reglas, calculadoras y organizadores.'],
+        ['Presentación documental', 'Carpetas de presentación, micas, fundas transparentes y sobres.']
+      ],
+      cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'organizadores', 'tableros', 'grapas', 'notas', 'calculadoras']
+    },
+    inmobiliarias: {
+      nombre: 'Inmobiliarias y bienes raíces',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel de mayor gramaje para propuestas y papel fotográfico compatible.'],
+        ['Presentación comercial', 'Carpetas de presentación, portadocumentos, folders con pestaña y protectores de hojas.'],
+        ['Archivo', 'Carpetas de argollas, carpetas expandibles, separadores, cajas de archivo y etiquetas para expedientes.'],
+        ['Escritura', 'Bolígrafos, lápices, marcatextos, marcadores permanentes y correctores.'],
+        ['Organización', 'Agendas ejecutivas, planners, libretas profesionales, blocks de notas y notas adhesivas.'],
+        ['Correspondencia', 'Sobres blancos, sobres manila, etiquetas para destinatarios y etiquetas adhesivas.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, papel para impresión, clips, grapas y sujetadocumentos.'],
+        ['Escritorio', 'Calculadoras, organizadores, portaplumas, tijeras y dispensadores de cinta.']
+      ],
+      cats: ['papel', 'escritura', 'folders', 'carpetas', 'organizadores', 'calculadoras', 'notas', 'mouse']
+    },
+    laboratorios: {
+      nombre: 'Laboratorios clínicos y médicos',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras láser y papel para impresión de reportes.'],
+        ['Archivo', 'Folders, carpetas de argollas, separadores, sobres, cajas de archivo y protectores de hojas.'],
+        ['Identificación', 'Etiquetas adhesivas blancas, etiquetas de colores, etiquetas para expedientes y pestañas clasificadoras.'],
+        ['Escritura', 'Bolígrafos, marcadores permanentes, marcatextos, lápices y correctores.'],
+        ['Recepción', 'Agendas, libretas, blocks de notas, notas adhesivas y portapapeles.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta y papel compatible con los equipos de impresión.'],
+        ['Administración', 'Clips, grapas, sujetadocumentos, engrapadoras, perforadoras y sobres.'],
+        ['Organización', 'Organizadores de documentos, carpetas expandibles y etiquetas para archivo.']
+      ],
+      nota: 'Los reactivos, recipientes para muestras, materiales de laboratorio y otros insumos clínicos especializados pertenecen a una categoría diferente de los suministros de oficina.',
+      cats: ['rollos', 'miniprinter', 'carpetas', 'organizadores', 'escritura', 'notas', 'correctores', 'cintas']
+    },
+    oficinas: {
+      nombre: 'Oficinas y corporativos',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel reciclado, papel de mayor gramaje, papel autocopiante y papel para impresión dúplex.'],
+        ['Escritura', 'Bolígrafos, lápices, portaminas, borradores, marcatextos, marcadores permanentes y correctores.'],
+        ['Organización documental', 'Carpetas de argollas, folders, separadores, carpetas expandibles, protectores de hojas y cajas de archivo.'],
+        ['Notas y planificación', 'Agendas ejecutivas, planners, calendarios, libretas profesionales, blocks de notas y notas adhesivas.'],
+        ['Sujeción', 'Clips, clips mariposa, sujetadocumentos, grapas, engrapadoras y perforadoras.'],
+        ['Correspondencia', 'Sobres blancos, sobres manila, sobres para documentos y etiquetas para destinatarios.'],
+        ['Identificación', 'Etiquetas adhesivas, etiquetas para lomos de carpetas, pestañas clasificadoras y etiquetas de colores.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, cintas adhesivas y papel compatible con los equipos instalados.'],
+        ['Equipo de escritorio', 'Calculadoras, organizadores, portaplumas, tijeras, reglas, dispensadores de cinta y bandejas para documentos.']
+      ],
+      cats: ['papel', 'escritura', 'marcadores', 'folders', 'organizadores', 'calculadoras', 'mouse', 'cables', 'notas', 'correctores', 'carpetas']
+    },
+    restaurantes: {
+      nombre: 'Restaurantes y cafeterías',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras y papel para documentos administrativos.'],
+        ['Punto de venta', 'Rollos térmicos para impresoras de tickets y terminales compatibles con las medidas requeridas.'],
+        ['Control operativo', 'Libretas de registro, blocks de notas, portapapeles y bolígrafos.'],
+        ['Organización', 'Folders, carpetas, sobres, etiquetas adhesivas y notas adhesivas.'],
+        ['Identificación', 'Marcadores permanentes, etiquetas de colores y etiquetas para organización de documentos.'],
+        ['Administración', 'Agendas, calendarios, calculadoras, clips, grapas y sujetadocumentos.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, papel para impresión y cinta adhesiva.'],
+        ['Escritorio', 'Engrapadoras, perforadoras, tijeras, reglas, organizadores y dispensadores de cinta.']
+      ],
+      cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'notas', 'calculadoras']
+    },
+    tiendas: {
+      nombre: 'Tiendas y comercios',
+      productos: [
+        ['Papel e impresión', 'Papel bond carta y oficio, papel para impresoras y papel de mayor gramaje para presentaciones.'],
+        ['Punto de venta', 'Rollos térmicos para impresoras de tickets y terminales compatibles.'],
+        ['Etiquetado', 'Etiquetas adhesivas blancas, etiquetas de colores, etiquetas para precios y etiquetas para organización de productos.'],
+        ['Escritura', 'Bolígrafos, lápices, marcadores permanentes, marcatextos y correctores.'],
+        ['Organización', 'Libretas, blocks de notas, agendas, notas adhesivas y calendarios.'],
+        ['Archivo', 'Folders, carpetas de argollas, separadores, sobres y cajas de archivo.'],
+        ['Consumibles', 'Tóner, cartuchos de tinta, grapas, clips y cinta adhesiva.'],
+        ['Equipo de escritorio', 'Calculadoras, engrapadoras, perforadoras, tijeras, reglas y organizadores.']
+      ],
+      cats: ['rollos', 'cajones', 'miniprinter', 'cintas', 'folders', 'organizadores', 'calculadoras', 'notas']
+    }
   };
 
   // =================================================================
   // FILTRADO POR GIRO
   // =================================================================
-  const giroSticky = document.getElementById('girosSticky');
   const girosClear = document.getElementById('girosClear');
+  const catalogHeader = document.querySelector('#catalogo .cat-header');
+  const giroMessage = document.getElementById('giroMessage');
+  const giroMessageIcon = document.getElementById('giroMessageIcon');
+  const giroMessageTitle = document.getElementById('giroMessageTitle');
+  const giroProducts = document.getElementById('giroProducts');
+  const giroProductsCount = document.getElementById('giroProductsCount');
+  const giroProductsList = document.getElementById('giroProductsList');
+  const giroProductsNote = document.getElementById('giroProductsNote');
+  const giroQuoteLink = document.getElementById('giroQuoteLink');
   const envioBanner = document.querySelector('.delivery-banner');
   let activeGiro = null;
 
@@ -1513,25 +1702,41 @@ footer .logo{width:140px;height:36px}
       card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
-    document.querySelectorAll('.giro-chip-mini').forEach(chip => {
-      chip.classList.toggle('active', chip.dataset.giro === giroId);
-    });
-
-    document.querySelectorAll('.bento-cat').forEach(cat => {
-      cat.classList.remove('featured-giro', 'dimmed');
-    });
+    document.querySelectorAll('.bento-cat').forEach(cat => cat.classList.remove('featured-giro'));
 
     if (!config) {
+      catalogHeader.hidden = false;
       girosClear.hidden = true;
+      giroMessage.hidden = true;
       return;
     }
+
+    catalogHeader.hidden = true;
+    applyFilter('all');
 
     document.querySelectorAll('.bento-cat:not(.bento-cta)').forEach(cat => {
       const isRelevant = config.cats.includes(cat.dataset.key);
       cat.classList.toggle('featured-giro', isRelevant);
-      cat.classList.toggle('dimmed', !isRelevant);
     });
 
+    const giroIcon = document.querySelector(`.giro-card[data-giro="${giroId}"] .giro-icon svg`);
+    giroMessageIcon.replaceChildren(giroIcon.cloneNode(true));
+    giroMessageTitle.textContent = config.nombre;
+    giroProducts.open = false;
+    giroProductsCount.textContent = `${config.productos.length} categorías`;
+    giroProductsList.replaceChildren(...config.productos.map(([category, items]) => {
+      const item = document.createElement('li');
+      const categoryName = document.createElement('strong');
+      const productNames = document.createElement('span');
+      categoryName.textContent = category;
+      productNames.textContent = items;
+      item.append(categoryName, productNames);
+      return item;
+    }));
+    giroProductsNote.textContent = config.nota || '';
+    giroProductsNote.hidden = !config.nota;
+    giroQuoteLink.href = link(`Hola, me interesa cotizar productos de papelería para ${config.nombre}. ¿Me pueden orientar?`);
+    giroMessage.hidden = false;
     girosClear.hidden = false;
   }
 
@@ -1547,25 +1752,7 @@ footer .logo{width:140px;height:36px}
     });
   });
 
-  document.querySelectorAll('.giro-chip-mini').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const giroId = chip.dataset.giro;
-      if (activeGiro === giroId) {
-        applyGiro(null);
-        return;
-      }
-      applyGiro(giroId);
-    });
-  });
-
   girosClear.addEventListener('click', () => applyGiro(null));
-
-  // Sombra del sticky al pegarse
-  if ("IntersectionObserver" in window && giroSticky) {
-    new IntersectionObserver(([e]) => {
-      giroSticky.classList.toggle('is-stuck', !e.isIntersecting);
-    }, { rootMargin: '-70px 0px 0px 0px' }).observe(giroSticky);
-  }
 
   // =================================================================
   // FILTRADO POR CATEGORÍA
