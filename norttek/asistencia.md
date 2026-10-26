@@ -14,65 +14,56 @@
 - No presentar biometría como requisito legal ni como infalible.
 - Mantener la información de precios, soporte, privacidad, almacenamiento y compatibilidad sujeta a confirmación interna.
 
-## Orden recomendado de la página
+## Orden y enfoque de la página
 
-### 1. Portada: presentar el resultado
+### 1. Portada: resultado primero
 
-**Título**
+**Título:** “Controla la asistencia de tu personal desde un solo lugar.”
 
-> Controla la asistencia de tu personal desde un solo lugar.
+Explicar en el apoyo que se organizan horarios e incidencias y se consultan los registros de una o varias ubicaciones. Mantener una acción directa para cotizar y otra para entender el funcionamiento. No abrir con especificaciones ni promesas legales.
 
-**Texto de apoyo**
+La portada contiene seis beneficios breves e interactivos. Los encabezados deben ser cortos y las descripciones, al abrir cada tarjeta, deben explicar el valor para el cliente:
 
-> Administra horarios e incidencias, consulta los registros de tus sucursales y organiza la información de tu equipo en sitio o en campo.
+- **Registro por rostro:** facilita el registro sin contacto; las funciones dependen del equipo compatible.
+- **Sucursales en la nube:** administra usuarios, roles y ubicaciones desde un mismo lugar.
+- **Gestión desde tu app:** consulta y administra desde la aplicación o navegador compatibles.
+- **Reportes de asistencia:** prepara información para nómina, sin prometer integración directa.
+- **Licencia base gratis:** especificar el límite de la oferta y aclarar que equipo e instalación pueden cobrarse aparte.
+- **Acceso + asistencia:** ambas funciones en terminales compatibles.
 
-**Acciones**
+### 2. Beneficios operativos y flujo
 
-- Solicitar una cotización.
-- Ver cómo funciona.
+Después de la franja de confianza, destacar tres resultados concretos: organizar horarios e incidencias, consultar sucursales y preparar datos para nómina. Seguir con un flujo fácil de reconocer:
 
-La portada debe vender el beneficio operativo. No abrir con una promesa de cumplimiento legal.
+1. Configura al personal y sus horarios.
+2. Registra entradas y salidas en sitio, en campo o mediante una combinación disponible.
+3. Revisa incidencias y exporta reportes para el proceso interno.
 
-### 2. Primera vista: seis afirmaciones principales
+Evitar repetir literalmente en esta sección las seis tarjetas de la portada.
 
-Presentar estas utilidades como tarjetas breves, después de la portada. Mantener el lenguaje afirmativo y centrado en cómo Norttek resuelve necesidades del dueño y de Recursos Humanos.
+Destacar desde aquí el desarrollo exclusivo de Norttek para RH: incluir un enlace visible a la explicación completa de la herramienta de reportes individuales.
 
-1. **Simplifica el control diario de asistencia** — Administra personal, horarios e incidencias desde una plataforma clara, con acompañamiento para ponerla en marcha.
-2. **Centraliza todas tus sucursales** — Consulta la asistencia de cada ubicación desde un solo panel y asigna permisos a gerentes y responsables.
-3. **Automatiza turnos e incidencias** — Organiza horarios fijos y rotativos, y calcula retardos, faltas y horas extra con reglas configurables.
-4. **Registra al personal en sitio y en campo** — Combina checadores y registro móvil para mantener el control del equipo, incluso cuando trabaja fuera de la oficina.
-5. **Prepara reportes para tu proceso de nómina** — Exporta registros e incidencias para reducir la captura manual. La plataforma entrega reportes; no se integra directamente con sistemas de nómina.
-6. **Implementa una solución adecuada a tu operación** — Revisa los equipos actuales y aprovecha los que sean compatibles, o configura una solución nueva sin sobredimensionar el proyecto.
+El comparativo “antes y después” debe mostrar explícitamente la diferencia entre la lista y captura manuales y el registro electrónico de entradas y salidas. Presentarlo como una ilustración de la operación, no como prueba automática de cumplimiento legal.
 
-**Control previo a publicación:** confirmar que las funciones, métodos de registro, exportaciones, acompañamiento y compatibilidad descritos están disponibles en la oferta de Norttek para el equipo y plan cotizados.
+### 3. Elegir equipo y plataforma
 
-### 3. Mostrar cómo funciona en el día a día
+Presentar el catálogo después de explicar el flujo. Ayudar al cliente a comparar métodos de registro y capacidades; dejar los términos técnicos como MIFARE, PoE e IP65 subordinados a necesidades concretas.
 
-Explicar la operación en tres pasos visuales:
+Explicar Hik-Connect for Teams con las funciones confirmadas por equipo y plan. Separar claramente la plataforma de Hik-Connect de la herramienta exclusiva de reportes desarrollada por Norttek.
 
-1. **Configura al personal y sus horarios.**
-2. **Registra entradas y salidas**, en sitio o mediante las opciones móviles disponibles.
-3. **Consulta incidencias y exporta reportes** para la gestión interna y el proceso de nómina.
+### 4. Reportes y proceso de nómina
 
-Esta sección debe convertir la lista de funciones en un flujo fácil de reconocer para Recursos Humanos.
+Decir que la plataforma entrega reportes para preparar la nómina, pero no se integra directamente con el sistema de nómina del cliente. Explicar que el reporte estándar puede ser poco práctico para la revisión diaria de RH y que la herramienta exclusiva de Norttek convierte el archivo exportado en reportes individuales, semanales y fáciles de revisar. Aclarar que requiere importar el archivo y no es una integración automática.
 
-### 4. Explicar el valor para cada responsable
+Presentar el formato como un reporte con espacio para revisión y firma. No insinuar que la firma, por sí sola, garantiza cumplimiento o validez legal.
 
-- **Dueño de negocio:** consulta registros y obtiene visibilidad de la asistencia en sus sucursales.
-- **Recursos Humanos:** administra horarios e incidencias y consulta reportes desde un mismo lugar.
-- **Gerentes y responsables:** acceden a la información de las ubicaciones que tienen asignadas.
+### 5. Roles, modalidades y condiciones
 
-No atribuir a los registros una garantía de exactitud o de resultado legal que dependa de la configuración, del acuerdo entre las partes o de condiciones fuera del sistema.
+- **Dueño de negocio:** visibilidad de la asistencia y las sucursales.
+- **Recursos Humanos:** administración de horarios, incidencias y reportes.
+- **Gerentes:** acceso a los datos de las ubicaciones asignadas.
 
-### 5. Presentar las modalidades de registro
-
-Mostrar únicamente las opciones que estén confirmadas por equipo y plan:
-
-- Checador en sitio.
-- Registro móvil para personal en campo.
-- Solución mixta con plataforma en la nube.
-
-Si se describen rostro o huella, presentarlos como métodos opcionales de identificación. Acompañar esa información con una explicación clara del tratamiento de los datos personales.
+Mostrar checador en sitio, registro móvil y solución mixta solo cuando estén confirmados para el equipo y plan cotizados. Si se usan rostro o huella, tratarlos como métodos opcionales y explicar el tratamiento de datos personales.
 
 ### 6. Aclarar los reportes y su relación con nómina
 
@@ -174,3 +165,14 @@ Consulta realizada el 25 de octubre de 2026:
 - El [artículo de Hik-Connect 6 Teams](https://www.syscom.mx/blog/conoce-hik-connect-6-teams-para-android-ios-y-navegadores-chrome-edge-safari) menciona acceso desde iOS, Android y navegadores, y gestión de soluciones de control de acceso y asistencia.
 - El tiempo de 0.3 s corresponde al modelo de la ficha, no a todos los equipos. Confirmar modelo, funciones y vigencia del beneficio de licencia antes de cotizar; el costo del equipo y la instalación se define por separado.
 - Hik-Connect Teams facilita consultar reportes para el proceso de nómina, pero no se anuncia aquí como integración directa con sistemas de nómina.
+
+## Marca y contacto de Norttek
+
+- Usar el logo compartido en `img/logo.webp` en el encabezado y el pie de página.
+- WhatsApp de contacto: **+52 625 269 0997** (`wa.me/526252690997`). Los botones para cotizar y contactar deben abrir este chat; la encuesta envía sus respuestas al mismo número.
+- Correo: **soporte@norttek.com.mx**.
+- Domicilio: **Rayón y Agustín Melgar 608, Cuauhtémoc, Chihuahua, México**.
+- Mantener estos datos alineados con la ficha comercial de Norttek en [`papeleria/index.html`](../papeleria/index.html).
+- Para compartir la página, usar la URL canónica `https://cmeraz.github.io/norttek/asistencia.html` y las etiquetas Open Graph/Twitter del HTML; la imagen de vista previa es `img/logo.png`.
+- El botón discreto del encabezado abre un diálogo para capturar el nombre y WhatsApp de la persona destinataria. Acepta 10 dígitos mexicanos, con o sin `+52`, arma un mensaje personalizado y no persiste esos datos.
+- Mantener el botón **Cotizar** de la barra inferior conectado al WhatsApp de Norttek.

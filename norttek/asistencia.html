@@ -5,7 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f5f8fc">
 <title>Control de asistencia y registro de jornada | Norttek</title>
-<meta name="description" content="Administra horarios e incidencias, consulta los registros de tus sucursales y organiza la información de tu equipo en sitio o en campo. Reportes personalizados con firma de conformidad.">
+<meta name="description" content="Administra horarios, incidencias y sucursales con control de asistencia Hikvision. Consulta reportes claros y conoce la herramienta de Norttek para RH.">
+<link rel="canonical" href="https://cmeraz.github.io/norttek/asistencia.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:site_name" content="Norttek">
+<meta property="og:title" content="Control de asistencia para tu negocio | Norttek">
+<meta property="og:description" content="Administra horarios, incidencias y sucursales con control de asistencia Hikvision. Consulta reportes claros y conoce la herramienta de Norttek para RH.">
+<meta property="og:url" content="https://cmeraz.github.io/norttek/asistencia.html">
+<meta property="og:image" content="https://cmeraz.github.io/norttek/img/logo.png">
+<meta property="og:image:secure_url" content="https://cmeraz.github.io/norttek/img/logo.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="484">
+<meta property="og:image:height" content="484">
+<meta property="og:image:alt" content="Logo de Norttek">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Control de asistencia para tu negocio | Norttek">
+<meta name="twitter:description" content="Administra horarios, incidencias y sucursales con control de asistencia Hikvision. Consulta reportes claros y conoce la herramienta de Norttek para RH.">
+<meta name="twitter:image" content="https://cmeraz.github.io/norttek/img/logo.png">
+<meta name="twitter:image:alt" content="Logo de Norttek">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -126,7 +144,7 @@ p{margin:0}
 }
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
 .brand{display:flex;align-items:center;gap:.55rem;font-weight:700;letter-spacing:.16em;font-size:.72rem}
-.brand i{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);animation:blink 2.2s steps(1) infinite;flex:0 0 auto}
+.brand__logo{width:34px;height:34px;object-fit:contain;flex:0 0 auto}
 @keyframes blink{0%,68%{opacity:1}69%,100%{opacity:.25}}
 .topbar .btn{--pad:.55rem 1rem;min-height:40px;font-size:.78rem}
 .theme-toggle{
@@ -141,6 +159,14 @@ p{margin:0}
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
   clip:rect(0,0,0,0);white-space:nowrap;border:0;
 }
+.share-trigger{
+  display:inline-flex;align-items:center;justify-content:center;gap:.45rem;flex:0 0 auto;
+  min-height:40px;padding:.5rem .75rem;border:1px solid transparent;border-radius:999px;
+  color:var(--dim);font-size:.76rem;font-weight:600;
+  transition:background .25s var(--ease),border-color .25s var(--ease),color .25s var(--ease);
+}
+.share-trigger:hover{border-color:var(--line-2);background:rgba(255,255,255,.035);color:var(--text)}
+.share-trigger .ico{width:16px;height:16px}
 
 /* ============================================================
    3. HERO
@@ -218,6 +244,18 @@ p{margin:0}
 .hero__benefit-detail[hidden]{display:none}
 @keyframes benefitReveal{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .hero__benefits-note{margin:0;color:var(--mute);font-size:.72rem;line-height:1.45}
+.report-teaser{
+  display:grid;gap:.8rem;margin-top:1.5rem;padding:1.15rem 1.25rem;
+  border:1px solid rgba(47,227,255,.3);border-left:3px solid var(--accent);
+  border-radius:var(--r-sm);background:linear-gradient(110deg,var(--surface-2),var(--surface));
+}
+.report-teaser h3{margin:0;color:var(--text);font-size:1.05rem;line-height:1.3}
+.report-teaser p{margin:0;color:var(--dim);font-size:.82rem;line-height:1.55}
+@media (min-width:720px){
+  .report-teaser{grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1.25rem}
+  .report-teaser__copy{grid-column:1}
+  .report-teaser__cta{grid-column:2;grid-row:1 / span 2}
+}
 
 .demo{margin-top:.6rem}
 .demo__switch{
@@ -1011,6 +1049,8 @@ p{margin:0}
   color:var(--mute);line-height:1.6;margin-top:.6rem;
 }
 .contact__info span{color:var(--dim)}
+.contact__info a{color:var(--dim);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:.2em}
+.contact__info a:hover{color:var(--accent);text-decoration-color:currentColor}
 
 /* Encuesta */
 .survey{
@@ -1088,6 +1128,42 @@ p{margin:0}
 .survey .btn{width:100%}
 
 /* ============================================================
+   SHARE DIALOG
+   ============================================================ */
+.share-modal{
+  width:min(92vw,480px);max-width:calc(100% - 1.5rem);
+  padding:0;border:1px solid var(--line-2);border-radius:var(--r-lg);
+  background:var(--surface);color:var(--text);
+  box-shadow:0 28px 90px rgba(0,0,0,.55);
+}
+.share-modal::backdrop{background:rgba(4,8,13,.68);backdrop-filter:blur(5px)}
+.share-modal__form{position:relative;display:grid;gap:.7rem;padding:1.5rem}
+.share-modal__form .eyebrow{margin:0}
+.share-modal__form h2{padding-right:2.5rem;font-size:1.55rem}
+.share-modal__intro{color:var(--dim);font-size:.88rem;line-height:1.5}
+.share-modal__close{
+  position:absolute;top:1rem;right:1rem;display:grid;place-items:center;
+  width:38px;height:38px;border:1px solid var(--line-2);border-radius:50%;
+  color:var(--dim);background:rgba(255,255,255,.03);font-size:1.35rem;line-height:1;
+}
+.share-modal__close:hover{border-color:var(--accent);color:var(--text)}
+.share-modal__form label{margin-top:.25rem;color:var(--text);font-size:.82rem;font-weight:600}
+.share-modal__input{
+  width:100%;min-height:48px;padding:.7rem .85rem;
+  border:1px solid var(--line-2);border-radius:12px;
+  background:var(--surface-2);color:var(--text);font:inherit;
+}
+.share-modal__input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.share-modal__help,.share-modal__privacy{color:var(--dim);font-size:.74rem;line-height:1.45}
+.share-modal__privacy{color:var(--mute)}
+.share-modal__actions{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.35rem}
+.share-modal__actions .btn{width:100%;padding-inline:.75rem}
+@media (max-width:380px){
+  .share-modal__form{padding:1.25rem}
+  .share-modal__actions{grid-template-columns:1fr}
+}
+
+/* ============================================================
    16. MOBILE CTA
    ============================================================ */
 .mobile-cta{
@@ -1116,6 +1192,9 @@ p{margin:0}
 .foot__grid{display:flex;flex-direction:column;gap:1.4rem}
 .foot p{font-size:.74rem;color:var(--mute);max-width:60ch;line-height:1.6}
 .foot .brand{font-size:.7rem;margin-bottom:.6rem}
+.foot .brand__logo{width:30px;height:30px}
+.foot__contact{display:flex;flex-direction:column;gap:.35rem;margin-top:.9rem;font-style:normal;font-size:.74rem;color:var(--dim);line-height:1.5}
+.foot__contact a:hover{color:var(--accent)}
 .foot__legal{font-size:.7rem;color:var(--mute);line-height:1.5;padding-top:1rem;border-top:1px solid var(--line)}
 
 /* ============================================================
@@ -1308,6 +1387,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></symbol>
 <symbol id="i-wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5 12a10 10 0 0 1 14 0"/><path d="M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 1 0-5.6l3-3a4 4 0 0 1 5.6 5.6l-1.6 1.6"/><path d="M14 10a4 4 0 0 1 0 5.6l-3 3a4 4 0 0 1-5.6-5.6l1.6-1.6"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></symbol>
 <symbol id="i-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3a5 5 0 0 0-4.6 7L3 17.4V21h3.6l7.4-7.4A5 5 0 0 0 21 9l-3 3-3-3 3-3a5 5 0 0 0-3-3z"/></symbol>
 <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></symbol>
 <symbol id="i-devices" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="13" height="10" rx="1.5"/><path d="M2 17h13"/><rect x="17" y="9" width="5" height="11" rx="1"/></symbol>
@@ -1382,7 +1462,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
   <rect x="20" y="286" width="60" height="5" rx="2.5" fill="#c3cedc"/>
   <circle cx="184" cy="262" r="33" fill="none" stroke="#2fe3ff" stroke-width="2.5"/>
   <circle cx="184" cy="262" r="28" fill="none" stroke="#2fe3ff" stroke-width="1"/>
-  <text x="184" y="265" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="800" font-size="8.5" fill="#2fe3ff">CONFORME</text>
+  <text x="184" y="265" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="800" font-size="8.5" fill="#2fe3ff">REPORTE</text>
 </symbol>
 </defs>
 </svg>
@@ -1392,12 +1472,14 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="wrap">
-    <a href="#inicio" class="brand"><i></i>NORTTEK</a>
+    <a href="#inicio" class="brand"><img class="brand__logo" src="img/logo.webp" alt="">NORTTEK</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a tema oscuro" aria-pressed="false" title="Cambiar a tema oscuro">
       <svg class="ico" aria-hidden="true"><use href="#i-sunmoon"></use></svg>
       <span class="theme-toggle__label">Cambiar tema visual</span>
     </button>
-    <a href="#contacto" class="btn btn--primary">Cotizar</a>
+    <button class="share-trigger" id="shareOpen" type="button" aria-haspopup="dialog" aria-controls="shareDialog">
+      <svg class="ico" aria-hidden="true"><use href="#i-share"/></svg>Compartir
+    </button>
   </div>
 </header>
 
@@ -1418,8 +1500,8 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
         </p>
 
         <div class="hero__actions reveal" style="--d:220ms">
-          <a href="#contacto" class="btn btn--primary btn--block">
-            Solicitar una cotización
+          <a href="https://wa.me/526252690997" class="btn btn--primary btn--block" data-wa-contact target="_blank" rel="noopener noreferrer">
+            <svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>Solicitar una cotización
             <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           </a>
           <a href="#como-funciona" class="btn btn--ghost btn--block">Ver cómo funciona</a>
@@ -1577,14 +1659,122 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
       </div>
       <p class="brand-trust__pitch">
         <strong>Terminales de asistencia y control de acceso Hikvision.</strong>
-        Equipos originales, garantía del fabricante y soporte técnico certificado
-        para tu operación.
+        Te ayudamos a revisar compatibilidad, garantía aplicable y alcance del soporte
+        para elegir una solución adecuada a tu operación.
       </p>
       <ul class="brand-trust__badges" aria-label="Beneficios de trabajar con Hikvision">
-        <li><svg class="ico"><use href="#i-check"/></svg>Equipos originales</li>
-        <li><svg class="ico"><use href="#i-shield"/></svg>Garantía</li>
-        <li><svg class="ico"><use href="#i-certificate"/></svg>Soporte</li>
+        <li><svg class="ico"><use href="#i-check"/></svg>Soluciones Hikvision</li>
+        <li><svg class="ico"><use href="#i-shield"/></svg>Garantía por modelo</li>
+        <li><svg class="ico"><use href="#i-certificate"/></svg>Soporte según propuesta</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS OPERATIVOS -->
+<section class="sec" id="funciones">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">En la operación diaria</p>
+      <h2 class="reveal" style="--d:60ms">Más control, menos tareas manuales.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        Organiza la asistencia de tu equipo y prepara la información que necesitan
+        quienes administran el negocio.
+      </p>
+    </header>
+
+    <div class="carousel reveal" style="--d:0ms">
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-calendar"/></svg></span>
+          <span class="idx">01</span>
+        </div>
+        <h3>Organiza horarios e incidencias</h3>
+        <p>Configura turnos y reglas para que RH consulte registros e incidencias en un mismo flujo.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-building"/></svg></span>
+          <span class="idx">02</span>
+        </div>
+        <h3>Consulta tus sucursales</h3>
+        <p>Revisa la asistencia de cada ubicación desde un panel y asigna permisos según la responsabilidad de cada persona.</p>
+        <div class="card__viz">
+          <div class="viz-branches"><span>S1</span><span>S2</span><span>S3</span><span>S4</span></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <span class="card__ico"><svg class="ico"><use href="#i-file"/></svg></span>
+          <span class="idx">03</span>
+        </div>
+        <h3>Prepara datos para nómina</h3>
+        <p>Exporta registros e incidencias para que RH o tu contador los procese en el sistema que ya utilizan. La plataforma no se integra directamente con nómina.</p>
+        <div class="card__viz">
+          <span class="card__badge card__badge--warn">
+            <svg class="ico"><use href="#i-alert"/></svg>No se integra con nómina
+          </span>
+        </div>
+      </article>
+    </div>
+
+    <div class="carousel-hint reveal" aria-hidden="true" style="--d:120ms">
+      <span>←</span><span>Desliza</span><span>→</span>
+    </div>
+
+    <p class="reveal" style="margin-top:1.8rem;font-size:.74rem;color:var(--mute);max-width:64ch;line-height:1.55">
+      Funciones, métodos de registro, exportaciones y compatibilidad se confirman
+      según el equipo y el plan cotizados.
+    </p>
+    <aside class="report-teaser reveal" aria-label="Herramienta exclusiva de Norttek para reportes de asistencia">
+      <div class="report-teaser__copy">
+        <span class="diff__badge diff__badge--accent"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>Desarrollo exclusivo de Norttek</span>
+        <h3>Un reporte semanal más claro para RH.</h3>
+        <p>Creamos una herramienta que convierte la exportación estándar de Hik-Connect en reportes individuales fáciles de revisar. Requiere importar el archivo; no es una integración automática.</p>
+      </div>
+      <a href="#reportes-personalizados" class="btn btn--ghost report-teaser__cta">Conoce la herramienta</a>
+    </aside>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="sec" id="como-funciona" style="padding-top:0">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">Un flujo sencillo</p>
+      <h2 class="reveal" style="--d:60ms">Así organizas la asistencia diaria.</h2>
+      <p class="lede reveal" style="--d:120ms">
+        Tres pasos para pasar del registro cotidiano a la información que necesita tu negocio.
+      </p>
+    </header>
+
+    <div class="steps" id="steps">
+      <article class="step reveal" style="--d:0ms">
+        <span class="step__n"><svg class="ico"><use href="#i-users"/></svg></span>
+        <div class="step__body">
+          <span class="step__num">Paso 01</span>
+          <h4>Configura a tu equipo y sus horarios</h4>
+          <p>Organiza las altas del equipo, los turnos y las reglas de incidencias con acompañamiento según el alcance cotizado.</p>
+        </div>
+      </article>
+      <article class="step reveal" style="--d:100ms">
+        <span class="step__n"><svg class="ico"><use href="#i-login"/></svg></span>
+        <div class="step__body">
+          <span class="step__num">Paso 02</span>
+          <h4>Registra entradas y salidas</h4>
+          <p>Elige checadores en sitio, registro móvil o una combinación, según cómo trabaja tu equipo.</p>
+        </div>
+      </article>
+      <article class="step reveal" style="--d:200ms">
+        <span class="step__n"><svg class="ico"><use href="#i-chart"/></svg></span>
+        <div class="step__body">
+          <span class="step__num">Paso 03</span>
+          <h4>Revisa incidencias y exporta reportes</h4>
+          <p>Consulta la información de asistencia y compártela con RH o tu contador para el proceso de nómina.</p>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -1738,7 +1928,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
           <h3>Hik-Connect for Teams</h3>
           <p>Orientado a empresas, oficinas, tiendas y comunidades que necesitan administrar más de una ubicación.</p>
           <ul class="hik-mode__features">
-            <li>Organiza sitios en grupos y zonas para su gestión centralizada.</li>
+            <li>Agrupa sitios y zonas para administrarlos desde un mismo lugar.</li>
             <li>Asigna roles y permisos según las responsabilidades de cada usuario.</li>
             <li>Incluye funciones de asistencia, como gestión de horarios y registros, según compatibilidad.</li>
           </ul>
@@ -1771,118 +1961,16 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
   </div>
 </section>
 
-<!-- 5. SEIS FUNCIONES -->
-<section class="sec" id="funciones">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="eyebrow reveal">01 — Lo que puedes hacer</p>
-      <h2 class="reveal" style="--d:60ms">Seis afirmaciones que cambian tu operación diaria.</h2>
-      <p class="lede reveal" style="--d:120ms">
-        Sin tecnicismos. Lo que un sistema de asistencia bien configurado pone en manos
-        del dueño y de Recursos Humanos.
-      </p>
-    </header>
-
-    <div class="carousel reveal" style="--d:0ms">
-
-      <article class="card">
-        <div class="card__head">
-          <span class="card__ico"><svg class="ico"><use href="#i-clipboard"/></svg></span>
-          <span class="idx">01</span>
-        </div>
-        <h3>Simplifica el control diario de asistencia</h3>
-        <p>Administra personal, horarios e incidencias desde una plataforma clara, con acompañamiento para ponerla en marcha.</p>
-      </article>
-
-      <article class="card">
-        <div class="card__head">
-          <span class="card__ico"><svg class="ico"><use href="#i-building"/></svg></span>
-          <span class="idx">02</span>
-        </div>
-        <h3>Centraliza todas tus sucursales</h3>
-        <p>Consulta la asistencia de cada ubicación desde un solo panel y asigna permisos a gerentes y responsables.</p>
-        <div class="card__viz">
-          <div class="viz-branches"><span>S1</span><span>S2</span><span>S3</span><span>S4</span></div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card__head">
-          <span class="card__ico"><svg class="ico"><use href="#i-calendar"/></svg></span>
-          <span class="idx">03</span>
-        </div>
-        <h3>Automatiza turnos e incidencias</h3>
-        <p>Organiza horarios fijos y rotativos, y calcula retardos, faltas y horas extra con reglas configurables.</p>
-        <div class="card__viz">
-          <div class="viz-shift">
-            <div class="viz-shift__bar"><div class="viz-shift__fill"></div></div>
-            <span class="viz-shift__label">09:00</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card__head">
-          <span class="card__ico"><svg class="ico"><use href="#i-pin"/></svg></span>
-          <span class="idx">04</span>
-        </div>
-        <h3>Registra al personal en sitio y en campo</h3>
-        <p>Combina checadores y registro móvil para mantener el control del equipo, incluso cuando trabaja fuera de la oficina.</p>
-        <div class="card__viz">
-          <div class="viz-gear">
-            <span><svg class="ico"><use href="#i-mobile"/></svg></span>
-            <span><svg class="ico"><use href="#i-pin"/></svg></span>
-            <span><svg class="ico"><use href="#i-badge"/></svg></span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card__head">
-          <span class="card__ico"><svg class="ico"><use href="#i-file"/></svg></span>
-          <span class="idx">05</span>
-        </div>
-        <h3>Prepara reportes para tu proceso de nómina</h3>
-        <p>Exporta registros e incidencias para reducir la captura manual.</p>
-        <div class="card__viz">
-          <span class="card__badge card__badge--warn">
-            <svg class="ico"><use href="#i-alert"/></svg>No se integra con nómina
-          </span>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card__head">
-          <span class="card__ico"><svg class="ico"><use href="#i-wrench"/></svg></span>
-          <span class="idx">06</span>
-        </div>
-        <h3>Implementa una solución adecuada a tu operación</h3>
-        <p>Revisa los equipos actuales y aprovecha los que sean compatibles, o configura una solución nueva sin sobredimensionar el proyecto.</p>
-      </article>
-
-    </div>
-
-    <div class="carousel-hint reveal" aria-hidden="true" style="--d:120ms">
-      <span>←</span><span>Desliza</span><span>→</span>
-    </div>
-
-    <p class="reveal" style="margin-top:1.8rem;font-size:.74rem;color:var(--mute);max-width:64ch;line-height:1.55">
-      Funciones, métodos de registro, exportaciones, acompañamiento y compatibilidad
-      se confirman según la oferta de Norttek para el equipo y el plan cotizados.
-    </p>
-  </div>
-</section>
-
 <!-- 6. VENTAJA COMPETITIVA -->
 <section class="sec" id="reportes-personalizados" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">02 — El diferenciador</p>
-      <h2 class="reveal" style="--d:60ms">El reporte que sí se entiende.</h2>
+      <p class="eyebrow reveal">Desarrollo exclusivo de Norttek</p>
+      <h2 class="reveal" style="--d:60ms">Un reporte de asistencia más claro, creado para RH.</h2>
       <p class="lede reveal" style="--d:120ms">
-        Hik-Connect for Teams es nuestra plataforma principal de asistencia. Sobre ella,
-        construimos una herramienta que convierte los registros en reportes individuales,
-        claros y con firma de conformidad.
+        El reporte estándar de Hik-Connect permite exportar registros, pero puede quedarse
+        corto para el trabajo diario de RH. Desarrollamos una herramienta exclusiva que
+        transforma esa exportación en reportes semanales, individuales y fáciles de revisar.
       </p>
     </header>
 
@@ -1893,30 +1981,30 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
           <span>Plataforma principal</span>
         </div>
         <h3>Hik-Connect for Teams</h3>
-        <p>Gestión multi-sitio, registro GPS desde la app y aprobaciones de permisos en una sola nube. La base operativa de tu asistencia diaria.</p>
+        <p>Administra usuarios, roles y sucursales desde la nube. El reporte estándar permite exportar registros; su formato puede requerir trabajo adicional para la revisión de RH.</p>
         <ul class="diff__feats">
-          <li><svg class="ico"><use href="#i-check"/></svg>Registro en sitio y móvil con GPS</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Aprobación de permisos e incidencias</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Registros de asistencia según compatibilidad</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Gestión de permisos según funciones habilitadas</li>
           <li><svg class="ico"><use href="#i-check"/></svg>Vista unificada de sucursales</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Exportación de registros en PDF/Excel</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Exportación de los reportes disponibles</li>
         </ul>
-        <p class="diff__note">Exporta los datos. Pero el reporte final, listo para el empleado y para RH, no viene incluido.</p>
+        <p class="diff__note">Hik-Connect no se conecta directamente con sistemas de nómina. La herramienta de Norttek toma la exportación y la presenta en un formato más práctico para RH.</p>
       </div>
 
       <div class="diff__arrow" aria-hidden="true">
         <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 24h28M28 16l10 8-10 8"/>
         </svg>
-        <span>Tu herramienta Norttek</span>
+        <span>Herramienta Norttek</span>
       </div>
 
       <div class="diff__tool">
         <div class="diff__badge diff__badge--accent">
           <svg class="ico"><use href="#i-star"/></svg>
-          <span>Exclusivo Norttek</span>
+          <span>Exclusivo de Norttek</span>
         </div>
-        <h3>Reportes personalizados con firma</h3>
-        <p>Importa la información de Hik-Connect y genera un reporte por persona, tamaño carta, con el detalle semanal de su asistencia y espacio para firma de conformidad.</p>
+        <h3>Reporte semanal, individual y claro</h3>
+        <p>Importa el archivo exportado de Hik-Connect para generar un reporte por persona, en tamaño carta y con espacio para revisión y firma.</p>
 
         <div class="diff__flow" aria-hidden="true">
           <div class="diff__flow-step">
@@ -1958,7 +2046,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
             <div class="diff__paper-total"><span>Total semanal</span><strong>40h 22m</strong></div>
             <div class="diff__paper-sign">
               <span class="diff__paper-sign-line"></span>
-              <span>Firma de conformidad</span>
+              <span>Firma del empleado</span>
             </div>
           </div>
         </div>
@@ -1973,9 +2061,8 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
     </div>
 
     <p class="reveal" style="margin-top:1.6rem;font-size:.74rem;color:var(--mute);max-width:72ch;line-height:1.6">
-      La herramienta de reportes personalizados es un desarrollo de Norttek que
-      complementa la información exportada desde Hik-Connect for Teams.
-      No modifica la plataforma ni la sustituye.
+      Esta herramienta propia de Norttek complementa el reporte estándar de Hik-Connect:
+      requiere importar el archivo exportado y no modifica ni sustituye la plataforma.
     </p>
   </div>
 </section>
@@ -1984,17 +2071,17 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="formatos" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">03 — Formatos y firmas</p>
-      <h2 class="reveal" style="--d:60ms">Formatos listos para imprimir y firmar.</h2>
+      <p class="eyebrow reveal">Ejemplo de reporte</p>
+      <h2 class="reveal" style="--d:60ms">Así se presenta el formato semanal.</h2>
       <p class="lede reveal" style="--d:120ms">
-        Hojas tamaño carta con datos completos, espacio para firma y conformidad del empleado.
-        Se entregan como herramienta adicional de Norttek.
+        El reporte individual reúne los datos de asistencia en tamaño carta y deja espacio
+        para que cada empleado revise la información y firme.
       </p>
     </header>
 
     <div class="formats reveal" style="--d:0ms">
       <div class="formats__paper" aria-hidden="true">
-        <svg viewBox="0 0 240 320" role="img" aria-label="Formato de asistencia tamaño carta con firma y sello de conformidad">
+        <svg viewBox="0 0 240 320" role="img" aria-label="Reporte semanal de asistencia tamaño carta con detalle por día y espacio para firma">
           <use href="#ill-report"/>
         </svg>
       </div>
@@ -2002,54 +2089,13 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
         <ul class="formats__checks">
           <li><svg class="ico"><use href="#i-check"/></svg><span>Tamaño carta</span></li>
           <li><svg class="ico"><use href="#i-check"/></svg><span>Datos completos de la jornada</span></li>
-          <li><svg class="ico"><use href="#i-check"/></svg><span>Espacio para firma y conformidad del empleado</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Espacio para revisión y firma del empleado</span></li>
         </ul>
         <p class="formats__note">
-          La firma de conformidad funciona como respaldo documental del acuerdo entre
-          las partes. No sustituye otras medidas de cumplimiento ni garantiza por sí
-          sola el efecto legal del registro.
+          La firma permite documentar la revisión del reporte. No sustituye otras medidas
+          de cumplimiento ni garantiza por sí sola el efecto legal del registro.
         </p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 8. CÓMO FUNCIONA -->
-<section class="sec" id="como-funciona" style="padding-top:0">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="eyebrow reveal">04 — Cómo funciona</p>
-      <h2 class="reveal" style="--d:60ms">Tres pasos en el día a día.</h2>
-      <p class="lede reveal" style="--d:120ms">
-        El flujo que ya reconoce Recursos Humanos, sin pasos innecesarios.
-      </p>
-    </header>
-
-    <div class="steps" id="steps">
-      <article class="step reveal" style="--d:0ms">
-        <span class="step__n"><svg class="ico"><use href="#i-users"/></svg></span>
-        <div class="step__body">
-          <span class="step__num">Paso 01</span>
-          <h4>Configura al personal y sus horarios</h4>
-          <p>Altas del equipo, turnos fijos o rotativos y reglas de incidencias, con acompañamiento para poner el sistema en marcha.</p>
-        </div>
-      </article>
-      <article class="step reveal" style="--d:100ms">
-        <span class="step__n"><svg class="ico"><use href="#i-login"/></svg></span>
-        <div class="step__body">
-          <span class="step__num">Paso 02</span>
-          <h4>Registra entradas y salidas</h4>
-          <p>En sitio con checadores o mediante las opciones móviles disponibles para el personal en campo.</p>
-        </div>
-      </article>
-      <article class="step reveal" style="--d:200ms">
-        <span class="step__n"><svg class="ico"><use href="#i-chart"/></svg></span>
-        <div class="step__body">
-          <span class="step__num">Paso 03</span>
-          <h4>Consulta incidencias y exporta reportes</h4>
-          <p>Revisa retardos, faltas y horas extra, y exporta la información para tu gestión interna y el proceso de nómina.</p>
-        </div>
-      </article>
     </div>
   </div>
 </section>
@@ -2058,7 +2104,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="roles" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">05 — Por responsable</p>
+      <p class="eyebrow reveal">Para cada responsable</p>
       <h2 class="reveal" style="--d:60ms">Cada rol ve lo que necesita.</h2>
       <p class="lede reveal" style="--d:120ms">
         El dueño, Recursos Humanos y los gerentes acceden a la misma plataforma
@@ -2094,7 +2140,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="modalidades" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">06 — Modalidades de registro</p>
+      <p class="eyebrow reveal">Opciones de registro</p>
       <h2 class="reveal" style="--d:60ms">Una forma para cada tipo de equipo.</h2>
       <p class="lede reveal" style="--d:120ms">
         Muéstranos cómo trabaja tu gente y definimos la combinación adecuada.
@@ -2136,8 +2182,8 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="reportes" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">07 — Reportes</p>
-      <h2 class="reveal" style="--d:60ms">Reportes claros, sin promesas de integración.</h2>
+      <p class="eyebrow reveal">Reportes para tu proceso</p>
+      <h2 class="reveal" style="--d:60ms">Prepara la información para nómina.</h2>
     </header>
 
     <div class="callout reveal" style="--d:0ms">
@@ -2160,11 +2206,11 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="antes-despues" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">08 — Antes y después</p>
-      <h2 class="reveal" style="--d:60ms">De la hoja de firmas al registro electrónico.</h2>
+      <p class="eyebrow reveal">Antes y después</p>
+      <h2 class="reveal" style="--d:60ms">De la lista manual al registro electrónico de asistencia.</h2>
       <p class="lede reveal" style="--d:120ms">
-        Desliza para comparar cómo se registra la asistencia hoy en muchos negocios
-        y cómo queda con un sistema electrónico auditable.
+        Desliza para comparar las firmas y la captura manual con el registro electrónico
+        de entradas y salidas. Es un ejemplo ilustrativo, no una garantía de cumplimiento legal.
       </p>
     </header>
 
@@ -2174,35 +2220,35 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
           <li>
             <svg class="ico"><use href="#i-clock"/></svg>
             <div>
-              <h4>Registro electrónico</h4>
-              <p>No basta una hoja de firmas ni un cuaderno. La jornada debe registrarse de forma electrónica.</p>
+              <h4>Antes: listas y captura manual</h4>
+              <p>Las firmas y anotaciones en papel pueden requerir revisión y captura posterior.</p>
             </div>
           </li>
           <li>
             <svg class="ico"><use href="#i-calendar"/></svg>
             <div>
-              <h4>Documentación completa</h4>
-              <p>Entradas, salidas, horas ordinarias y extra, descansos y días festivos.</p>
+              <h4>Ahora: entradas y salidas electrónicas</h4>
+              <p>Registra los movimientos con checadores o las opciones móviles compatibles.</p>
             </div>
           </li>
           <li>
             <svg class="ico"><use href="#i-doc"/></svg>
             <div>
-              <h4>Auditable y disponible</h4>
-              <p>Debe poder revisarse y entregarse cuando la autoridad lo solicite.</p>
+              <h4>Consulta lo registrado</h4>
+              <p>Revisa entradas e incidencias según las funciones habilitadas para tu equipo.</p>
             </div>
           </li>
           <li>
             <svg class="ico"><use href="#i-scale"/></svg>
             <div>
-              <h4>La prueba es suya</h4>
-              <p>Si un trabajador reclama, la empresa es quien debe demostrar lo que pasó.</p>
+              <h4>Información para gestionar</h4>
+              <p>Comparte los registros disponibles con RH y las personas responsables.</p>
             </div>
           </li>
         </ul>
         <p class="legal-quote">
-          El sistema registra electrónicamente la jornada, deja la información disponible
-          para la autoridad y entrega formatos con firma de conformidad del empleado.
+          La automatización facilita la consulta y organización diaria. Las funciones dependen
+          del equipo y su configuración; el cumplimiento legal se revisa por separado.
         </p>
       </div>
 
@@ -2238,7 +2284,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
               </div>
               <div class="compare__foot">
                 <svg class="ico"><use href="#i-shield"/></svg>
-                Auditable y disponible para la autoridad
+                Entradas y salidas registradas electrónicamente
               </div>
             </div>
           </div>
@@ -2255,7 +2301,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
               <div class="compare__row">
                 <span>Luis</span>
                 <span></span>
-                <span class="compare__note">¿firmó otro?</span>
+                <span class="compare__note">¿Firma legible?</span>
               </div>
               <div class="compare__row">
                 <span>Marta</span>
@@ -2290,8 +2336,8 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="legal" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">09 — Marco legal</p>
-      <h2 class="reveal" style="--d:60ms">Con precisión, no con promesas.</h2>
+      <p class="eyebrow reveal">Información laboral</p>
+      <h2 class="reveal" style="--d:60ms">Qué considerar sobre el registro de jornada.</h2>
       <p class="lede reveal" style="--d:120ms">
         Separamos lo que dice la ley, lo que hace la plataforma y lo que conviene revisar
         caso por caso antes de publicar o cotizar.
@@ -2398,7 +2444,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="condiciones" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">10 — Antes de cotizar</p>
+      <p class="eyebrow reveal">Antes de elegir</p>
       <h2 class="reveal" style="--d:60ms">Lo que revisamos contigo.</h2>
       <p class="lede reveal" style="--d:120ms">
         Antes de cualquier propuesta, aclaramos estos puntos para que la solución
@@ -2483,14 +2529,14 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <section class="sec" id="faq" style="padding-top:0">
   <div class="wrap">
     <header class="sec-head" style="text-align:center;margin-inline:auto">
-      <p class="eyebrow reveal" style="justify-content:center">11 — Preguntas frecuentes</p>
+      <p class="eyebrow reveal" style="justify-content:center">Resolvemos tus dudas</p>
       <h2 class="reveal" style="--d:60ms">Dudas frecuentes, respuestas claras.</h2>
     </header>
 
     <div class="faq reveal" style="--d:0ms">
       <details>
         <summary><span class="q">01</span>¿La plataforma cumple con la reforma de 2027?<span class="plus"></span></summary>
-        <div class="faq__a">La plataforma permite registrar el inicio y fin de la jornada de manera electrónica, pero el cumplimiento depende de la configuración, del acuerdo entre las partes y de las disposiciones aplicables. No publicamos una promesa de cumplimiento sin revisar cada caso.</div>
+        <div class="faq__a">Con equipo y configuración compatibles, la solución permite registrar electrónicamente el inicio y fin de jornada. El cumplimiento depende de las disposiciones aplicables, la configuración y el acuerdo entre las partes. Revisamos cada caso antes de recomendar una solución.</div>
       </details>
       <details>
         <summary><span class="q">02</span>¿La ley exige biometría?<span class="plus"></span></summary>
@@ -2498,7 +2544,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
       </details>
       <details>
         <summary><span class="q">03</span>¿Se integra con mi sistema de nómina?<span class="plus"></span></summary>
-        <div class="faq__a">No directamente. La plataforma <strong>entrega reportes</strong> para que tu equipo de Recursos Humanos o tu contador los procesen en el sistema de nómina que utilices. Además, con la herramienta de reportes personalizados, puedes generar documentos individuales con firma de conformidad.</div>
+        <div class="faq__a">No directamente. La plataforma <strong>entrega reportes</strong> para que tu equipo de RH o tu contador los procese en el sistema de nómina que utilices. Si necesitas reportes individuales, Norttek ofrece una herramienta complementaria que requiere importar el archivo exportado de Hik-Connect.</div>
       </details>
       <details>
         <summary><span class="q">04</span>¿Qué pasa si el personal trabaja en campo?<span class="plus"></span></summary>
@@ -2506,7 +2552,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
       </details>
       <details>
         <summary><span class="q">05</span>¿Puedo usar mis checadores actuales?<span class="plus"></span></summary>
-        <div class="faq__a">Puede ser posible si son compatibles con la solución propuesta. Requiere revisión técnica previa; no todos los equipos se integran entre sí.</div>
+        <div class="faq__a">Podemos conservar tus checadores actuales si son compatibles con la solución propuesta. Primero revisamos el modelo; no todos los equipos se integran entre sí.</div>
       </details>
       <details>
         <summary><span class="q">06</span>¿Qué pasa si se va el internet?<span class="plus"></span></summary>
@@ -2522,16 +2568,18 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
       </details>
       <details>
         <summary><span class="q">09</span>¿Ofrecen capacitación, soporte y mantenimiento?<span class="plus"></span></summary>
-        <div class="faq__a">Sí, aunque su alcance, canales, horarios y tiempos de respuesta se confirman en la propuesta. No los presentamos como incluidos sin validarlos.</div>
+        <div class="faq__a">Sí; los canales, horarios, tiempos de respuesta y alcance se confirman en la propuesta. Te indicamos qué incluye antes de cotizar.</div>
       </details>
       <details>
         <summary><span class="q">10</span>¿Qué pasa con la reducción de la jornada máxima?<span class="plus"></span></summary>
-        <div class="faq__a">Es un tema relacionado pero independiente del registro electrónico. La jornada máxima semanal se reduce gradualmente entre 2026 y 2030 conforme a las disposiciones aplicables. Aconsejamos revisar tu caso con la asesoría correspondiente.</div>
+        <div class="faq__a">Es un tema relacionado, pero independiente del registro electrónico. La jornada máxima semanal se reduce gradualmente entre 2026 y 2030 conforme a las disposiciones aplicables. Revisa cómo afecta tu caso con la asesoría correspondiente.</div>
       </details>
     </div>
 
     <div class="reveal" style="text-align:center;margin-top:2.2rem">
-      <a href="#contacto" class="btn btn--primary btn--block" style="max-width:360px;margin-inline:auto">Solicitar una cotización</a>
+      <a href="https://wa.me/526252690997" class="btn btn--primary btn--block" data-wa-contact target="_blank" rel="noopener noreferrer" style="max-width:360px;margin-inline:auto">
+        <svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>Solicitar una cotización
+      </a>
     </div>
   </div>
 </section>
@@ -2541,27 +2589,28 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
   <div class="wrap">
     <div class="cta reveal">
       <div class="contact__pitch">
-        <p class="eyebrow">12 — Siguiente paso</p>
-        <h2>Hablemos de su operación.</h2>
+        <p class="eyebrow">Siguiente paso</p>
+        <h2>Hablemos de tu operación.</h2>
         <p class="lede">
-          Cuéntenos cómo trabaja su personal hoy y le armamos una propuesta a la medida.
+          Cuéntanos cómo trabaja tu equipo y preparamos una propuesta a tu medida.
         </p>
         <div class="contact__cta">
-          <a href="#" class="btn btn--primary" id="waDirect">
+          <a href="https://wa.me/526252690997" class="btn btn--primary" id="waDirect" data-wa-contact target="_blank" rel="noopener noreferrer">
+            <svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>
             Escribir por WhatsApp
             <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           </a>
           <p class="contact__info">
-            Tel. <span id="contactPhone">[TELÉFONO]</span><br>
-            <span id="contactEmail">[CORREO]</span>
+            WhatsApp: <a href="https://wa.me/526252690997" data-wa-contact target="_blank" rel="noopener noreferrer">+52 625 269 0997</a><br>
+            Correo: <a href="mailto:soporte@norttek.com.mx">soporte@norttek.com.mx</a>
           </p>
         </div>
       </div>
 
       <form class="survey" id="survey" novalidate>
-        <h3 style="font-size:1rem;font-weight:600;margin:0 0 .3rem">Ayúdenos a entender su necesidad</h3>
+        <h3 style="font-size:1rem;font-weight:600;margin:0 0 .3rem">Ayúdanos a entender tu operación</h3>
         <p style="font-size:.78rem;color:var(--dim);line-height:1.5;margin:0 0 1rem">
-          Cuatro preguntas rápidas. Sus respuestas nos ayudan a preparar una propuesta a la medida.
+          Cuatro preguntas rápidas para recomendarte una opción acorde con tu equipo y tus ubicaciones.
         </p>
 
         <div class="survey__head">
@@ -2570,7 +2619,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
         </div>
 
         <fieldset class="survey__step" data-q="size">
-          <legend>¿Cuántas personas tiene en su equipo?</legend>
+          <legend>¿Cuántas personas hay en tu equipo?</legend>
           <div class="survey__opts">
             <label class="survey__opt"><input type="radio" name="size" value="1 a 10 personas"><span>1 a 10</span></label>
             <label class="survey__opt"><input type="radio" name="size" value="11 a 30 personas"><span>11 a 30</span></label>
@@ -2580,7 +2629,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
         </fieldset>
 
         <fieldset class="survey__step" data-q="place" hidden>
-          <legend>¿Dónde trabaja su personal?</legend>
+          <legend>¿Dónde trabaja tu equipo?</legend>
           <div class="survey__opts">
             <label class="survey__opt"><input type="radio" name="place" value="En un solo lugar"><span>En un solo lugar</span></label>
             <label class="survey__opt"><input type="radio" name="place" value="En varias sucursales"><span>En varias sucursales</span></label>
@@ -2590,7 +2639,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
         </fieldset>
 
         <fieldset class="survey__step" data-q="today" hidden>
-          <legend>¿Cómo registra la asistencia hoy?</legend>
+          <legend>¿Cómo registras hoy la asistencia?</legend>
           <div class="survey__opts">
             <label class="survey__opt"><input type="radio" name="today" value="Hoja o cuaderno"><span>Hoja o cuaderno</span></label>
             <label class="survey__opt"><input type="radio" name="today" value="Reloj checador antiguo"><span>Reloj checador antiguo</span></label>
@@ -2632,12 +2681,17 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
 <footer class="foot">
   <div class="wrap foot__grid">
     <div>
-      <div class="brand"><i></i>NORTTEK</div>
+      <div class="brand"><img class="brand__logo" src="img/logo.webp" alt="">NORTTEK</div>
       <p>
         Control de asistencia y registro de jornada con tecnología Hikvision.
         La información de esta página es orientativa; las capacidades, especificaciones
         y servicios se confirman en la propuesta según los equipos y la configuración elegidos.
       </p>
+      <address class="foot__contact">
+        <a href="https://wa.me/526252690997" data-wa-contact target="_blank" rel="noopener noreferrer">WhatsApp: +52 625 269 0997</a>
+        <a href="mailto:soporte@norttek.com.mx">soporte@norttek.com.mx</a>
+        <span>Rayón y Agustín Melgar 608, Cuauhtémoc, Chihuahua, México</span>
+      </address>
     </div>
     <p style="max-width:38ch">
       El uso de biometría (rostro o huella) es opcional y requiere revisión conforme a la
@@ -2655,13 +2709,39 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
   </div>
 </footer>
 
+<dialog class="share-modal" id="shareDialog" aria-labelledby="shareTitle" aria-describedby="shareDescription">
+  <form class="share-modal__form" id="shareForm">
+    <button class="share-modal__close" type="button" data-share-close aria-label="Cerrar">×</button>
+    <p class="eyebrow">Compartir Norttek</p>
+    <h2 id="shareTitle">Envía esta página por WhatsApp</h2>
+    <p class="share-modal__intro" id="shareDescription">Personaliza el mensaje con el nombre de la persona y su número de WhatsApp.</p>
+
+    <label for="shareName">Nombre de la persona</label>
+    <input class="share-modal__input" id="shareName" name="name" type="text" autocomplete="name" maxlength="80" required>
+
+    <label for="sharePhone">Número de WhatsApp</label>
+    <input class="share-modal__input" id="sharePhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+52 625 000 0000" maxlength="20" aria-describedby="sharePhoneHelp" required>
+    <p class="share-modal__help" id="sharePhoneHelp">Ingresa 10 dígitos mexicanos; también puedes incluir el prefijo +52.</p>
+    <p class="share-modal__privacy">El nombre y el teléfono solo se usan para preparar el mensaje; no se guardan.</p>
+
+    <div class="share-modal__actions">
+      <button class="btn btn--ghost" type="button" data-share-close>Cancelar</button>
+      <button class="btn btn--primary" type="submit">
+        <svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>Compartir por WhatsApp
+      </button>
+    </div>
+  </form>
+</dialog>
+
 <!-- MOBILE CTA -->
 <div class="mobile-cta" id="mobileCta" aria-hidden="true">
   <div class="mobile-cta__txt">
     <b>¿Listo para ordenar tu asistencia?</b>
     <span>Solicita una cotización</span>
   </div>
-  <a href="#contacto" class="btn btn--primary">Cotizar</a>
+  <a href="https://wa.me/526252690997" class="btn btn--primary" data-wa-contact target="_blank" rel="noopener noreferrer" aria-label="Cotizar por WhatsApp">
+    <svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>Cotizar
+  </a>
 </div>
 
 <!-- TOAST -->
@@ -2737,26 +2817,69 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
     lightboxCaption.textContent = '';
   });
 
-  // CONFIG — reemplaza antes de publicar
+  // CONFIG — datos de contacto de Norttek
   const CONFIG = {
-    whatsappNumber: '521XXXXXXXXXX', // 52 + lada + número
-    phoneDisplay: '[TELÉFONO]',
-    emailDisplay: '[CORREO]',
+    whatsappNumber: '526252690997',
     defaultMessage: 'Hola, quiero información sobre control de asistencia para mi negocio.'
   };
   const waUrl = text => 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(text);
 
   /* ---------- 1. Contacto directo por WhatsApp ---------- */
-  const waDirect = document.getElementById('waDirect');
-  if (waDirect) {
-    waDirect.href = waUrl(CONFIG.defaultMessage);
-    waDirect.target = '_blank';
-    waDirect.rel = 'noopener';
+  document.querySelectorAll('[data-wa-contact]').forEach(link => {
+    link.href = waUrl(link.dataset.waMessage || CONFIG.defaultMessage);
+  });
+
+  const shareDialog = document.getElementById('shareDialog');
+  const shareTrigger = document.getElementById('shareOpen');
+  const shareForm = document.getElementById('shareForm');
+  const shareName = document.getElementById('shareName');
+  const sharePhone = document.getElementById('sharePhone');
+  if (shareDialog && shareTrigger && shareForm && shareName && sharePhone) {
+    shareTrigger.addEventListener('click', () => {
+      shareDialog.showModal();
+      requestAnimationFrame(() => shareName.focus());
+    });
+    shareDialog.querySelectorAll('[data-share-close]').forEach(button => {
+      button.addEventListener('click', () => shareDialog.close());
+    });
+    shareDialog.addEventListener('click', event => {
+      if (event.target === shareDialog) shareDialog.close();
+    });
+    shareDialog.addEventListener('close', () => {
+      shareForm.reset();
+      shareName.setCustomValidity('');
+      sharePhone.setCustomValidity('');
+    });
+    shareName.addEventListener('input', () => shareName.setCustomValidity(''));
+    sharePhone.addEventListener('input', () => sharePhone.setCustomValidity(''));
+    shareForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const recipientName = shareName.value.trim();
+      if (!recipientName) {
+        shareName.setCustomValidity('Escribe el nombre de la persona.');
+        shareName.reportValidity();
+        return;
+      }
+
+      const phoneDigits = sharePhone.value.replace(/\D/g, '');
+      const recipientNumber = phoneDigits.length === 10
+        ? '52' + phoneDigits
+        : phoneDigits.length === 12 && phoneDigits.startsWith('52')
+          ? phoneDigits
+          : '';
+      if (!recipientNumber) {
+        sharePhone.setCustomValidity('Ingresa 10 dígitos mexicanos, con o sin el prefijo +52.');
+        sharePhone.reportValidity();
+        return;
+      }
+
+      const canonicalUrl = document.querySelector('link[rel="canonical"]');
+      const pageUrl = canonicalUrl ? canonicalUrl.href : window.location.href;
+      const message = 'Hola ' + recipientName + ', te comparto esta página de Norttek sobre control de asistencia: ' + pageUrl;
+      window.open('https://wa.me/' + recipientNumber + '?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
+      shareDialog.close();
+    });
   }
-  const cp = document.getElementById('contactPhone');
-  const ce = document.getElementById('contactEmail');
-  if (cp) cp.textContent = CONFIG.phoneDisplay;
-  if (ce) ce.textContent = CONFIG.emailDisplay;
 
   /* ---------- 2. Relojes ---------- */
   const clockField  = document.getElementById('clockField');
@@ -2816,10 +2939,10 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
     card:   { name: 'Pedro Sánchez',  time: '09:45' }
   };
   const HK_PROMPTS = {
-    finger: 'Coloque su dedo',
+    finger: 'Coloca tu dedo',
     face:   'Mire a la cámara',
-    pin:    'Ingrese su PIN',
-    card:   'Acerque su tarjeta'
+    pin:    'Ingresa tu PIN',
+    card:   'Acerca tu tarjeta'
   };
 
   const hkStage = document.getElementById('hktermStage');
@@ -2952,7 +3075,7 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
         'Configura turnos fijos y rotativos, y reglas de retardos y faltas.',
         'Registra altas, bajas y cambios de horario sin hojas de cálculo paralelas.',
         'Consulta y exporta reportes para preparar la nómina.',
-        'Genera reportes individuales con firma de conformidad para cada empleado.'
+        'Genera reportes individuales con espacio para firma de cada empleado.'
       ]
     },
     gerente: {
@@ -2960,8 +3083,8 @@ html[data-theme="light"] .mobile-cta__txt{color:var(--dim)}
       title: 'Gerentes y responsables',
       lead: 'Acceso a la información de las ubicaciones que tienen asignadas, sin ver lo que no les corresponde.',
       items: [
-        'Consulta la asistencia del equipo de su sucursal o área.',
-        'Ve incidencias del turno y del personal a su cargo.',
+        'Consulta la asistencia del equipo de tu sucursal o área.',
+        'Ve incidencias del turno y del personal a tu cargo.',
         'Reporta novedades a RH desde la misma plataforma.',
         'Permisos configurables por ubicación y por rol.'
       ]
