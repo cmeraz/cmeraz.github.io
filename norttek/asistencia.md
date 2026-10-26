@@ -148,3 +148,29 @@ Usar una sección de información complementaria para describir soporte, precios
 - [Decreto de reforma a la Ley Federal del Trabajo, DOF, 1 de mayo de 2026](https://dof.gob.mx/nota_detalle_popup.php?codigo=5786537).
 - [Ley Federal de Protección de Datos Personales en Posesión de los Particulares vigente, Cámara de Diputados](https://www.diputados.gob.mx/LeyesBiblio/ref/lfpdppp.htm).
 
+## Códigos de producto en `img/asistencia`
+
+- DS-K1T321MFWX
+- DS-K1T320MFWX
+- DS-K1T342MFWX-E1
+- DS-K1T323MBFWX-E1
+- DS-K1T343MWX
+- DS-K1T344MBWX-E1
+
+## Catálogo y Hik-Connect 6 en la página
+
+- La sección de terminales se presenta después de la franja Hikvision. Resume características de cada modelo a partir de [`img/asistencia/asistencia_img.md.md`](./img/asistencia/asistencia_img.md.md).
+- Cada miniatura usa carga diferida, animación de entrada al desplazarse y un lightbox accesible para ver el producto ampliado.
+- El bloque Hik-Connect 6 distingue el modo Personal del modo Teams y enfoca este último como plataforma para administrar asistencia y sucursales. Las funciones dependen de los dispositivos y su configuración.
+- Fuentes oficiales: [Personal Mode](https://securitylab.hikvision.com/en/products/software/hik-connect/personal-mode/) y [Team Mode](https://securitylab.hikvision.com/en/products/software/hik-connect/team-mode/).
+- Video: [Hik-Connect 6: Gestiona tu Seguridad Desde Cualquier Lugar — Hikvision Latinoamérica](https://youtu.be/DwqXQtG8fYU).
+- El tema claro queda predeterminado; la selección del visitante se guarda para futuras visitas.
+
+## Verificación de beneficios del hero en SYSCOM
+
+Consulta realizada el 25 de octubre de 2026:
+
+- La [ficha del DS-K1T321MFWX-B/S](https://www.syscom.mx/products/237091) indica reconocimiento facial en 0.3 s y describe Hik-Connect Teams para administrar usuarios, roles y sucursales, además de reportes de acceso y asistencia. La misma ficha anuncia el servicio gratuito hasta 100 empleados y 10 dispositivos.
+- El [artículo de Hik-Connect 6 Teams](https://www.syscom.mx/blog/conoce-hik-connect-6-teams-para-android-ios-y-navegadores-chrome-edge-safari) menciona acceso desde iOS, Android y navegadores, y gestión de soluciones de control de acceso y asistencia.
+- El tiempo de 0.3 s corresponde al modelo de la ficha, no a todos los equipos. Confirmar modelo, funciones y vigencia del beneficio de licencia antes de cotizar; el costo del equipo y la instalación se define por separado.
+- Hik-Connect Teams facilita consultar reportes para el proceso de nómina, pero no se anuncia aquí como integración directa con sistemas de nómina.
